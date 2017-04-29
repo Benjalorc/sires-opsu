@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const config = require('./config/database')
+const config = require('./config/database');
 
 const app = express();
 
@@ -35,16 +35,22 @@ app.use(cors());
 //BODY-PARSER MIDDLEWARE
 app.use(bodyParser.json());
 
+//PASSPORT MIDDLEWARE
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
+
 
 //Respondera al llamar a /users/xxxxxx
-app.use('/users', users)
+app.use('/users', users);
 
 //STATIC FOLDER
 app.use(express.static(path.join(__dirname, 'client')));
 
 //INDEX ROUTE
 app.get('/', (req, res) => {
-    res.send("Hola a todos!")
+    res.send("Hola a todos!");
 });
 
 

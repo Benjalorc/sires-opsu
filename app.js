@@ -8,6 +8,12 @@ const config = require('./config/database')
 
 const app = express();
 
+const users = require('./routes/users');
+
+//PORT NUMBER
+const port = process.env.PORT;
+
+
 //CONNECT TO DATABASE
 mongoose.connect(config.database);
 
@@ -22,17 +28,12 @@ mongoose.connection.on('error', (err) => {
    
    console.log('Database error: '+err);
 });
-const users = require('./routes/users')
-
-//PORT NUMBER
-const port = process.env.PORT;
 
 //CORS MIDDLEWARE
 app.use(cors());
 
 //BODY-PARSER MIDDLEWARE
 app.use(bodyParser.json());
-
 
 
 //Respondera al llamar a /users/xxxxxx

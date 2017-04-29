@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 //REGISTER
-
 router.get('/register', (req, res, next) => {
     res.send('REGISTER');
 });

@@ -13,7 +13,6 @@ const users = require('./routes/users');
 //PORT NUMBER
 const port = process.env.PORT;
 
-
 //CONNECT TO DATABASE
 mongoose.connect(config.database);
 

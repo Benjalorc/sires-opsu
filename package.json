@@ -1,32 +1,21 @@
 {
   "name": "sires-opsu",
   "version": "1.0.0",
-  "description": "Proyecto sires-opsu",
+  "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    
-  "express":"*",
-  "mongoose":"*",
-  "bcryptjs":"*",
-  "cors":"*",
-  "jsonwebtoken":"*",
-  "body-parser":"*",
-  "passport":"*",
-  "passport-jwt":"*"
-  
-    },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Benjalorc/sires-opsu.git"
+    "express": "*",
+    "mongoose": "*",
+    "bcryptjs": "*",
+    "cors": "*",
+    "jsonwebtoken": "*",
+    "body-parser": "*",
+    "passport": "*",
+    "passport-jwt": "*"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Benjalorc/sires-opsu/issues"
-  },
-  "homepage": "https://github.com/Benjalorc/sires-opsu#readme"
+  "license": "ISC"
 }

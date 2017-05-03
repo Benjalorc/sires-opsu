@@ -52,6 +52,14 @@ app.get('/', (req, res) => {
     res.send("Hola a todos!");
 });
 
+app.get('/scripts/mapController.js', (req, res) => {
+    res.download('./scripts/mapController.js');
+});
+
+app.get('/scripts/leafLet/leaflet.js', (req, res) => {
+    res.download('./scripts/leaflet/leaflet.js');
+});
+
 
 //START SERVER
 app.listen(port, () => {

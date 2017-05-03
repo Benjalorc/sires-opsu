@@ -56,9 +56,18 @@ app.get('/scripts/mapController.js', (req, res) => {
     res.download('./scripts/mapController.js');
 });
 
+app.get('/scripts/divisionTerritorial.js', (req, res) => {
+    res.download('./scripts/divisionTerritorial.js');
+});
+
+app.get('/scripts/divisionTerritorial.js', (req, res) => {
+    res.download('./scripts/mapaSucre.png');
+});
+
 app.get('/scripts/leafLet/leaflet.js', (req, res) => {
     res.download('./scripts/leaflet/leaflet.js');
 });
+
 
 
 //START SERVER

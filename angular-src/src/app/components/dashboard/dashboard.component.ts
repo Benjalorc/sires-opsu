@@ -16,8 +16,8 @@ export class DashboardComponent implements OnInit {
   }
   
   dibujarMapa(callback){
-    eval(callback);
     document.querySelector("#holder").remove();
+    eval(callback);
   }
 
 }

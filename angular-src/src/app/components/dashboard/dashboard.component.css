@@ -1,0 +1,15 @@
+#map { height: 360px; }
+
+div#holder {
+    height: 360px;
+    text-size: 24px;
+    transition: background-color 0.2s;
+}
+
+div#holder:hover {
+    background-color: #8b98a5;
+}
+
+div#holder:active {
+    background-color: #546575;
+}

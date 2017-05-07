@@ -11,7 +11,7 @@
   
 <fieldset>
 
-<!-- Text input-->
+<!-- Cedula de identidad -->
 <div class="form-group">
   <label class="col-md-5 control-label" for="cedula">Cedula</label>  
   <div class="col-md-3">
@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<!-- Text input-->
+<!-- Nombre-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="nombre">Nombre</label>  
   <div class="col-md-3">
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<!-- Text input-->
+<!-- Apellido-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="apellido">Apellido</label>  
   <div class="col-md-3">
@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<!-- Text input-->
+<!-- Nombre de usuario-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="username">Usuario</label>  
   <div class="col-md-3">
@@ -46,7 +46,7 @@
   </div>
 </div>
 
-<!-- Password input-->
+<!-- Contraseña del usuario-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="password">Contrasena</label>
   <div class="col-md-3">
@@ -55,7 +55,7 @@
   </div>
 </div>
 
-<!-- Text input-->
+<!-- Correo electronico-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="email">e-mail</label>
   <div class="col-md-3">
@@ -64,7 +64,7 @@
   </div>
 </div>
 
-<!-- Multiple Radios (inline) -->
+<!-- Sexo-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="sexo">Sexo</label>
   <div class="col-md-3"> 
@@ -79,6 +79,15 @@
   </div>
 </div>
 
+<!-- Fecha de nacimiento-->
+<div class="form-group">
+  <label class="col-md-5 control-label" for="f_nac">Fecha de nacimiento</label>
+  <div class="col-md-4">
+    <my-date-picker name="f_nac" [options]="myDatePickerOptions"
+                    [(ngModel)]="f_nac" required></my-date-picker>  </div>
+</div> 
+
+<!-- Submit-->
 <div class="form-group">
   <div class="col-md-5">
 

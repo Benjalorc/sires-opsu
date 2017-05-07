@@ -3,6 +3,7 @@ import { ValidateService } from '../../services/validate/validate.service';
 import { AuthService } from '../../services/auth/auth.service'
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import {IMyOptions} from 'mydatepicker';
 
 
 @Component({
@@ -20,7 +21,14 @@ export class RegisterComponent implements OnInit {
   password: String;
   email: String;
   sexo: String;
+  f_nac: Date;
   
+  private myDatePickerOptions: IMyOptions = {
+        // other options...
+        dateFormat: 'yyyy-mm-dd',
+        minYear: 1900,
+        maxYear: new Date().getFullYear()
+    };
  
   constructor(private validateService: ValidateService, 
               private flashMessage: FlashMessagesService,
@@ -30,6 +38,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
   
   onRegisterSubmit(){
@@ -40,17 +49,18 @@ export class RegisterComponent implements OnInit {
       username: this.username,
       password: this.password,
       email: this.email,
-      sexo: this.sexo
+      sexo: this.sexo,
+      f_nac: this.f_nac
     }
     
     if(!this.validateService.validateRegister(user)){
       this.flashMessage.show('Rellene todos los campos!', { cssClass: 'alert-danger', timeout: 3000 });
     }
-    /*
+    
     if(!this.validateService.validateEmail(user.email)){
-      this.flashMessages.show('Correo invalido!', { cssClass: 'alert-danger', timeout: 1000 });
+      this.flashMessage.show('Correo invalido!', { cssClass: 'alert-danger', timeout: 1000 });
     }
-    */
+
     //REGISTRAR USUARIO
     this.authService.registerUser(user).subscribe(data => {
       if(data.success){
@@ -60,6 +70,7 @@ export class RegisterComponent implements OnInit {
       else{
         this.flashMessage.show('Algo salio mal con su registro!', { cssClass: 'alert-danger', timeout: 5000 });
         this.router.navigate(['/register']);
+        console.log(user);
       }
     })
     

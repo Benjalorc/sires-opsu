@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ValidateService } from './services/validate/validate.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { MyDatePickerModule } from 'mydatepicker';
 
 const appRoutes : Routes = [
   { path: '', component: HomeComponent },
@@ -38,6 +39,7 @@ const appRoutes : Routes = [
   ],
   imports: [
     BrowserModule,
+    MyDatePickerModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),

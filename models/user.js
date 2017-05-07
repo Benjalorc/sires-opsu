@@ -25,14 +25,18 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    f_nac:{
-        type: Date,
+    email:{
+        type: String,
         required: true
     },
     sexo:{
         type: String,
         required: true
-    }
+    },
+    f_nac:{
+        type: Date,
+        required: true
+    },
     
 });
 

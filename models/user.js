@@ -56,6 +56,11 @@ module.exports.getUserByCedula = function(cedula, callback){
     User.findOne(query, callback);
 }
 
+module.exports.getUserByEmail = function(email, callback){
+    const query = {email: email};
+    User.findOne(query, callback);
+}
+
 module.exports.addUser = function(newUser, callback){
     bcrypt.genSalt(10, (err, salt) =>{
         

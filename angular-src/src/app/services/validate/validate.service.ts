@@ -6,8 +6,10 @@ export class ValidateService {
   constructor() { }
   
   validateRegister(user){
-      if(user.cedula == undefined || user.nombre == undefined || user.apellido == undefined || user.username == undefined || user.password == undefined || user.sexo == undefined || user.f_nac == undefined){
+      if(user.cedula == undefined || user.nombre == undefined || user.apellido == undefined || user.username == undefined || user.password == undefined || user.email == undefined || user.sexo == undefined || user.f_nac == undefined){
           return false;
+      }else if(user.cedula == '' || user.nombre == '' || user.apellido == '' || user.username == '' || user.password == '' || user.email == '' || user.sexo == '' || user.f_nac == ''){
+          return false;        
       }
       return true;
   }

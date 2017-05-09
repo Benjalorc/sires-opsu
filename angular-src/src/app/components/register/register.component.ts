@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   sexo: String;
   f_nac: Date;
   
-  private myDatePickerOptions: IMyOptions = {
+  myDatePickerOptions: IMyOptions = {
         // other options...
         dateFormat: 'yyyy-mm-dd',
         minYear: 1900,
@@ -42,6 +42,7 @@ export class RegisterComponent implements OnInit {
   }
   
   onRegisterSubmit(){
+
     const user = {
       cedula: this.cedula,
       nombre: this.nombre,
@@ -53,26 +54,36 @@ export class RegisterComponent implements OnInit {
       f_nac: this.f_nac
     }
     
+    let go = true;
+    
     if(!this.validateService.validateRegister(user)){
       this.flashMessage.show('Rellene todos los campos!', { cssClass: 'alert-danger', timeout: 3000 });
+      go = false;
     }
     
     if(!this.validateService.validateEmail(user.email)){
-      this.flashMessage.show('Correo invalido!', { cssClass: 'alert-danger', timeout: 1000 });
+      this.flashMessage.show('Correo invalido!', { cssClass: 'alert-danger', timeout: 3000 });
+      go = false;
     }
 
-    //REGISTRAR USUARIO
-    this.authService.registerUser(user).subscribe(data => {
-      if(data.success){
-        this.flashMessage.show('Se ha registrado exitosamente. Ya puede iniciar sesion', { cssClass: 'alert-success', timeout: 5000 });
-        this.router.navigate(['/login']);
-      }
-      else{
-        this.flashMessage.show('Algo salio mal con su registro!', { cssClass: 'alert-danger', timeout: 5000 });
-        this.router.navigate(['/register']);
-        console.log(user);
-      }
-    })
+    if(go){
+
+      this.flashMessage.show('Sus datos estan siendo verificados', { cssClass: 'alert-info', timeout: 3000 });
+  
+      //REGISTRAR USUARIO
+      this.authService.registerUser(user).subscribe(data => {
+        if(data.success){
+          this.flashMessage.show('Se ha registrado exitosamente. Ya puede iniciar sesion', { cssClass: 'alert-success', timeout: 5000 });
+          this.router.navigate(['/login']);
+        }
+        else{
+          this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
+          this.router.navigate(['/register']);
+        }
+      })      
+      
+    }
+    
     
   }
   

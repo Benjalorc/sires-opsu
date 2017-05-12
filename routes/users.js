@@ -5,6 +5,10 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
 
+
+//DELETE
+
+
 //REGISTER
 router.post('/register', (req, res, next) => {
     //res.send('REGISTER');
@@ -85,9 +89,6 @@ router.post('/register', (req, res, next) => {
         
     });
     
-   
-   
-    
 });
 
 //AUNTHENTICATE
@@ -128,6 +129,26 @@ router.post('/authenticate', (req, res, next) => {
            }
         });
     });
+});
+
+//DELETE
+router.delete('/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    const username = req.body.username;
+    
+    User.deleteUserByUsername(username, (err, user) =>{
+       'use strict';
+       
+       if (err) throw err;
+       
+       let response = {
+            message: "El usuario ha sido borrado del sistema",
+            id: user._id
+        };
+        
+        res.send(response);
+        
+    });
+
 });
 
 //PROFILE

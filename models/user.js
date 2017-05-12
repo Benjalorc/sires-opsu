@@ -42,6 +42,11 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
+module.exports.deleteUserByUsername = function(username, callback){
+    const query = {username : username};
+    User.findOneAndRemove(query, callback);
+}
+
 module.exports.getUserById = function(id, callback){
     User.findById(id, callback);
 }

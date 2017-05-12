@@ -53,3 +53,25 @@ Iniciar el servicio de mongodb
 Finalmente para iniciar
 
     npm start
+
+**ACTUALIZACION**
+
+Instalar Angular 4 utilizando angularCLI
+
+    npm install -g @angular/cli
+
+Navegar hasta la carpeta angular-src
+
+    cd angular-src
+
+Instalar los paquetes
+
+    npm install
+    
+Correr la aplicaion
+
+    ng serve --host 0.0.0.0 --port 8081
+
+*El puerto 8081 se especifica para ejecucion en cloud9. Para desarrollo local no hace falta especificar, se configurara automaticamete en el puerto 4200*
+*El host tampoco es necesario especificarlo para desarrollo local*
+*Si se requiere una compilacion menos pesada se puede incluir el parametro -aot   ---sin embargo, esto requerira mas tiempo de compilacion pues aplica una compresion*

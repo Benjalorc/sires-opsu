@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.authService.getProfile().subscribe(profile => {
       this.user = profile.user;
+      console.log(this.user);
     }, 
     err => { 
       console.log(err);
@@ -25,19 +26,22 @@ export class ProfileComponent implements OnInit {
     });
   }
   
-  deleteUser(){
-      this.authService.deleteUser(this.user).subscribe(users => {
-    
-      this.authService.logout();
-      this.flashMessage.show('El usuario ha sido eliminado', { cssClass: 'alert-danger', timeout: 5000 });
-      this.router.navigate(['/login']);
-      return false;
+  deleteUser(user){
+    if(confirm('¿Se encuentra seguro de querer eliminar su usuario?')){
+      this.authService.deleteUser(user._id).subscribe(data => {
+        
+        document.querySelector("nav").focus();
       
-    },
-    err => {
-      console.log(err);
-      return false;
-    });
+        if(data.success){
+          this.authService.logout();
+          this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
+          this.router.navigate(['/login']);
+        }else{
+          this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
+        }
+      });
+    }
   }
 
+  
 }

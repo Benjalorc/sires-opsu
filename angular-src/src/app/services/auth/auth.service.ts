@@ -38,15 +38,14 @@ export class AuthService {
             .map(res => res.json());
     }
     
-    deleteUser(user){
+    deleteUser(userId){
         'use strict';
         let headers = new Headers();
         this.loadToken();
         headers.append('Authorization', this.authToken);
         headers.append('Content-Type','application/json');
-        return this.http.delete('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/delete', new RequestOptions({ headers: headers, body: {username: user.username}}))
+        return this.http.delete('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/delete', new RequestOptions({ headers: headers, body: {id: userId}}))
             .map(res => res.json());
-        
     }
     
     loadToken(){

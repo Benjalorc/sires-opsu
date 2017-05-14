@@ -75,9 +75,9 @@ router.post('/register', (req, res, next) => {
                             User.addUser(newUser, (err, user) =>{
                                 
                                 if(err){
-                                    res.json({success:false, msg:"Fallo al registrar usuario"});
+                                    return res.json({success:false, msg:"Fallo al registrar usuario"});
                                 }else{
-                                    res.json({success:true, msg:"Usuario registrado"});
+                                    return res.json({success:true, msg:"Usuario registrado"});
                                 }
                             });    
                     
@@ -133,20 +133,18 @@ router.post('/authenticate', (req, res, next) => {
 
 //DELETE
 router.delete('/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    const username = req.body.username;
+    const id = req.body.id;
     
-    User.deleteUserByUsername(username, (err, user) =>{
-       'use strict';
+    User.deleteUser(id, (err, user) =>{
        
        if (err) throw err;
        
-       let response = {
-            message: "El usuario ha sido borrado del sistema",
-            id: user._id
-        };
-        
-        res.send(response);
-        
+       if (user){
+           return res.json({success: true, msg: 'Su usuario ha sido eliminado'});
+       }else{
+           return res.json({success: false, msg: 'Ha habido un problema eliminando su cuenta. Contacte a personal autorizado para solucionar el problema'});
+       }
+       
     });
 
 });

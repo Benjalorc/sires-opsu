@@ -4,9 +4,10 @@
     <ul class="list-group">
         <li class="list-group-item">Usuario: {{user.username}}</li>
         <li class="list-group-item">email: {{user.email}}</li>
+        <li class="list-group-item">email: {{user.email}}</li>
         <li class="list-group-item">
             <button type="button" class="btn btn-warning">Editar usuario</button>
-            <button type="button" (click)="deleteUser()" class="btn btn-danger">Eliminar usuario</button>
+            <button type="button" (click)="deleteUser(user)" class="btn btn-danger">Eliminar usuario</button>
         </li>
         
     </ul>

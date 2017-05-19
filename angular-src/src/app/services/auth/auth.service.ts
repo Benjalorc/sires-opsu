@@ -34,7 +34,7 @@ export class AuthService {
         let headers = new Headers();
         this.loadToken();
         headers.append('Authorization', this.authToken);
-        return this.http.get('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/profile', {headers: headers})
+        return this.http.get('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/profile')
             .map(res => res.json());
     }
     

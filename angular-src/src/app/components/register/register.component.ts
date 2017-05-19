@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from '../../services/validate/validate.service';
-import { AuthService } from '../../services/auth/auth.service'
+import { AuthService } from '../../services/auth/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import {IMyOptions} from 'mydatepicker';
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
   }
   
   onRegisterSubmit(){
-
+      
     const user = {
       cedula: this.cedula,
       nombre: this.nombre,
@@ -57,11 +57,13 @@ export class RegisterComponent implements OnInit {
     let go = true;
     
     if(!this.validateService.validateRegister(user)){
+      
       this.flashMessage.show('Rellene todos los campos!', { cssClass: 'alert-danger', timeout: 3000 });
       go = false;
     }
     
     if(!this.validateService.validateEmail(user.email)){
+      
       this.flashMessage.show('Correo invalido!', { cssClass: 'alert-danger', timeout: 3000 });
       go = false;
     }
@@ -69,7 +71,7 @@ export class RegisterComponent implements OnInit {
     if(go){
 
       this.flashMessage.show('Sus datos estan siendo verificados', { cssClass: 'alert-info', timeout: 3000 });
-  
+
       //REGISTRAR USUARIO
       this.authService.registerUser(user).subscribe(data => {
         if(data.success){
@@ -80,12 +82,9 @@ export class RegisterComponent implements OnInit {
           this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
           this.router.navigate(['/register']);
         }
-      })      
-      
-    }
+      });
+    }//Cierre de condicional
     
-    
-  }
-  
+  }//Cierre de onRegisterSubmit
   
 }

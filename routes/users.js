@@ -131,6 +131,20 @@ router.post('/authenticate', (req, res, next) => {
     });
 });
 
+//UPDATE
+router.put('/update', (req, res, next) =>{
+    'use strict';
+    //PENDIENTE DE OPTIMIZAR ESTO
+    User.updateUser(req, (err, challenge) =>{
+        if(err){
+            return res.json({success:false, msg:"Fallo al actualizar usuario"});
+        }
+        else{
+            return res.json({success:true, msg:"Usuario actualizado"});
+        }
+    });
+});
+
 //DELETE
 router.delete('/delete', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     const id = req.body.id;

@@ -76,6 +76,11 @@ module.exports.addUser = function(newUser, callback){
     });
 }
 
+module.exports.updateUser = function(req, callback){
+    //PENDIENTE DE OPTIMIZAR ESTO
+    User.findByIdAndUpdate(req.body._id, { $set: req.body}, callback);
+}
+
 module.exports.comparePassword = function(candidatePassword, hash, callback){
     
     bcrypt.compare(candidatePassword, hash, (err, isMatch) =>{

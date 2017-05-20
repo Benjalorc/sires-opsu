@@ -20,7 +20,6 @@ export class AuthService {
             .map(res => res.json());
     }
 
-
      authenticateUser(user){
         'use strict'
         let headers = new Headers();
@@ -34,9 +33,18 @@ export class AuthService {
         let headers = new Headers();
         this.loadToken();
         headers.append('Authorization', this.authToken);
-        return this.http.get('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/profile')
+        return this.http.get('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/profile',{headers: headers})
             .map(res => res.json());
     }
+    
+    
+    updateUser(user){
+        'use strict';
+        let headers = new Headers();
+        headers.append('Content-Type','application/json');
+        return this.http.put('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/update', user, {headers: headers})
+            .map(res => res.json());
+    }    
     
     deleteUser(userId){
         'use strict';
@@ -55,7 +63,6 @@ export class AuthService {
     
     loggedIn() {
         this.loadToken();
-        //console.log(tokenNotExpired('id_token'));
         return tokenNotExpired('id_token');
     }
     

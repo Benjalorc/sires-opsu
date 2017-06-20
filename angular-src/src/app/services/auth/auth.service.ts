@@ -16,7 +16,7 @@ export class AuthService {
         'use strict'
         let headers = new Headers();
         headers.append('Content-Type','application/json');
-        return this.http.post('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/register', user, {headers: headers})
+        return this.http.post('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/register', user, {headers: headers})
             .map(res => res.json());
     }
 
@@ -24,7 +24,7 @@ export class AuthService {
         'use strict'
         let headers = new Headers();
         headers.append('Content-Type','application/json');
-        return this.http.post('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/authenticate', user, {headers: headers})
+        return this.http.post('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/authenticate', user, {headers: headers})
             .map(res => res.json());
     }
     
@@ -33,7 +33,7 @@ export class AuthService {
         let headers = new Headers();
         this.loadToken();
         headers.append('Authorization', this.authToken);
-        return this.http.get('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/profile',{headers: headers})
+        return this.http.get('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/profile',{headers: headers})
             .map(res => res.json());
     }
     
@@ -42,7 +42,7 @@ export class AuthService {
         'use strict';
         let headers = new Headers();
         headers.append('Content-Type','application/json');
-        return this.http.put('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/update', user, {headers: headers})
+        return this.http.put('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/update', user, {headers: headers})
             .map(res => res.json());
     }    
     
@@ -52,7 +52,7 @@ export class AuthService {
         this.loadToken();
         headers.append('Authorization', this.authToken);
         headers.append('Content-Type','application/json');
-        return this.http.delete('http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/delete', new RequestOptions({ headers: headers, body: {id: userId}}))
+        return this.http.delete('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/delete', new RequestOptions({ headers: headers, body: {id: userId}}))
             .map(res => res.json());
     }
     

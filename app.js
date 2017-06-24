@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 const config = require('./config/database');
 
 const app = express();

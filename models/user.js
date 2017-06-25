@@ -37,6 +37,12 @@ const UserSchema = mongoose.Schema({
         type: Date,
         required: true
     },
+    active:{
+        type: Boolean,
+        default: false,
+        required: true
+        
+    }
     
 });
 
@@ -58,6 +64,11 @@ module.exports.getUserByUsername = function(username, callback){
 module.exports.getUserByCedula = function(cedula, callback){
     const query = {cedula: cedula};
     User.findOne(query, callback);
+}
+
+module.exports.updateUserByCedula = function(cedula, callback){
+    const query = {cedula: cedula};
+    User.findOneAndUpdate(query, { $set: { active: true }}, callback);
 }
 
 module.exports.getUserByEmail = function(email, callback){

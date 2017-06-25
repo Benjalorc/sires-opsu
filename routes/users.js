@@ -4,6 +4,10 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
+const AuthToken = require('../models/authToken');
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+const randtoken = require('rand-token');
 
 
 //DELETE
@@ -67,7 +71,8 @@ router.post('/register', (req, res, next) => {
                                 password: req.body.password,
                                 email: req.body.email,
                                 sexo: req.body.sexo,
-                                f_nac: new Date(req.body.f_nac.jsdate)
+                                f_nac: new Date(req.body.f_nac.jsdate),
+                                active: false
                             });
                             
                             //AGREGAR EL USUARIO
@@ -77,7 +82,42 @@ router.post('/register', (req, res, next) => {
                                 if(err){
                                     return res.json({success:false, msg:"Fallo al registrar usuario"});
                                 }else{
-                                    return res.json({success:true, msg:"Usuario registrado"});
+                                    let transporter = nodemailer.createTransport(smtpTransport({
+                                      service: 'gmail',
+                                      auth: {
+                                        user: 'benjalorc@gmail.com',
+                                        pass: '11358965409612'
+                                      }
+                                    }));
+                                    
+                                    let token = new AuthToken({
+                                        code: randtoken.generate(16),
+                                        user: user.cedula
+                                    });
+                                    
+                                    AuthToken.addAuthToken(token, (err, data) =>{
+                                        if(err){
+                                            return res.json({success:false, msg:"Fallo al generar token. No se envio correo de verificacion!"});
+                                        }else{
+                                           let mailOptions = {
+                                              from: 'benjalorc@gmail.com',
+                                              to: newUser.email,
+                                              subject: 'Sending Email using Node.js',
+                                              text: 'Correo automatico enviado con nodemailer!',
+                                              html: "<p>Estimado "+newUser.nombre+" </p> <br> Haga clic en el enlace para verificar su correo y completar la activación de su cuenta.<br><a href=http://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/users/verify/"+token.code+">Verificar</a>" 
+                                            };
+                                    
+                                            transporter.sendMail(mailOptions, function(error, info){
+                                              if (error) {
+                                                console.log(error);
+                                              } else {
+                                                console.log('Email sent: ' + info.response);
+                                                
+                                              }
+                                            }); 
+                                        }        
+                                    });
+                                    return res.json({success:true, msg:"Usuario registrado. Se ha enviado un correo a la dirección que indicó"});
                                 }
                             });    
                     
@@ -89,6 +129,46 @@ router.post('/register', (req, res, next) => {
         
     });
     
+});
+
+
+router.get('/verify/:code', (req, res, next) =>{
+    
+    
+    console.log(req.protocol+":/"+req.get('host'));
+        if(/*(req.protocol+"://"+req.get('host'))==("https://"+host)*/true==true){
+            
+            console.log("Domain is matched. Information is from Authentic email");
+            AuthToken.deleteAuthToken(req.params.code, (err, doc) =>{
+                if(err){
+                    console.log("No existe el usuario o ya fue utilizado el enlace");
+                    res.redirect('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8081/login');
+                }
+                else{
+                    if(doc){
+                        console.log("Se procedera a activar al usuario");
+                        User.updateUserByCedula(doc.user, (err, user) =>{
+                           if(err){
+                               console.log("Error al actualizar usuario");
+                           }
+                           else{
+                               console.log("Usuario actualizado");
+                               res.redirect('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8081/login');
+                           }
+                        });
+                    }else{
+                        console.log("No existe el usuario o ya fue utilizado el enlace");
+                        res.redirect('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8081/login');    
+                    }
+                    
+                }
+                
+                
+            });
+        }
+        else{
+            console.log("<h1>Request is from unknown source");
+        }
 });
 
 //AUNTHENTICATE
@@ -109,22 +189,26 @@ router.post('/authenticate', (req, res, next) => {
            
            if(isMatch){
                
-               const token = jwt.sign(user, config.secret, {
-                   
-                   expiresIn: 86400 //1 dia
-               });
+               if(user.active){
                
-                res.json({
-                   success: true,
-                   token: 'JWT '+token,
-                   user: {
-                       id: user._id,
-                       cedula: user.cedula,
-                       nombre: user.nombre,
-                       username: user.username
-                   }
-                });
-           } else{
+                   const token = jwt.sign(user, config.secret, {
+                       expiresIn: 86400 //1 dia
+                   });
+                   
+                    res.json({
+                       success: true,
+                       token: 'JWT '+token,
+                       user: {
+                           id: user._id,
+                           cedula: user.cedula,
+                           nombre: user.nombre,
+                           username: user.username
+                       }
+                    });
+               }else{
+                  return res.json({success: false, msg: 'Verifique antes su cuenta a traves del enlace enviado a su correo'}) 
+               }
+           }else{
                return res.json({success: false, msg: 'Contraseña erronea'});
            }
         });

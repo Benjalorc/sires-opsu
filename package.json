@@ -8,15 +8,19 @@
   },
   "dependencies": {
     "bcryptjs": "*",
+    "bluebird": "^3.5.0",
     "body-parser": "*",
     "cors": "*",
     "express": "*",
     "jsonwebtoken": "*",
     "mongoose": "*",
     "nodemailer": "^4.0.1",
+    "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^1.11.0",
     "passport": "*",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "rand-token": "^0.3.0",
+    "xoauth2": "^1.2.0"
   },
   "author": "",
   "license": "ISC"

@@ -10,6 +10,12 @@ const config = require('./config/database');
 const app = express();
 
 const users = require('./routes/users');
+const municipios = require('./routes/municipios');
+const estudiantes = require('./routes/estudiantes');
+const carreras = require('./routes/carreras');
+const universidades = require('./routes/universidades');
+const snis = require('./routes/snis');
+const pnevs = require('./routes/pnevs');
 
 //PORT NUMBER
 const port = process.env.PORT;
@@ -41,9 +47,14 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
-
-//Respondera al llamar a /users/xxxxxx
+//Respondera al llamar a /*routes*/xxxxxx
 app.use('/users', users);
+app.use('/municipios', municipios);
+app.use('/estudiantes', estudiantes);
+app.use('/carreras', carreras);
+app.use('/universidades', universidades);
+app.use('/snis', snis);
+app.use('/pnevs', pnevs);
 
 //STATIC FOLDER
 app.use(express.static(path.join(__dirname, 'client')));

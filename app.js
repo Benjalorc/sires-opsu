@@ -21,7 +21,13 @@ const pnevs = require('./routes/pnevs');
 const port = process.env.PORT;
 
 //CONNECT TO DATABASE
-mongoose.connect(config.database);
+mongoose.connect(config.database, (err)=>{
+    if(err){
+        console.log("La cagaste pendejo"); 
+        throw err;
+        }
+    else{console.log("Todo va bien!");}
+});
 
 //ON CONNECTION
 mongoose.connection.on('connected', () => {
@@ -33,6 +39,7 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
    
    console.log('Database error: '+err);
+   throw err;
 });
 
 //CORS MIDDLEWARE
@@ -63,19 +70,6 @@ app.use(express.static(path.join(__dirname, 'client')));
 app.get('/', (req, res) => {
     res.send("Hola a todos!");
 });
-
-app.get('/scripts/mapController.js', (req, res) => {
-    res.download('./scripts/mapController.js');
-});
-
-app.get('/scripts/divisionTerritorial.js', (req, res) => {
-    res.download('./scripts/divisionTerritorial.js');
-});
-
-app.get('/scripts/leafLet/leaflet.js', (req, res) => {
-    res.download('./scripts/leaflet/leaflet.js');
-});
-
 
 
 //START SERVER

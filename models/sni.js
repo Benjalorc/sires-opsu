@@ -21,9 +21,9 @@ const SniSchema = mongoose.Schema({
         a: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: true},
         b: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: true},
         c: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: true},
-        d: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: true},
-        e: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: true},
-        f: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: true}
+        d: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: false},
+        e: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: false},
+        f: {type: mongoose.Schema.Types.ObjectId, ref: "Carrera", required: false}
     }
 });
 

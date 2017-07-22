@@ -39,11 +39,20 @@ module.exports.registrarUniversidad = function(universidad, callback){
     universidad.save(callback);
 }
 
+module.exports.listarUniversidades = function(data, callback){
+
+    const query = {};
+    Universidad.find(query)
+        .populate("municipio")
+        .exec(callback);
+}
+
 module.exports.buscarUniversidad = function(data, callback){
 
     const query = {codigo: data};
     Universidad.findOne(query)
         .populate("carreras")
+        .populate("municipio")
         .exec(callback);
 }
 

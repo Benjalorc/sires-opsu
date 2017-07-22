@@ -55,11 +55,28 @@ router.get('/buscar/:codigo', (req, res, next) =>{
         }
         
         if(universidad){
-            return res.json({success: true, msg: "Se encontro el municipio", data: universidad});
+            return res.json({success: true, msg: "Se encontro la universidad", data: universidad});
         }else{
-            return res.json({success: false, msg: "Municipio no encontrado"});
+            return res.json({success: false, msg: "Universidad no encontrada"});
         }
     });
+});
+
+router.get('/all', (req, res, next) =>{
+   'use strict';
+   
+   Universidad.listarUniversidades('', (err, universidades) =>{
+
+        if(err){
+            return res.json({success: false, msg: "Error al ejecutar la consulta"});
+        }
+        
+        if(universidades){
+            return res.json({success: true, msg: "Se encontro el listado de universidades", data: universidades});
+        }else{
+            return res.json({success: false, msg: "Listado de universidades no encontrado"});
+        }
+   })
 });
 
 router.put('/incluircarrera', (req, res, next) =>{

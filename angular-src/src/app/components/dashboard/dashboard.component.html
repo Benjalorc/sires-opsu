@@ -1,4 +1,87 @@
-<div class="panel panel-default">
-<div id="holder" class="panel-body text-center" (click)="dibujarMapa('window.drawMap()')"><h2>Haga click en este cuadro para ver el mapa!</h2></div>
+<div>
+
+<div *ngIf="loadedMap">
+    
+    <p>Elija una opcion!</p>
+        <form (submit)="onOriginSubmit()">
+            <select name="dataOrigin" [(ngModel)]="dataOrigins">
+                <option *ngFor="let dataOrigin of dataOrigins" [value]="dataOrigin">
+                    
+                    {{dataOrigin}}
+                    
+                </option>
+            </select>
+        </form>
+    <div *ngIf="loadedMap">
+        <button type="button" (click)="drawUniversities()">Ver Universidades</button>        
+    </div>
+
 </div>
-<div id="map"></div>
+
+<div class="panel panel-default">
+    <div id="holder" class="panel-body text-center" (click)="dibujarMapa()">
+        <h2>Haga click en este cuadro para ver el mapa!</h2>
+    </div>
+    <div id="map"></div>
+</div>
+
+<div *ngIf="showingUniversity" class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Informacion de la universidad</th>
+              </tr>
+            </thead>
+            <tbody [(ngModel)]="currentUniv" ngDefaultControl>
+              <tr>
+                <td>Nombre</td>
+                <td>{{currentUniv.nombre}}</td>
+              </tr>
+              <tr>
+                <td>Municipio</td>
+                <td>{{currentUniv.municipio.nombre}}</td>
+              </tr>
+              <tr>
+                <td>Capacidad</td>
+                <td>{{currentUniv.capacidad}}</td>
+              </tr>              
+              <tr>
+                <td>Población</td>
+                <td>{{currentUniv.poblacion}}</td>
+              </tr>              
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div *ngIf="showingUnivCarreers" class="panel panel-default">
+    <h4>Carreras disponibles en la universidad seleccionada</h4>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Titulo</th>
+                <th>Especialidad</th>
+                <th>Area</th>
+                <th>Duracion</th>
+                <th>Modalidad</th>
+              </tr>
+            </thead>
+            <tbody [(ngModel)]="currentUniv" ngDefaultControl>
+              <tr *ngFor="let carreer of currentUniv.carreras">
+                <td>{{carreer.nombre}}</td>
+                <td>{{carreer.titulo}}</td>
+                <td>{{carreer.especialidad}}</td>
+                <td>{{carreer.area}}</td>
+                <td>{{carreer.duracion}}</td>
+                <td>{{carreer.modalidad}}</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>

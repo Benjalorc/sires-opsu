@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit {
       username : this.username,
       password : this.password 
     }
-    
+
+    this.flashMessage.show('Espere mientras sus datos son verificados...', { cssClass: 'alert-info', timeout: 3000 });
     this.authService.authenticateUser(user).subscribe(data =>{
 
       if(data.success){

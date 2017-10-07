@@ -1,7 +1,7 @@
 <div class="jumbotron text-center">
   <h1>SIRES OPSU SIG</h1>
   <p class="lead">Bienvenido a la pagina de prueba del sistema. Registrese o inicie sesion</p>
-  <div>
+  <div *ngIf="!loggedIn">
     <a class="btn btn-primary" [routerLink]="['/register']">Registrarse</a> 
     <a class="btn btn-default" [routerLink]="['/login']">Login</a>
   </div>

@@ -30,6 +30,12 @@ module.exports.registrarMunicipio = function(municipio, callback){
     municipio.save(callback);
 }
 
+module.exports.obtenerMunicipios = function(data, callback){
+
+    const query = {};
+    Municipio.find(query, callback);
+}
+
 module.exports.buscarMunicipio = function(data, callback){
 
     const query = {codigo: data};

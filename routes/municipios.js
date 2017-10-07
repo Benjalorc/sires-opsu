@@ -23,6 +23,29 @@ router.post('/registrar', (req, res, next) =>{
      });
 });
 
+//BUSCAR TODOS LOS MUNICIPIOS
+
+router.get('/buscar', (req, res, next) =>{
+   'use strict'; 
+    
+    Municipio.obtenerMunicipios('', (err, mun) =>{
+        
+        
+        if(err){
+            return res.json({success: false, msg: "Error al ejecutar la consulta"});
+        }
+        
+        if(mun){
+            
+            return res.json({success: true, msg: "Se encontraron los municipios", data: mun});
+        }else{
+            
+            return res.json({success: false, msg: "Municipios no encontrados"});
+        }
+    });
+});
+
+//BUSCAR 1 MUNICIPIO
 router.get('/buscar/:code', (req, res, next) =>{
    'use strict'; 
     

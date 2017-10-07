@@ -76,7 +76,7 @@ router.get('/all', (req, res, next) =>{
         }else{
             return res.json({success: false, msg: "Listado de universidades no encontrado"});
         }
-   })
+   });
 });
 
 router.put('/incluircarrera', (req, res, next) =>{

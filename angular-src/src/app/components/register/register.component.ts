@@ -3,7 +3,7 @@ import { ValidateService } from '../../services/validate/validate.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-import {IMyOptions} from 'mydatepicker';
+import {IMyOptions, IMyDate, IMyDateModel} from 'mydatepicker';
 
 
 @Component({
@@ -21,23 +21,36 @@ export class RegisterComponent implements OnInit {
   password: String;
   email: String;
   sexo: String;
-  f_nac: Date;
+  f_nac: Object;
   
   myDatePickerOptions: IMyOptions = {
         // other options...
+        markCurrentDay: false,
+        markCurrentMonth: false,
+        markCurrentYear: false,
         dateFormat: 'yyyy-mm-dd',
         minYear: 1900,
-        maxYear: new Date().getFullYear()
-    };
- 
+        maxYear: new Date().getFullYear() - 15
+  };
+  
+  
   constructor(private validateService: ValidateService, 
               private flashMessage: FlashMessagesService,
               private authService: AuthService,
               private router: Router
-              ){ 
+              ){
   }
-
+  
   ngOnInit() {
+    this.f_nac  = { date: { year: 0, month: 0, day: 0 } }
+  }
+  
+  
+  onDateChanged(event: IMyDateModel) {
+        // event properties are: event.date, event.jsdate, event.formatted and event.epoc
+  }
+  
+  clearDate() {
 
   }
   
@@ -75,7 +88,7 @@ export class RegisterComponent implements OnInit {
       //REGISTRAR USUARIO
       this.authService.registerUser(user).subscribe(data => {
         if(data.success){
-          this.flashMessage.show('Se ha registrado exitosamente. Ya puede iniciar sesion', { cssClass: 'alert-success', timeout: 5000 });
+          this.flashMessage.show(data.msg, { cssClass: 'alert-success', timeout: 5000 });
           this.router.navigate(['/login']);
         }
         else{

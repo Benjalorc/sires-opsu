@@ -13,20 +13,24 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SysadminComponent } from './components/sysadmin/sysadmin.component';
-
+import { AdminUnivComponent } from './components/sysadmin/admin-univ/admin-univ.component';
 
 import { ValidateService } from './services/validate/validate.service';
 import { AuthService } from './services/auth/auth.service';
+import { UniversidadesService } from './services/universidades/universidades.service';
+import { MunicipiosService } from './services/municipios/municipios.service';
+import { CarrerasService } from './services/carreras/carreras.service';
 import { AuthGuard } from './guards/auth.guard';
 import { MyDatePickerModule } from 'mydatepicker';
 
 const appRoutes : Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]},
-  { path: 'admin', component: SysadminComponent, canActivate:[AuthGuard]}
+  { path: '', component: HomeComponent},
+  { path: 'register', component: RegisterComponent, canActivate:[AuthGuard], data:{ ruta: 'register' } },
+  { path: 'login', component: LoginComponent, canActivate:[AuthGuard], data:{ ruta: 'login' } },
+  { path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard], data:{ ruta: 'dashboard' } },
+  { path: 'profile', component: ProfileComponent, canActivate:[AuthGuard], data:{ ruta: 'profile' } },
+  { path: 'admin', component: SysadminComponent, canActivate:[AuthGuard], data:{ ruta: 'admin' } },
+  { path: 'admin/universidades', component: AdminUnivComponent, canActivate:[AuthGuard], data:{ ruta: 'universidades' } }
 ]
 
 @NgModule({
@@ -38,7 +42,8 @@ const appRoutes : Routes = [
     HomeComponent,
     DashboardComponent,
     ProfileComponent,
-    SysadminComponent
+    SysadminComponent,
+    AdminUnivComponent
   ],
   imports: [
     BrowserModule,
@@ -46,9 +51,9 @@ const appRoutes : Routes = [
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
-    FlashMessagesModule,
+    FlashMessagesModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard],
+  providers: [ValidateService, AuthService, AuthGuard, UniversidadesService, MunicipiosService, CarrerasService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

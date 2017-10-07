@@ -1,3 +1,16 @@
+#link1:hover, #link2:hover, #link3:hover, #link4:hover, #link5:hover, #link6:hover{
+  
+  opacity: 0.5;
+  
+}
+
+#link1:active, #link2:active, #link3:active, #link4:active, #link5:active, #link6:active{
+  
+  opacity: 1; transition: all 0.01s;
+  
+}
+
+
 #btn1, #btn2 {
     transition: all 0.4s;
 }

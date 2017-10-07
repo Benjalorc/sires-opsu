@@ -29,6 +29,7 @@ export class SysadminComponent implements OnInit {
   
   toggleLeftAnimations(){
     if(this.pleaseToggleLeft){
+    if(this.showRightLinks == true){ this.toggleRightAnimations(); }
       this.showLeftLinks = true;
       document.getElementById("link1").classList.toggle("link1Go");
       document.getElementById("link2").classList.toggle("link2Go");
@@ -52,6 +53,7 @@ export class SysadminComponent implements OnInit {
   
   toggleRightAnimations(){
     if(this.pleaseToggleRight){
+      if(this.showLeftLinks == true){ this.toggleLeftAnimations(); }
       this.showRightLinks = true;
       document.getElementById("link3").classList.toggle("link3Go");
       document.getElementById("link4").classList.toggle("link4Go");

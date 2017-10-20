@@ -10,32 +10,45 @@ router.post('/registrar', (req, res, next) =>{
     'use strict';
 
     let cod_mun = req.body.municipio;
+    let cod_univ = req.body.codigo;
+    console.log("Universidad es: "+cod_univ);
     Municipio.buscarMunicipio(cod_mun, (err, municipio) =>{
         
         if(err){
-            return res.json({success: false, msg: "Error al consultar en municipio"});
+            return res.json({success: false, msg: "Error al consultar en municipio para asociar a universidad"});
         }
         
         if(municipio){
             
-            let newUniversidad = new Universidad({
-                codigo: req.body.codigo,
-                nombre: req.body.nombre,
-                municipio: municipio._id,
-                capacidad: req.body.capacidad,
-                poblacion: req.body.poblacion
-            });
-
-            console.log(newUniversidad);
-            Universidad.registrarUniversidad(newUniversidad, (err, universidad) =>{
-        
+            Universidad.buscarUniversidad(cod_univ, (err, universidad) =>{
                 if(err){
-                    return res.json({success:false, msg:"Fallo al agregar universidad en la base de datos"});
-                }else{
-                    return res.json({success:true, msg:"Universidad agregada con exito"});
+                    return res.json({success: false, msg: "Error al consultar en universidad"});
+                }
+                if (universidad){
+                    return res.json({success: false, msg: "Ya existia esa universidad"});
+                }
+                else{
+                    let newUniversidad = new Universidad({
+                    codigo: req.body.codigo,
+                    nombre: req.body.nombre,
+                    municipio: municipio._id,
+                    capacidad: req.body.capacidad,
+                    poblacion: req.body.poblacion
+                    });
+
+                    console.log(newUniversidad);
+                    Universidad.registrarUniversidad(newUniversidad, (err, universidad) =>{
+                
+                        if(err){
+                            return res.json({success:false, msg:"Fallo al agregar universidad en la base de datos"});
+                        }else{
+                            return res.json({success:true, msg:"Universidad agregada con exito"});
+                        }
+                    });
                 }
             });
-        }else{
+        }
+        else{
             return res.json({success: false, msg: "No se encontro el municipio"})
         }
     })
@@ -48,8 +61,7 @@ router.get('/buscar/:codigo', (req, res, next) =>{
     let codigo = req.params.codigo;
 
     Universidad.buscarUniversidad(codigo, (err, universidad) =>{
-        
-        
+                
         if(err){
             return res.json({success: false, msg: "Error al ejecutar la consulta"});
         }

@@ -7,23 +7,40 @@ const Carrera = require('../models/carrera');
 router.post('/agregar', (req, res, next) =>{
     'use strict';
 
-    let newCarrera = new Carrera({
-        codigo: req.body.codigo,
-        nombre: req.body.nombre,
-        titulo: req.body.titulo,
-        especialidad: req.body.especialidad,
-        area: req.body.area,
-        duracion: req.body.duracion,
-        modalidad: req.body.modalidad
-    });
-    
-    Carrera.agregarCarrera(newCarrera, (err, carrera) =>{
+    let carr_cod = req.body.codigo;
+
+    Carrera.buscarCarrera(carr_cod, (err, carr) =>{
+
         if(err){
-            return res.json({success:false, msg:"Fallo al agregar carrera en la base de datos"});
-        }else{
-            return res.json({success:true, msg:"Carrera agregada con exito"});
+            return res.json({success: false, msg: "Error al ejecutar la consulta de carreras"});
+        }
+        if(carr) {
+            return res.json({success: false, msg: "Ya existia esa carrera"});
+        }
+        else{
+
+
+            let newCarrera = new Carrera({
+                codigo: req.body.codigo,
+                nombre: req.body.nombre,
+                titulo: req.body.titulo,
+                especialidad: req.body.especialidad,
+                area: req.body.area,
+                duracion: req.body.duracion,
+                modalidad: req.body.modalidad
+            });
+            
+            Carrera.agregarCarrera(newCarrera, (err, carrera) =>{
+                if(err){
+                    return res.json({success:false, msg:"Fallo al agregar carrera en la base de datos"});
+                }else{
+                    return res.json({success:true, msg:"Carrera agregada con exito"});
+                }
+            });
         }
     });
+
+
 });
     
 router.get('/buscar/:codigo', (req, res, next) =>{

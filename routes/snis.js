@@ -58,6 +58,103 @@ router.post('/agregar', (req, res, next) =>{
         }
     });
 });
+
+
+router.get('/all', (req, res, next) =>{
+    'use strict';
+
+    Sni.obtenerSnis('', (err, data) =>{
+        if(err){
+           return res.json({success: false, msg: "Error al ejecutar consulta en Sni"});            
+        }
+
+        if(data){
+
+            let upperData = data;
+            Estudiante.getAllStudents('', (err, data) =>{
+                if(err){
+                    console.log("CAGASTE");
+                }
+                if(data){
+                    let estudiantesArr = [];
+
+                    data.forEach((element) =>{
+                        estudiantesArr.push({cedula: element.cedula, municipio: element.mun.nombre});
+                    });
+
+                    let snis = [];
+
+                    upperData.forEach((element) =>{
+                        let upperElement = element;
+                        let sni = {
+                            codigo: element.codigo,
+                            ano: element.ano,
+                            estudiante: element.estudiante.cedula,
+                            municipio: estudiantesArr.find((element) =>{return upperElement.estudiante.cedula == element.cedula}).municipio,
+                            carreras: {
+                                a: {
+                                    nombre: element.opciones.a.nombre,
+                                    especialidad: element.opciones.a.especialidad,
+                                    area: element.opciones.a.area
+                                }, 
+                                b: {
+                                    nombre: element.opciones.b.nombre,
+                                    especialidad: element.opciones.b.especialidad,
+                                    area: element.opciones.b.area
+                                }, 
+                                c: {
+                                    nombre: element.opciones.c.nombre,
+                                    especialidad: element.opciones.c.especialidad,
+                                    area: element.opciones.c.area
+                                }
+                            }
+                        }
+                        console.log(sni);
+                        console.log(element.estudiante.mun);
+                        snis.push(sni);
+                    });
+
+                    return res.json({success: true, msg: "Se preparo un listado de los snis encontrados", data: snis});
+
+                }
+                else{
+                    console.log("CAGASTE DOBLE");
+                }
+            });
+        }
+        else{
+           return res.json({success: false, msg: "No se encontraron snis"});
+        }
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 router.get('/buscar/:cedula', (req, res, next) =>{
     'use strict';

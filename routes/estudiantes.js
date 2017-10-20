@@ -80,6 +80,24 @@ router.get('/buscar/:cedula/:completo?', (req, res, next) =>{
     
 });
 
+router.get('/all', (req, res, next) =>{
+   'use strict'; 
+
+    Estudiante.getAllStudents('', (err, data) =>{
+        
+        if(err){
+            console.log(err);
+            return res.json({success: false, msg: "Error al ejecutar la consulta"});
+        }
+       
+        if(data){
+            return res.json({success: true, msg: "Se encontro el listado de estudiantes", data: data});
+        }else{
+            return res.json({success: false, msg: "Listado de estudiantes no encontrado"});
+        }
+    });        
+});
+
 //ACTUALIZAR ESTUDIANTE
 router.put('/actualizar', (req, res, next) =>{
    'use strict'; 

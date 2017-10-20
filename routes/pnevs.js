@@ -53,6 +53,77 @@ router.post('/agregar', (req, res, next) =>{
         }
     });
 });
+
+router.get('/all', (req, res, next) =>{
+    'use strict';
+
+    
+
+    Pnev.obtenerPnevs('', (err, data) =>{
+        if(err){
+           return res.json({success: false, msg: "Error al ejecutar consulta en Pnev"});            
+        }
+
+        if(data){
+
+            let upperData = data;
+            Estudiante.getAllStudents('', (err, data) =>{
+                if(err){
+                    console.log("CAGASTE");
+                }
+                if(data){
+                    let estudiantesArr = [];
+
+                    data.forEach((element) =>{
+                        estudiantesArr.push({cedula: element.cedula, municipio: element.mun.nombre});
+                    });
+
+                    let pnevs = [];
+
+                    upperData.forEach((element) =>{
+                        let upperElement = element;
+                        let pnev = {
+                            codigo: element.codigo,
+                            ano: element.ano,
+                            estudiante: element.estudiante.cedula,
+                            municipio: estudiantesArr.find((element) =>{return upperElement.estudiante.cedula == element.cedula}).municipio,
+                            carreras: {
+                                a: {
+                                    nombre: element.resultados.a.nombre,
+                                    especialidad: element.resultados.a.especialidad,
+                                    area: element.resultados.a.area
+                                }, 
+                                b: {
+                                    nombre: element.resultados.b.nombre,
+                                    especialidad: element.resultados.b.especialidad,
+                                    area: element.resultados.b.area
+                                }, 
+                                c: {
+                                    nombre: element.resultados.c.nombre,
+                                    especialidad: element.resultados.c.especialidad,
+                                    area: element.resultados.c.area
+                                }
+                            }
+                        }
+                        console.log(pnev);
+                        console.log(element.estudiante.mun);
+                        pnevs.push(pnev);
+                    });
+
+                    return res.json({success: true, msg: "Se preparo un listado de los pnevs encontrados", data: pnevs});
+
+                }
+                else{
+                    console.log("CAGASTE DOBLE");
+                }
+            });
+        }
+        else{
+           return res.json({success: false, msg: "No se encontraron Pnevs"});
+        }
+    });
+
+});
     
 router.get('/buscar/:cedula', (req, res, next) =>{
     'use strict';

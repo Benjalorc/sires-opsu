@@ -12,16 +12,19 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
-    "jsonwebtoken": "*",
+    "jsonwebtoken": "7.4.0",
     "mongoose": "*",
     "nodemailer": "^4.0.1",
     "nodemailer-smtp-transport": "^2.7.4",
-    "nodemon": "^1.11.0",
-    "passport": "*",
-    "passport-jwt": "*",
+    "nodemon": "^1.12.1",
+    "passport": "0.3.2",
+    "passport-jwt": "2.2.1",
     "rand-token": "^0.3.0",
     "xoauth2": "^1.2.0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@angular/cli": "^1.4.8"
+  }
 }

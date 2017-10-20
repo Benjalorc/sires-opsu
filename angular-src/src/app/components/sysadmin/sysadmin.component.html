@@ -1,34 +1,35 @@
 <div class="container">
     <div class="row">
-        <div class="containerLeft col-xs-6" style="background-color:yellow;">
-            <div id="btnset1" (click)="toggleLeftAnimations()">
-                <img id="btn1" src="./icons/search64.png">
+        
+        <div class="containerLeft col-xs-6">
+            <h4>Estadisticas</h4>
+            <div id="btnset1" (click)="animateLeft()">
+                <img id="btn1" src="../../assets/icons/search64.png">
             </div>
             <div id="linkset1" class="linksLeft">
-                <img id="link1" src="./icons/analytics64.png">
-                <img id="link2" src="./icons/laptop64.png">
+                <img [@myAwesomeAnimation]='icon1' [routerLink]="['/admin/indicadores']" id="link1" src="../../assets/icons/analytics64.png">
+                <img [@myAwesomeAnimation]='icon2' id="link2" src="../../assets/icons/laptop64.png">
             </div>
-            <!-- 
-                Link 1: Indicadores de gestion
-                Link 2: Indicadores de uso del sistema
-            -->
         </div>
-        <div class="containerRight col-xs-6" style="background-color:blue;">
-            <div id="btnset2" (click)="toggleRightAnimations()">
-                <img id="btn2" src="./icons/books64.png">
+
+        <div class="containerRight col-xs-6">
+            <h4>Registros</h4>
+            <div id="btnset2" (click)="animateRight()">
+                <img id="btn2" src="../../assets/icons/books64.png">
             </div>
-            <div id="linkset2" class="linksLeft">
-                <img [routerLink]="['/admin/universidades']" id="link3" src="./icons/school64.png">
-                <img id="link4" src="./icons/trophy64.png">
-                <img id="link5" src="./icons/graduation64.png">
-                <img id="link6" src="./icons/radar64.png">
+            <div id="linkset2" class="linksRight">
+                <img [@myAwesomeAnimation]='icon3' [routerLink]="['/admin/universidades']" id="link3" src="../../assets/icons/school64.png">
+                <img [@myAwesomeAnimation]='icon4' [routerLink]="['/admin/carreras']" id="link4" src="../../assets/icons/trophy64.png">
+                <img [@myAwesomeAnimation]='icon5' [routerLink]="['/admin/estudiantes']" id="link5" src="../../assets/icons/graduation64.png">
+                <img [@myAwesomeAnimation]='icon6' [routerLink]="['/admin/municipios']" id="link6" src="../../assets/icons/radar64.png">
             </div>
-            
-            <!-- 
-                Link 3: Universidades
-                Link 4: 
-            -->
         </div>
         
     </div>
+</div>
+
+<div id="testingCharts" class="panel panel-default">
+    <button type="button" (click)="firstChart()">Primer chart</button>
+    <button type="button" (click)="secondChart()">Segundo chart</button>
+    <canvas id="myChart"></canvas>
 </div>

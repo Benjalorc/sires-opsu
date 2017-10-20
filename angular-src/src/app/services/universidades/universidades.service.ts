@@ -10,29 +10,40 @@ export class UniversidadesService {
   
     validateUniversity(universidad){
       'use strict'
-      if(universidad.codigo == '' 
-      || universidad.nombre == '' 
-      || universidad.municipio == '' 
-      || universidad.municipio == undefined 
-      || universidad.capacidad == '' 
-      || universidad.poblacion == ''){
-        return false;
-      }
-      else{
-        return true;
-      }
+      let avaible = Object.getOwnPropertyNames(universidad);
+      let pass = true;
+
+      avaible.forEach((element) =>{
+        if(universidad[element] == undefined || universidad[element] == '' || universidad[element] == null){
+          pass = false
+        }
+        else{
+
+        }
+      });
+
+      return pass;
     }  
   
     getUniversities(){
         'use strict'
-        return this.http.get('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/universidades/all')
-            .map(res => res.json());
+        return this.http.get('http://localhost:8080/universidades/all')
+          .map(res => res.json());
     }
     
     getUniversity(univ_code){
       'use strict'
-      return this.http.get('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/universidades/buscar/'+univ_code)
+      return this.http.get('http://localhost:8080/universidades/buscar/'+univ_code)
             .map(res => res.json());
     }
+
+    registrarUniversidad(universidad){
+      'use strict'
+      let headers = new Headers();
+      headers.append('Content-Type','application/json');
+      return this.http.post('http://localhost:8080/universidades/registrar', universidad, {headers: headers})
+            .map(res => res.json());
+    }
+    
 
 }

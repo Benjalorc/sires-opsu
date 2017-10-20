@@ -4,13 +4,13 @@ import {RequestOptions, Request, RequestMethod} from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class MunicipiosService {
+export class SnisService {
 
   constructor(private http: Http) { }
   
-    obtenerMunicipios(){
+    obtenerSnis(){
         'use strict'
-        return this.http.get('http://localhost:8080/municipios/buscar')
+        return this.http.get('http://localhost:8080/snis/all')
             .map(res => res.json());
     }
 

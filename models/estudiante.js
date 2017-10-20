@@ -56,6 +56,16 @@ module.exports.buscarEstudianteCompleto = function(data, callback){
         .exec(callback);
 }
 
+module.exports.getAllStudents = function(data, callback){
+
+    const query = {};
+    Estudiante.find(query)
+        .populate("mun")
+        .select("cedula")
+        .select("mun")
+        .exec(callback);
+}
+
 module.exports.actualizarEstudiante = function(data, callback){
     
     const query = {cedula: data.cedula};

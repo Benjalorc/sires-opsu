@@ -43,8 +43,8 @@ module.exports.listarUniversidades = function(data, callback){
 
     const query = {};
     Universidad.find(query)
-        .populate("municipio")
         .populate("carreras")
+        .populate("municipio")
         .exec(callback);
 }
 

@@ -33,6 +33,19 @@ module.exports.agregarSni = function(sni, callback){
     sni.save(callback);
 }
 
+
+module.exports.obtenerSnis = function(data, callback){
+
+    const query = {};
+    Sni.find(query)
+        .populate("estudiante")
+        .populate("opciones.a")
+        .populate("opciones.b")
+        .populate("opciones.c")
+        .exec(callback);
+}
+
+
 module.exports.buscarSni = function(data, callback){
 
     const query = {estudiante: data};

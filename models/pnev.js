@@ -35,6 +35,18 @@ module.exports.buscarPnev = function(data, callback){
     const query = {estudiante: data};
     Pnev.findOne(query)
         .populate("estudiante")
+        .populate("estudiante.mun")
+        .populate("resultados.a")
+        .populate("resultados.b")
+        .populate("resultados.c")
+        .exec(callback);
+}
+
+module.exports.obtenerPnevs = function(data, callback){
+
+    const query = {};
+    Pnev.find(query)
+        .populate("estudiante")
         .populate("resultados.a")
         .populate("resultados.b")
         .populate("resultados.c")

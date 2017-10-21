@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MunicipiosService } from '../../../services/municipios/municipios.service';
 import { UniversidadesService } from '../../../services/universidades/universidades.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -11,7 +10,6 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class AdminUnivComponent implements OnInit {
 
-  listadoMunicipios: Object;
   mostrarFormulario: Boolean;
   codigo: String;
   nombre: String;
@@ -20,60 +18,23 @@ export class AdminUnivComponent implements OnInit {
   poblacion: Number;
   carreras: any;
 
-  constructor(private municipios: MunicipiosService,
-              private universidades: UniversidadesService,
+  constructor(private UniversidadesService: UniversidadesService,
               private router: Router,
               private flashMessage : FlashMessagesService
             ){ 
   }
 
   ngOnInit() {
-    this.listadoMunicipios = {};
     this.mostrarFormulario = false;
   }
   
   toogleForm(){
-    if(this.mostrarFormulario){
-      this.mostrarFormulario = false;
-    }
-    else{
-      this.mostrarFormulario = true;
-    }
+    this.mostrarFormulario = (this.mostrarFormulario === true? false : true);
   }
 
-  cargarMunicipios(){
-
-    this.municipios.obtenerMunicipios().subscribe(data =>{
-      if(data.success){
-        this.flashMessage.show('Se cargaron con exito los municipios', { cssClass: 'alert-success', timeout: 1000 });
-        this.listadoMunicipios = data;
-        console.log(this.listadoMunicipios);
-
-            if(this.listadoMunicipios["data"]){
-  
-              let formMunicipio = document.querySelector("#municipio");
-              for (let i = 0,  j = this.listadoMunicipios["data"].length; i<j; i++){
-                let opcion = document.createElement("option");
-                opcion.setAttribute("value", this.listadoMunicipios["data"][i].codigo);
-                opcion.innerHTML=this.listadoMunicipios["data"][i].nombre;
-                formMunicipio.appendChild(opcion);
-              }
-            }
-            else{
-              console.log("Error anadiendo los municipios");
-            }
-
-      }
-      else{
-        this.flashMessage.show('No se pudieron cargar los municipios', { cssClass: 'alert-danger', timeout: 2000 });
-      }
-    });
-  }
 
   cargarFormulario(){
     this.toogleForm();
-    this.cargarMunicipios()
-    
   }
   
   quitarFormulario(){
@@ -95,12 +56,21 @@ export class AdminUnivComponent implements OnInit {
       poblacion : this.poblacion
     }
     
-    if(this.universidades.validateUniversity(universidad)){
-      console.log("TODO LLENO");
+    if(this.UniversidadesService.validateUniversity(universidad)){
+      this.flashMessage.show('Formulario llenado con exito', { cssClass: 'alert-info', timeout: 1000 });
       console.log(universidad);
+      this.UniversidadesService.registrarUniversidad(universidad).subscribe(data =>{
+
+        if(data.success){
+          this.flashMessage.show(data.msg, { cssClass: 'alert-success', timeout: 1000 });
+        }
+        else{
+          this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 1000 });
+        }
+      });
     }
     else{
-      console.log("FALTAN DATOS");
+      this.flashMessage.show('Rellene todos los campos', { cssClass: 'alert-danger', timeout: 1000 });
       console.log(universidad);
     }
     

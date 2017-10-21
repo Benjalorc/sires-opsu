@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
     console.log("A PINTAAAAAAAAR");
 
       this.croquis.setStyle(this.newStyle);
-
+      this.originalPaint = false;
     console.log("LISTO");
   }
 
@@ -226,6 +226,7 @@ export class DashboardComponent implements OnInit {
         this.currentUniv = data.data;
         this.showingUniversity = true;
         this.showingUnivCarreers = true;
+        document.querySelector("#panelInferior").scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
       }
       else{
         this.flashMessage.show('Hubo un problema cargando la información de esta universidad. Contacte a un administrador', { cssClass: 'alert-danger', timeout: 3000 });
@@ -280,7 +281,6 @@ export class DashboardComponent implements OnInit {
 //17
   revealCareer(carr_code, listadoDeUniversidades){
     
-    //let carr = listadoDeUniversidades.find((element)=>{ return element.codigo == carr_code });
     this.showingCareers = true;
     this.careersOne = true;
     this.careersTwo = false;
@@ -294,6 +294,7 @@ export class DashboardComponent implements OnInit {
     
         this.flashMessage.show('Cargando la carrera seleccionada en el panel inferior...', { cssClass: 'alert-success', timeout: 3000 });
         this.currentCareer = data.data;
+        document.querySelector("#panelInferior").scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
         console.log(this.currentCareer);
         console.log(listadoDeUniversidades);
 
@@ -362,12 +363,12 @@ export class DashboardComponent implements OnInit {
 //////////////////////////////////////////////////////////////////////////
 
         let listadoDeUniversidades = data.data;
-        let avaibleList = {}
+        let avaibleList = {};
 
         listadoDeUniversidades.forEach((element) =>{
           
           let munName = element.municipio.nombre;
-          if(avaibleList[munName]){
+          if(avaibleList[munName] && element.carreras.length > 0){
             
             for(let i = 0, j = element.carreras.length; i<j; i++){
               
@@ -378,20 +379,26 @@ export class DashboardComponent implements OnInit {
                 avaibleList[munName].push(element.carreras[i]);
                 console.log("La carrera no existia y se añadio");
               }
+              
               else{
                 console.log("Esa carrera ya existia, no se añadio");
               }
+              
             }
           }
           else{
+            if(element.carreras.length > 0){
+              
             avaibleList[munName] = [];
             element.carreras.forEach((element) =>{
               avaibleList[munName].push(element);
             });
+            console.log(JSON.stringify(avaibleList))
+              
+            }
           }
-          console.log(avaibleList);
         });
-
+        
 ////////////////////////////////////////////////////////////////////////
 
         let avaibleMun = Object.getOwnPropertyNames(avaibleList);
@@ -446,6 +453,7 @@ export class DashboardComponent implements OnInit {
 
   drawUniversities(){
 
+    
     this.toogleMapColors();
     this.ocultarPanelInferior();
 
@@ -639,6 +647,7 @@ export class DashboardComponent implements OnInit {
 
         this.careersToSort = data.data;
         this.showingSortedCareers = true;
+        document.querySelector("#panelInferior").scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
       }
       else{
         this.flashMessage.show("No se pudo obtener la informacion de aptitudes academica", { cssClass: 'alert-danger', timeout: 500 });
@@ -662,6 +671,8 @@ export class DashboardComponent implements OnInit {
 
         this.careersToSort = data.data;
         this.showingSortedCareers = true;
+        document.querySelector("#panelInferior").scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
+        
       }
       else{
         this.flashMessage.show("No se pudo obtener la informacion de demanda academica", { cssClass: 'alert-danger', timeout: 500 });
@@ -767,6 +778,7 @@ export class DashboardComponent implements OnInit {
 
     eval("window.pintura = this.currentPaint");
     this.croquis.setStyle(this.densityPaint);
+    this.originalPaint = false;
   }
 
   getStudents(){
@@ -795,6 +807,7 @@ export class DashboardComponent implements OnInit {
         this.currentPaint = sortedStudents;
 
         this.showingStudents = true;
+        document.querySelector("#panelInferior").scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
       }
       else{
         this.flashMessage.show('No se pudo obtener la informacion de estudiantes...', { cssClass: 'alert-danger', timeout: 3000 });

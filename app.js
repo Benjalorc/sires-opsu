@@ -18,10 +18,10 @@ const snis = require('./routes/snis');
 const pnevs = require('./routes/pnevs');
 
 //PORT NUMBER
-const port = process.env.PORT;
+const port = 8080;
 
 //CONNECT TO DATABASE
-mongoose.connect(config.database, (err)=>{
+mongoose.connect(config.database, {useMongoClient: true}, (err)=>{
     if(err){
         console.log("La cagaste pendejo"); 
         throw err;
@@ -71,6 +71,15 @@ app.get('/', (req, res) => {
     res.send("Hola a todos!");
 });
 
+app.get('/files/bootstrap.min.css', function(req, res){
+  var file = __dirname + '/files/bootstrap.min.css';
+  res.download(file); // Set disposition and send it.
+});
+
+app.get('/files/leaflet.css', function(req, res){
+  var file = __dirname + '/files/leaflet.css';
+  res.download(file); // Set disposition and send it.
+});
 
 //START SERVER
 app.listen(port, () => {

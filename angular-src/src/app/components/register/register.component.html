@@ -82,9 +82,32 @@
 <!-- Fecha de nacimiento-->
 <div class="form-group">
   <label class="col-md-5 control-label" for="f_nac">Fecha de nacimiento</label>
-  <div class="col-md-4">
-    <my-date-picker name="f_nac" [options]="myDatePickerOptions"
-                    [(ngModel)]="f_nac" required></my-date-picker>  </div>
+
+  <select [(ngModel)]="ano" name="ano" id="ano" (change)="asignarDias()">
+    <option value="" selected></option>
+    {{asignarAnos()}}
+  </select>
+  
+  <select [(ngModel)]="mes" name="mes" id="mes" (change)="asignarDias()">
+    <option value="" selected></option>
+    <option value="1">Enero</option>
+    <option value="2">Febrero</option>
+    <option value="3">Marzo</option>
+    <option value="4">Abril</option>
+    <option value="5">Mayo</option>
+    <option value="6">Junio</option>
+    <option value="7">Julio</option>
+    <option value="8">Agosto</option>
+    <option value="9">Septiembre</option>
+    <option value="10">Octubre</option>
+    <option value="11">Noviembre</option>
+    <option value="12">Diciembre</option>
+  </select>
+  <select [(ngModel)]="dia" name="dia" id="dia">
+    <option value="" selected></option>
+    
+  </select>
+
 </div> 
 
 <!-- Submit-->

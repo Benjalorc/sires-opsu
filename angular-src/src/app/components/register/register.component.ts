@@ -3,8 +3,6 @@ import { ValidateService } from '../../services/validate/validate.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-import {IMyOptions, IMyDate, IMyDateModel} from 'mydatepicker';
-
 
 @Component({
   selector: 'app-register',
@@ -21,18 +19,12 @@ export class RegisterComponent implements OnInit {
   password: String;
   email: String;
   sexo: String;
+  ano: any;
+  mes: any;
+  dia: any;
   f_nac: Object;
   
-  myDatePickerOptions: IMyOptions = {
-        // other options...
-        markCurrentDay: false,
-        markCurrentMonth: false,
-        markCurrentYear: false,
-        dateFormat: 'yyyy-mm-dd',
-        minYear: 1900,
-        maxYear: new Date().getFullYear() - 15
-  };
-  
+  toSetup: Boolean;
   
   constructor(private validateService: ValidateService, 
               private flashMessage: FlashMessagesService,
@@ -42,19 +34,71 @@ export class RegisterComponent implements OnInit {
   }
   
   ngOnInit() {
-    this.f_nac  = { date: { year: 0, month: 0, day: 0 } }
-  }
   
-  
-  onDateChanged(event: IMyDateModel) {
-        // event properties are: event.date, event.jsdate, event.formatted and event.epoc
-  }
-  
-  clearDate() {
+    this.toSetup = true;
 
+  }
+
+  asignarAnos(){
+    if(this.toSetup){
+      let anoActual = new Date().getFullYear();
+      let anos = document.querySelector('#ano');
+      
+      for (let i = 100; i>5; i--){
+        let opcion = document.createElement("option");
+        opcion.setAttribute("value",""+(anoActual-i));
+        opcion.innerHTML = ""+(anoActual-i);
+        anos.appendChild(opcion);
+      }
+      this.toSetup = false;
+    }
+
+  }
+
+  
+  asignarDias() {
+    
+    if(this.mes == undefined || this.mes == "" || this.ano == undefined || this.ano == "") return;
+    
+    let dia = document.querySelector("#dia")
+    dia.innerHTML = "";
+  
+    let dias = 0;
+    
+    if(this.mes == "4" || this.mes == "6" || this.mes == "9" || this.mes == "11"){
+      dias = 30;
+    }
+    
+    if(this.mes == "1" || this.mes == "3" || this.mes == "5" || this.mes == "7" || this.mes == "8" || this.mes == "10" || this.mes == "12"){
+      dias = 31;
+    }
+    
+    if(this.mes == "2"){
+       if ((((this.ano%100)!=0)&&((this.ano%4)==0))||((this.ano%400)==0)){
+         dias = 29;
+       }
+       else{
+         dias = 28;
+       }
+    }
+    
+    let firstOption = document.createElement("option");
+    firstOption.setAttribute("value","");
+    firstOption.setAttribute("selected","selected");
+    dia.appendChild(firstOption);
+    
+    for (let i = 1; i<=dias; i++){
+      let opcion = document.createElement("option");
+      opcion.setAttribute("value",""+i);
+      opcion.innerHTML = ""+i;
+      dia.appendChild(opcion);
+    }
+    
   }
   
   onRegisterSubmit(){
+    
+    this.f_nac = new Date(this.ano, this.mes, this.dia, 0, 0, 0, 0);
       
     const user = {
       cedula: this.cedula,

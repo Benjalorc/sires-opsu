@@ -8,37 +8,53 @@ const Municipio = require('../models/municipio');
 router.post('/registrar', (req, res, next) =>{
     'use strict';
     
-    Municipio.buscarMunicipio(req.body.municipio, (err, mun) =>{
-
+    Estudiante.buscarEstudiante(req.body.cedula, (err, est) => {
         if(err){
-            return res.json({success: false, msg:"No se pudo alcanzar al municipio"});
+            return res.json({success: false, msg:"No se pudo ejecutar la consulta de estudiantes"});
         }
         
-        if(mun){
-            
-            let newEstudiante = new Estudiante({
-                cedula: req.body.cedula,
-                nombre: req.body.nombre,
-                apellido: req.body.apellido,
-                f_nac: req.body.f_nac,
-                sexo: req.body.sexo,
-                mun: mun._id
-            });
-            
-            Estudiante.registrarEstudiante(newEstudiante, (err, user) =>{
-                                
-                if(err){
-                    return res.json({success:false, msg:"Fallo al registrar estudiante"});
-                }else{
-                    return res.json({success:true, msg:"Estudiante registrado con exito"});
-                }
-            });
-        }else{
-            return res.json({success: false, msg:"No se pudo encontrar al municipio"});
+        if(est){
+            return res.json({success: false, msg:"Ya existe ese estudiante"});
         }
+        else{
 
+            Municipio.buscarMunicipio(req.body.municipio, (err, mun) =>{
         
+                if(err){
+                    return res.json({success: false, msg:"No se pudo alcanzar al municipio"});
+                }
+                
+                if(mun){
+                    
+                    let newEstudiante = new Estudiante({
+                        cedula: req.body.cedula,
+                        nombre: req.body.nombre,
+                        apellido: req.body.apellido,
+                        f_nac: req.body.f_nac,
+                        sexo: req.body.sexo,
+                        mun: mun._id
+                    });
+                    
+                    Estudiante.registrarEstudiante(newEstudiante, (err, user) =>{
+                                        
+                        if(err){
+                            return res.json({success:false, msg:"Fallo al registrar estudiante"});
+                        }else{
+                            return res.json({success:true, msg:"Estudiante registrado con exito"});
+                        }
+                    });
+                }else{
+                    return res.json({success: false, msg:"No se pudo encontrar al municipio"});
+                }
+        
+                
+            });    
+
+        }
+                
     });
+    
+
     
     
 });

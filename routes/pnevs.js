@@ -23,24 +23,36 @@ router.post('/agregar', (req, res, next) =>{
                 }
                 
                 if(carreras){
-                    console.log(carreras);
-                    let newPnev = new Pnev({
-                        codigo: req.body.pnev.codigo,
-                        ano: req.body.pnev.ano,
-                        estudiante: estudiante._id,
-                        resultados: {
-                            a: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.a})._id,
-                            b: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.b})._id,
-                            c: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.c})._id
-                        }
-                    });
                     
-                    Pnev.agregarPnev(newPnev, (err, pnev) =>{
-                        if(err){
-                            return res.json({success:false, msg:"Fallo al agregar PNEV en la base de datos"});
-                        }else{
-                            return res.json({success:true, msg:"PNEV agregado con exito"});
-                        }
+                    Pnev.buscarPnev(req.body.codigo, (err, pnev) =>{
+                       if(err){
+                           return res.json({success: false, msg:"Se produjo un error al consulta a pnev"});
+                       }
+                       if(pnev){
+                           return res.json({success: false, msg:"Ya existe una pnev con ese codigo"});
+                       }
+                       else{
+                           
+                            let newPnev = new Pnev({
+                                codigo: req.body.pnev.codigo,
+                                ano: req.body.pnev.ano,
+                                estudiante: estudiante._id,
+                                resultados: {
+                                    a: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.a})._id,
+                                    b: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.b})._id,
+                                    c: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.c})._id
+                                }
+                            });
+                            
+                            Pnev.agregarPnev(newPnev, (err, pnev) =>{
+                                if(err){
+                                    return res.json({success:false, msg:"Fallo al agregar PNEV en la base de datos"});
+                                }else{
+                                    return res.json({success:true, msg:"PNEV agregado con exito"});
+                                }
+                            });                           
+           
+                       }
                     });
                 }else{
                     return res.json({success: false, msg: "Listado de carreras no encontrado"});

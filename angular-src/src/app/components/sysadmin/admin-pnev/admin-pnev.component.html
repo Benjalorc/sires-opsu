@@ -1,0 +1,129 @@
+<div class="btn" *ngIf="!mostrarFormulario">
+  <button type="button" class="btn btn-danger" id="volver" [routerLink]="['/admin']">Volver</button>
+</div>
+
+<div class="container">
+
+    <div class="row">
+      
+      <div class="btn-group-vertical" *ngIf="!mostrarFormulario">
+        <button type="button" class="btn btn-primary" id="reg-pnev" (click)="cargarFormulario()">Registrar PNEV</button>
+        <button type="button" class="btn btn-warning" id="update-pnev">Actualizar PNEV</button>
+        <button type="button" class="btn btn-danger" id="del-pnev">Eliminar PNEV</button>
+      </div>
+      
+
+      <div class="btn" *ngIf="mostrarFormulario">
+        <button type="button" class="btn btn-danger" id="cancelar-registro" (click)="quitarFormulario()">Cancelar</button>
+      </div>
+    
+    </div>
+
+
+    <div class="row" *ngIf="mostrarFormulario">
+        <form class="form-horizontal" (submit)="enviarFormulario()">
+          
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h3 class="text-center">Registrar PNEV</h3>
+          </div>
+        </div>
+
+        <fieldset>
+
+        <!-- Codigo -->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="codigo">Codigo</label>  
+          <div class="col-xs-3">
+            <input id="cedula" [(ngModel)]="cedula" name="cedula" type="text" maxlength="8" placeholder="A0A0A0B" class="form-control input-xs">
+          </div>
+        </div>
+        
+        <!-- Cedula -->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="cedula">Cedula</label>  
+          <div class="col-xs-3">
+            <input id="cedula" [(ngModel)]="cedula" name="cedula" type="text" placeholder="123456789" class="form-control input-xs">
+          </div>
+        </div>
+
+        <!-- Ano-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="ano">Ano</label>  
+          <div class="col-xs-3">
+
+            <select [(ngModel)]="ano" name="ano" id="ano">
+              <option value="" selected></option>
+              {{asignarAnos()}}
+            </select>
+
+          </div>
+        </div>
+
+
+        <!-- Resultados-->
+        <div class="form-group">
+          
+          {{pedirCarreras()}}
+          <div>
+            <label class="col-xs-5 control-label" for="resultados">Ordenar por: </label>
+  
+            <button type="button" id="boton1" (click)="cargarClasificacion('Especialidad')" disabled>Especialidad</button>
+            <button type="button" id="boton2" (click)="cargarClasificacion('Area')" disabled>Area</button>
+          </div>
+          
+          <div>
+            <label class="col-xs-5 control-label" for="clase">Clasificacion</label>
+            <select id="clases" [(ngModel)]="clase" name="clase" (change)="cargarOpcionesCarrera()">
+                
+            </select>
+          </div>
+          
+          <div>
+            <label class="col-xs-5 control-label" for="carrera">Carrera</label>
+            <select id="opcionesCarreras" [(ngModel)]="carrera" name="carrera">
+                
+            </select>
+          </div>
+          
+        </div>
+        
+        <div class="form-group">
+
+          <div>
+            <div class="col-xs-5"></div>
+            <div class="">
+              <input type="text" value={{resultados.a}} disabled><button type="button" (click)="addCareer('a')">+</button><button type="button" (click)="clearCareer('a')">X</button>
+            </div>
+          </div>          
+          <div>
+            <div class="col-xs-5"></div>
+            <div class="">
+              <input type="text" value={{resultados.b}} disabled><button type="button" (click)="addCareer('b')">+</button><button type="button" (click)="clearCareer('b')">X</button>
+            </div>
+          </div>          
+          <div>
+            <div class="col-xs-5"></div>
+            <div class="">
+              <input type="text" value={{resultados.c}} disabled><button type="button" (click)="addCareer('c')">+</button><button type="button" (click)="clearCareer('c')">X</button>
+            </div>
+          </div>          
+            
+
+        </div>
+
+        <!-- Submit-->
+        <div class="form-group">
+          <div class="col-xs-5">
+          </div>
+
+          <div class="col-xs-4">
+              <input type="submit" class="btn btn-primary" value="Registrar">
+          </div>
+        </div>  
+        
+        </fieldset>
+        </form>
+    </div>
+
+</div>

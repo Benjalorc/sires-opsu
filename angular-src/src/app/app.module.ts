@@ -17,6 +17,7 @@ import { SysadminComponent } from './components/sysadmin/sysadmin.component';
 import { AdminUnivComponent } from './components/sysadmin/admin-univ/admin-univ.component';
 import { AdminCarrComponent } from './components/sysadmin/admin-carr/admin-carr.component';
 import { AdminEstComponent } from './components/sysadmin/admin-est/admin-est.component';
+import { AdminPnevComponent } from './components/sysadmin/admin-pnev/admin-pnev.component';
 import { AdminIndComponent } from './components/sysadmin/admin-ind/admin-ind.component';
 
 import { ValidateService } from './services/validate/validate.service';
@@ -28,7 +29,6 @@ import { PnevsService } from './services/pnevs/pnevs.service';
 import { SnisService } from './services/snis/snis.service';
 import { EstudiantesService } from './services/estudiantes/estudiantes.service';
 import { AuthGuard } from './guards/auth.guard';
-import { MyDatePickerModule } from 'mydatepicker';
 
 const appRoutes : Routes = [
   { path: '', component: HomeComponent},
@@ -40,6 +40,7 @@ const appRoutes : Routes = [
   { path: 'admin/universidades', component: AdminUnivComponent, canActivate:[AuthGuard], data:{ ruta: 'universidades' } },
   { path: 'admin/carreras', component: AdminCarrComponent, canActivate:[AuthGuard], data:{ ruta: 'carreras' } },
   { path: 'admin/estudiantes', component: AdminEstComponent, canActivate:[AuthGuard], data:{ ruta: 'estudiantes' } },
+  { path: 'admin/pnevs', component: AdminPnevComponent, canActivate:[AuthGuard], data:{ ruta: 'pnevs' } },
   { path: 'admin/indicadores', component: AdminIndComponent, canActivate:[AuthGuard], data:{ ruta: 'indicadores' } }
 ]
 
@@ -56,12 +57,12 @@ const appRoutes : Routes = [
     AdminUnivComponent,
     AdminCarrComponent,
     AdminEstComponent,
+    AdminPnevComponent,
     AdminIndComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MyDatePickerModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),

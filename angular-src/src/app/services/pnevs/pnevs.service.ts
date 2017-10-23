@@ -7,10 +7,40 @@ import 'rxjs/add/operator/map';
 export class PnevsService {
 
   constructor(private http: Http) { }
+
+    validatePnev(pnev){
+      'use strict'
+      let avaible = Object.getOwnPropertyNames(pnev);
+      let pass = true;
+  
+      avaible.forEach((element) =>{
+        if(pnev[element] == undefined || pnev[element] == '' || pnev[element] == null){
+          pass = false
+        }
+      });
+      
+      avaible = Object.getOwnPropertyNames(pnev.resultados);
+      
+      avaible.forEach((element) =>{
+        if(pnev.resultados[element] == undefined || pnev.resultados[element] == '' || pnev.resultados[element] == null){
+          pass = false;
+        }
+      });
+      return pass;
+    }
+
   
     obtenerPnevs(){
         'use strict'
-        return this.http.get('http://localhost:8080/pnevs/all')
+        return this.http.get('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/pnevs/all')
+            .map(res => res.json());
+    }
+
+    registrarPnev(pnev){
+      'use strict'
+      let headers = new Headers();
+      headers.append('Content-Type','application/json');
+      return this.http.post('http://localhost:8080/estudiantes/registrar', pnev, {headers: headers})
             .map(res => res.json());
     }
 

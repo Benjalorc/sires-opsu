@@ -32,6 +32,12 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
         })),
         state('b3', style({
             transform: 'translate(50%, 115%)',
+        })),        
+        state('b5', style({
+            transform: 'translate(-50%, 215%)',
+        })),        
+        state('b6', style({
+            transform: 'translate(50%, 215%)',
         })),
 
         transition('a0 => a1', animate('250ms ease-in', keyframes([
@@ -50,6 +56,7 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
           style({opacity: 1, transform: 'translate(-10%, 30%)', offset: 0.8}),
           style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
         ]))),
+        
         transition('a0 => a2', animate('250ms ease-in', keyframes([
           style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
           style({opacity: 1, transform: 'translate(10%, 30%)', offset: 0.2}),
@@ -66,6 +73,7 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
           style({opacity: 1, transform: 'translate(10%, 30%)', offset: 0.8}),
           style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
         ]))),
+        
         transition('b0 => b1', animate('250ms ease-in', keyframes([
           style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
           style({opacity: 1, transform: 'translate(-20%, 5%)', offset: 0.2}),
@@ -82,6 +90,7 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
           style({opacity: 1, transform: 'translate(-20%, 5%)', offset: 0.8}),
           style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
         ]))),
+        
         transition('b0 => b4', animate('250ms ease-in', keyframes([
           style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
           style({opacity: 1, transform: 'translate(20%, 5%)', offset: 0.2}),
@@ -98,6 +107,7 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
           style({opacity: 1, transform: 'translate(20%, 5%)', offset: 0.8}),
           style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
         ]))),
+        
         transition('b0 => b2', animate('250ms ease-in', keyframes([
           style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
           style({opacity: 1, transform: 'translate(-10%, 30%)', offset: 0.2}),
@@ -114,6 +124,7 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
           style({opacity: 1, transform: 'translate(-10%, 30%)', offset: 0.8}),
           style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
         ]))),
+        
         transition('b0 => b3', animate('250ms ease-in', keyframes([
           style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
           style({opacity: 1, transform: 'translate(10%, 30%)', offset: 0.2}),
@@ -128,6 +139,40 @@ import { trigger,state,style,transition,animate,keyframes } from '@angular/anima
           style({opacity: 1, transform: 'translate(30%, 70%)', offset: 0.4}),
           style({opacity: 1, transform: 'translate(20%, 50%)', offset: 0.6}),
           style({opacity: 1, transform: 'translate(10%, 30%)', offset: 0.8}),
+          style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
+        ]))),
+        
+        transition('b0 => b5', animate('250ms ease-in', keyframes([
+          style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
+          style({opacity: 1, transform: 'translate(-10%, 60%)', offset: 0.2}),
+          style({opacity: 1, transform: 'translate(-20%, 100%)', offset: 0.4}),
+          style({opacity: 1, transform: 'translate(-30%, 140%)', offset: 0.6}),
+          style({opacity: 1, transform: 'translate(-40%, 180%)', offset: 0.8}),
+          style({opacity: 1, transform: 'translate(-50%, 215%)', offset: 1.0})
+        ]))),
+        transition('b5 => b0', animate('250ms ease-in', keyframes([
+          style({opacity: 1, transform: 'translate(-50%, 215%)', offset: 0}),
+          style({opacity: 1, transform: 'translate(-40%, 180%)', offset: 0.2}),
+          style({opacity: 1, transform: 'translate(-30%, 140%)', offset: 0.4}),
+          style({opacity: 1, transform: 'translate(-20%, 100%)', offset: 0.6}),
+          style({opacity: 1, transform: 'translate(-10%, 60%)', offset: 0.8}),
+          style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
+        ]))),
+
+        transition('b0 => b6', animate('250ms ease-in', keyframes([
+          style({opacity: 1, transform: 'translate(0, 0)', offset: 0}),
+          style({opacity: 1, transform: 'translate(10%, 60%)', offset: 0.2}),
+          style({opacity: 1, transform: 'translate(20%, 100%)', offset: 0.4}),
+          style({opacity: 1, transform: 'translate(30%, 140%)', offset: 0.6}),
+          style({opacity: 1, transform: 'translate(40%, 180%)', offset: 0.8}),
+          style({opacity: 1, transform: 'translate(50%, 215%)', offset: 1.0})
+        ]))),
+        transition('b6 => b0', animate('250ms ease-in', keyframes([
+          style({opacity: 1, transform: 'translate(50%, 215%)', offset: 0}),
+          style({opacity: 1, transform: 'translate(40%, 180%)', offset: 0.2}),
+          style({opacity: 1, transform: 'translate(30%, 140%)', offset: 0.4}),
+          style({opacity: 1, transform: 'translate(20%, 100%)', offset: 0.6}),
+          style({opacity: 1, transform: 'translate(10%, 60%)', offset: 0.8}),
           style({opacity: 1, transform: 'translate(0, 0)', offset: 1})
         ]))),
     ]),
@@ -149,6 +194,8 @@ export class SysadminComponent implements OnInit {
   icon4 : String;
   icon5 : String;
   icon6 : String;
+  icon7 : String;
+  icon8 : String;
 
   constructor() { }
 
@@ -167,8 +214,9 @@ export class SysadminComponent implements OnInit {
     this.icon4 = 'b0';
     this.icon5 = 'b0';
     this.icon6 = 'b0';
+    this.icon7 = 'b0';
+    this.icon8 = 'b0';
 
-    eval("window.yo = this");
   }
 
   animateLeft(){
@@ -179,6 +227,8 @@ export class SysadminComponent implements OnInit {
     this.icon4 = 'b0';
     this.icon5 = 'b0';
     this.icon6 = 'b0';
+    this.icon7 = 'b0';
+    this.icon8 = 'b0';
   }
 
   animateRight(){
@@ -186,13 +236,15 @@ export class SysadminComponent implements OnInit {
     this.icon4 = (this.icon4 === 'b0' ? 'b2' : 'b0');
     this.icon5 = (this.icon5 === 'b0' ? 'b3' : 'b0');
     this.icon6 = (this.icon6 === 'b0' ? 'b4' : 'b0');
+    this.icon7 = (this.icon7 === 'b0' ? 'b5' : 'b0');
+    this.icon8 = (this.icon8 === 'b0' ? 'b6' : 'b0');
 
     this.icon1 = 'a0';
     this.icon2 = 'a0';
   }
 
 
-    firstChart(){
+  firstChart(){
     let ctx = "myChart";
     
     let chart = new Chart(ctx, {

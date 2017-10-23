@@ -1,5 +1,11 @@
-
-#link1:hover, #link2:hover, #link3:hover, #link4:hover, #link5:hover, #link6:hover{
+#link1:hover, 
+#link2:hover, 
+#link3:hover, 
+#link4:hover, 
+#link5:hover, 
+#link6:hover,
+#link7:hover,
+#link8:hover{
   
   opacity: 0.5;
   

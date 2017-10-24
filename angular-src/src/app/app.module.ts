@@ -18,6 +18,7 @@ import { AdminUnivComponent } from './components/sysadmin/admin-univ/admin-univ.
 import { AdminCarrComponent } from './components/sysadmin/admin-carr/admin-carr.component';
 import { AdminEstComponent } from './components/sysadmin/admin-est/admin-est.component';
 import { AdminPnevComponent } from './components/sysadmin/admin-pnev/admin-pnev.component';
+import { AdminSniComponent } from './components/sysadmin/admin-sni/admin-sni.component';
 import { AdminIndComponent } from './components/sysadmin/admin-ind/admin-ind.component';
 
 import { ValidateService } from './services/validate/validate.service';
@@ -41,6 +42,7 @@ const appRoutes : Routes = [
   { path: 'admin/carreras', component: AdminCarrComponent, canActivate:[AuthGuard], data:{ ruta: 'carreras' } },
   { path: 'admin/estudiantes', component: AdminEstComponent, canActivate:[AuthGuard], data:{ ruta: 'estudiantes' } },
   { path: 'admin/pnevs', component: AdminPnevComponent, canActivate:[AuthGuard], data:{ ruta: 'pnevs' } },
+  { path: 'admin/snis', component: AdminSniComponent, canActivate:[AuthGuard], data:{ ruta: 'snis' } },
   { path: 'admin/indicadores', component: AdminIndComponent, canActivate:[AuthGuard], data:{ ruta: 'indicadores' } }
 ]
 
@@ -58,6 +60,7 @@ const appRoutes : Routes = [
     AdminCarrComponent,
     AdminEstComponent,
     AdminPnevComponent,
+    AdminSniComponent,
     AdminIndComponent
   ],
   imports: [

@@ -32,7 +32,7 @@ export class PnevsService {
   
     obtenerPnevs(){
         'use strict'
-        return this.http.get('https://sires-opsu-nuevo-benjamin-s-e.c9users.io:8080/pnevs/all')
+        return this.http.get('http://localhost:8080/pnevs/all')
             .map(res => res.json());
     }
 
@@ -40,7 +40,7 @@ export class PnevsService {
       'use strict'
       let headers = new Headers();
       headers.append('Content-Type','application/json');
-      return this.http.post('http://localhost:8080/estudiantes/registrar', pnev, {headers: headers})
+      return this.http.post('http://localhost:8080/pnevs/agregar', pnev, {headers: headers})
             .map(res => res.json());
     }
 

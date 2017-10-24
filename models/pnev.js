@@ -30,9 +30,8 @@ module.exports.agregarPnev = function(pnev, callback){
     pnev.save(callback);
 }
 
-module.exports.buscarPnev = function(data, callback){
+module.exports.buscarPnev = function(query, callback){
 
-    const query = {estudiante: data};
     Pnev.findOne(query)
         .populate("estudiante")
         .populate("estudiante.mun")

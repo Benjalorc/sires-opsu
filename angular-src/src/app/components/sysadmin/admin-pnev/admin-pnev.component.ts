@@ -14,7 +14,7 @@ export class AdminPnevComponent implements OnInit {
   mostrarFormulario: Boolean;
   codigo: string;
   ano: number;
-  estudiante: string;
+  cedula: string;
   resultados: any;
   
   clasificacion: string;
@@ -25,6 +25,8 @@ export class AdminPnevComponent implements OnInit {
 
   toSetupYear: Boolean;
   toSetupCareers: Boolean;
+
+  careersToSend: any;
 
   constructor(private carrerasService: CarrerasService,
               private pnevsService: PnevsService,
@@ -45,6 +47,10 @@ export class AdminPnevComponent implements OnInit {
     this.clasificacion = "";
     this.carreras = [];
     this.carreraActual = "";
+
+    this.careersToSend = 0;
+
+    eval("window.yo = this");
   }
   
   pedirCarreras(){
@@ -104,6 +110,7 @@ export class AdminPnevComponent implements OnInit {
   
   cargarOpcionesCarrera(){
     
+    this.carreraActual = "";
     let carreras = this.sortedCareers[this.clasificacion][this.clase];
     console.log(carreras);
     
@@ -125,6 +132,7 @@ export class AdminPnevComponent implements OnInit {
   
   cargarClasificacion(opcionDom){
     
+    this.carreraActual = "";
     this.clasificacion = opcionDom;
     let selectCarreras = document.querySelector("#opcionesCarreras");
     selectCarreras.innerHTML = "";
@@ -160,7 +168,7 @@ export class AdminPnevComponent implements OnInit {
       let anoActual = new Date().getFullYear();
       let anos = document.querySelector('#ano');
       
-      for (let i = 100; i>5; i--){
+      for (let i = 0; i<=100; i++){
         let opcion = document.createElement("option");
         opcion.setAttribute("value",""+(anoActual-i));
         opcion.innerHTML = ""+(anoActual-i);
@@ -177,18 +185,107 @@ export class AdminPnevComponent implements OnInit {
   cargarFormulario(){
     this.toogleForm();
   }
+
+  enableAddButtons(){
+    if(this.carreraActual != ""){
+      document.querySelector("#add_a").removeAttribute("disabled");
+      document.querySelector("#add_a").setAttribute("class","btn-success");
+      document.querySelector("#remove_a").removeAttribute("disabled");
+      document.querySelector("#remove_a").setAttribute("class","btn-danger");
+    }
+  }
   
   addCareer(opcion){
+  if(this.carreraActual != ""){
+
+    if(this.resultados[opcion] == ""){
+      if(this.careersToSend<3) this.careersToSend++;    
+    }
+
     this.resultados[opcion] = this.carreraActual;
+    let fix = 1;
+    if(this.careersToSend == 3) fix = 0;
+
+    let charCode = String.fromCharCode(96+this.careersToSend+fix);
+    let addSelector = "add_"+charCode;
+    let removeSelector = "remove_"+charCode;
+
+    document.getElementById(addSelector).setAttribute("class","btn-success");
+    document.getElementById(removeSelector).setAttribute("class","btn-danger");
+    document.getElementById(addSelector).removeAttribute("disabled");
+    document.getElementById(removeSelector).removeAttribute("disabled");
+
+    if(this.resultados.a != "" && this.resultados.b != "" && this.resultados.c != ""){
+      document.querySelector("#reg").removeAttribute("disabled");
+    }
+  }else{
+    this.flashMessage.show('Seleccione primero alguna carrera de la lista', { cssClass: 'alert-danger', timeout: 1000 });
   }
+  }
+
   clearCareer(opcion){
+
+    let canReduce = false;
+    let emptyOption = false;
+    let careersFull = false;
+
+    if(this.careersToSend == 3){ careersFull = true}
+    if(this.careersToSend > 0){ canReduce = true }
+    if(this.resultados[opcion] == ""){ emptyOption = true; };
+
     this.resultados[opcion] = "";
+    console.log(this.resultados);
+  
+    let lista = opcion.charCodeAt(0)-96;
+    let fix = 0;
+
+    if(careersFull) fix = 1;
+
+    for(let i = 0, j = this.careersToSend-lista; i <= j; i++){
+
+      console.log("aqui voooy");
+      let letra = String.fromCharCode(96+lista+i);
+      console.log("letra: "+letra)
+      let siguiente = String.fromCharCode(96+lista+i+1-fix);
+      console.log("siguiente: "+siguiente);
+
+
+      console.log(this.resultados[""+letra]);
+      console.log(this.resultados[""+siguiente]);
+
+      this.resultados[""+letra]=this.resultados[""+siguiente];
+     
+      console.log(this.resultados[""+letra]);
+      console.log(this.resultados[""+siguiente]);
+
+    }
+
+    if(!careersFull && !emptyOption){
+
+      let charCode = String.fromCharCode(96+this.careersToSend+1);
+      let addSelector = "add_"+charCode;
+      let removeSelector = "remove_"+charCode;
+
+      document.getElementById(addSelector).removeAttribute("class");
+      document.getElementById(removeSelector).removeAttribute("class");
+      document.getElementById(addSelector).setAttribute("disabled","true");
+      document.getElementById(removeSelector).setAttribute("disabled","true");
+
+    }
+
+
+    if(this.resultados.a == "" || this.resultados.b == "" || this.resultados.c == ""){
+      document.querySelector("#reg").setAttribute("disabled","true");
+    }
+
+    if(canReduce && !emptyOption) this.careersToSend--;
+    
   }
   
   quitarFormulario(){
     this.codigo = "";
     this.ano = 0;
-    this.estudiante = "";
+    this.cedula = "";
     this.resultados = {
       a: "",
       b: "",
@@ -200,19 +297,30 @@ export class AdminPnevComponent implements OnInit {
  
   enviarFormulario(){
   
+    let a = this.carreras.find((element) =>{return element.nombre == this.resultados.a });
+    let b = this.carreras.find((element) =>{return element.nombre == this.resultados.b });
+    let c = this.carreras.find((element) =>{return element.nombre == this.resultados.c });
+
+
+
     let resultados = {
-      a: (this.carreras((element) =>{return element.nombre == this.resultados.a })).codigo,
-      b: (this.carreras((element) =>{return element.nombre == this.resultados.b })).codigo,
-      c: (this.carreras((element) =>{return element.nombre == this.resultados.c })).codigo
+      a: a.codigo,
+      b: b.codigo,
+      c: c.codigo
     }
+
+    console.log(resultados);
 
     const pnev = {
       codigo : this.codigo,
       ano : this.ano,
-      estudiante : this.estudiante,
-      resultados : this.resultados
+      estudiante : this.cedula,
+      resultados : resultados
     }
+
+    console.log(pnev);
     
+
     if(this.pnevsService.validatePnev(pnev)){
       this.flashMessage.show('Formulario llenado con exito', { cssClass: 'alert-info', timeout: 1000 });
 
@@ -220,6 +328,7 @@ export class AdminPnevComponent implements OnInit {
 
         if(data.success){
           this.flashMessage.show(data.msg, { cssClass: 'alert-success', timeout: 1000 });
+          this.quitarFormulario();
         }
         else{
           this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 1000 });
@@ -230,6 +339,7 @@ export class AdminPnevComponent implements OnInit {
       this.flashMessage.show('Rellene todos los campos', { cssClass: 'alert-danger', timeout: 1000 });
     }
     
+
   }
 
 }

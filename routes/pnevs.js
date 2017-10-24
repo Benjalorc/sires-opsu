@@ -4,11 +4,12 @@ const Pnev = require('../models/pnev');
 const Estudiante = require('../models/estudiante');
 const Carrera = require('../models/carrera');
 
+//AGREGAR PNEV
 router.post('/agregar', (req, res, next) =>{
-    'use strict';
 
-    let cedula = req.body.cedula;
-
+    let cedula = req.body.estudiante;
+    console.log(req.body);
+    console.log(cedula);
     Estudiante.buscarEstudiante(cedula, (err, estudiante) =>{
         
         if(err){
@@ -16,56 +17,85 @@ router.post('/agregar', (req, res, next) =>{
         }
         
         if(estudiante){
-            Carrera.listarCarreras('', (err, carreras) =>{
-                
+            
+            let query = {estudiante: estudiante._id};
+            console.log(query);
+            console.log(estudiante);
+            Pnev.buscarPnev(query, (err, pnev) =>{
+
                 if(err){
-                    return res.json({success: false, msg: "Error al ejecutar la consulta"});
+                    return res.json({success: false, msg:"Error intentando verificar pnev"});
                 }
-                
-                if(carreras){
-                    
-                    Pnev.buscarPnev(req.body.codigo, (err, pnev) =>{
-                       if(err){
-                           return res.json({success: false, msg:"Se produjo un error al consulta a pnev"});
-                       }
-                       if(pnev){
-                           return res.json({success: false, msg:"Ya existe una pnev con ese codigo"});
-                       }
-                       else{
-                           
-                            let newPnev = new Pnev({
-                                codigo: req.body.pnev.codigo,
-                                ano: req.body.pnev.ano,
-                                estudiante: estudiante._id,
-                                resultados: {
-                                    a: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.a})._id,
-                                    b: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.b})._id,
-                                    c: carreras.find(function(element){ return element.codigo == req.body.pnev.resultados.c})._id
+
+                if (pnev) {
+                    return res.json({success: false, msg:"Ya existe un registro de PNEV asociado a la cedula proporcionada"});
+                }
+
+                else{
+
+
+                    let query = {codigo: req.body.codigo};
+                    Pnev.buscarPnev(query, (err, pnev) =>{
+                        if(err){
+                            return res.json({success: false, msg:"Se produjo un error al consulta a pnev"});
+                        }
+                        if(pnev){
+                            return res.json({success: false, msg:"Ya existe una pnev con ese codigo"});
+                        }
+                        else{
+
+
+
+
+                            Carrera.listarCarreras('', (err, carreras) =>{
+                            
+                                if(err){
+                                    return res.json({success: false, msg: "Error al ejecutar la consulta"});
+                                }
+
+                                if(carreras){
+
+                                    let newPnev = new Pnev({
+                                        codigo: req.body.codigo,
+                                        ano: req.body.ano,
+                                        estudiante: estudiante._id,
+                                        resultados: {
+                                            a: carreras.find(function(element){ return element.codigo == req.body.resultados.a})._id,
+                                            b: carreras.find(function(element){ return element.codigo == req.body.resultados.b})._id,
+                                            c: carreras.find(function(element){ return element.codigo == req.body.resultados.c})._id
+                                        }
+                                    });
+                                    
+                                    Pnev.agregarPnev(newPnev, (err, pnev) =>{
+                                        if(err){
+                                            return res.json({success:false, msg:"Fallo al agregar PNEV en la base de datos"});
+                                        }else{
+                                            return res.json({success:true, msg:"PNEV agregado con exito"});
+                                        }
+                                    });                           
+
+                                }
+                                else{
+                                    return res.json({success: false, msg: "Listado de carreras no encontrado"});
                                 }
                             });
-                            
-                            Pnev.agregarPnev(newPnev, (err, pnev) =>{
-                                if(err){
-                                    return res.json({success:false, msg:"Fallo al agregar PNEV en la base de datos"});
-                                }else{
-                                    return res.json({success:true, msg:"PNEV agregado con exito"});
-                                }
-                            });                           
-           
-                       }
+                        }
                     });
-                }else{
-                    return res.json({success: false, msg: "Listado de carreras no encontrado"});
+             
                 }
+
             });
-            
-            
-        }else{
-            return res.json({success: false, msg:"No se encontro al estudiante"});
+
+        }
+        else{
+            return res.json({success: false, msg:"El estudiante con la cedula proporcionada no existe en los registros"});
         }
     });
+
 });
 
+
+//OBTENER TODOS LOS PNEV
 router.get('/all', (req, res, next) =>{
     'use strict';
 
@@ -136,7 +166,8 @@ router.get('/all', (req, res, next) =>{
     });
 
 });
-    
+
+//BUSCAR LA PNEV DE 1 ESTUDIANTE ESPECIFICO    
 router.get('/buscar/:cedula', (req, res, next) =>{
     'use strict';
 
@@ -169,6 +200,7 @@ router.get('/buscar/:cedula', (req, res, next) =>{
     });
 });
 
+//ACTUALIZAR UNA PNEV
 router.put('/actualizar', (req, res, next) =>{
     'use strict'; 
     
@@ -191,6 +223,7 @@ router.put('/actualizar', (req, res, next) =>{
     });
 });
 
+//ELIMINAR UNA PNEV
 router.delete('/eliminar', (req, res, next) =>{
     'use strict';
 

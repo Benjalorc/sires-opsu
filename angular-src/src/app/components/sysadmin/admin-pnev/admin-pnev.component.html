@@ -35,7 +35,7 @@
         <div class="form-group">
           <label class="col-xs-5 control-label" for="codigo">Codigo</label>  
           <div class="col-xs-3">
-            <input id="cedula" [(ngModel)]="cedula" name="cedula" type="text" maxlength="8" placeholder="A0A0A0B" class="form-control input-xs">
+            <input id="codigo" [(ngModel)]="codigo" name="codigo" type="text" maxlength="8" placeholder="A0A0A0B" class="form-control input-xs">
           </div>
         </div>
         
@@ -65,50 +65,61 @@
         <div class="form-group">
           
           {{pedirCarreras()}}
-          <div>
+          <div class="btn-goup">
+
             <label class="col-xs-5 control-label" for="resultados">Ordenar por: </label>
-  
-            <button type="button" id="boton1" (click)="cargarClasificacion('Especialidad')" disabled>Especialidad</button>
-            <button type="button" id="boton2" (click)="cargarClasificacion('Area')" disabled>Area</button>
+            
+            <label class="btn btn-primary">
+              <input type="radio" name="clasificacion" id="boton1" (click)="cargarClasificacion('Especialidad')" autocomplete="off" disabled>Especialidad
+            </label>
+
+            <label class="btn btn-primary">
+            <input type="radio" id="boton2" name="clasificacion" (click)="cargarClasificacion('Area')" autocomplete="off" disabled>Area
+            </label>
           </div>
           
           <div>
-            <label class="col-xs-5 control-label" for="clase">Clasificacion</label>
+            <label class="control-label" for="clase">Clasificacion</label>
             <select id="clases" [(ngModel)]="clase" name="clase" (change)="cargarOpcionesCarrera()">
                 
             </select>
           </div>
           
           <div>
-            <label class="col-xs-5 control-label" for="carrera">Carrera</label>
-            <select id="opcionesCarreras" [(ngModel)]="carrera" name="carrera">
+            <label class="control-label" for="carrera">Carrera</label>
+            <select id="opcionesCarreras" [(ngModel)]="carreraActual" name="carreraActual" (change)="enableAddButtons()">
                 
             </select>
           </div>
           
         </div>
         
-        <div class="form-group">
+        <div id="inputsCarreras" class="form-group">
+
 
           <div>
-            <div class="col-xs-5"></div>
+            <div class="col-xs-5">
+            </div>
             <div class="">
-              <input type="text" value={{resultados.a}} disabled><button type="button" (click)="addCareer('a')">+</button><button type="button" (click)="clearCareer('a')">X</button>
+              <input type="text" value={{resultados.a}} disabled><button type="button" (click)="addCareer('a')" id="add_a" disabled>+</button><button type="button" (click)="clearCareer('a')" id="remove_a" disabled>X</button>
             </div>
           </div>          
+
           <div>
-            <div class="col-xs-5"></div>
+            <div class="col-xs-5">
+            </div>
             <div class="">
-              <input type="text" value={{resultados.b}} disabled><button type="button" (click)="addCareer('b')">+</button><button type="button" (click)="clearCareer('b')">X</button>
+              <input type="text" value={{resultados.b}} disabled><button type="button" (click)="addCareer('b')" id="add_b" disabled>+</button><button type="button" (click)="clearCareer('b')" id="remove_b" disabled>X</button>
             </div>
           </div>          
+
           <div>
-            <div class="col-xs-5"></div>
-            <div class="">
-              <input type="text" value={{resultados.c}} disabled><button type="button" (click)="addCareer('c')">+</button><button type="button" (click)="clearCareer('c')">X</button>
+            <div class="col-xs-5">
             </div>
-          </div>          
-            
+            <div class="">
+              <input type="text" value={{resultados.c}} disabled><button type="button" (click)="addCareer('c')" id="add_c" disabled>+</button><button type="button" (click)="clearCareer('c')" id="remove_c" disabled>X</button>
+            </div>
+          </div> 
 
         </div>
 
@@ -118,7 +129,7 @@
           </div>
 
           <div class="col-xs-4">
-              <input type="submit" class="btn btn-primary" value="Registrar">
+              <input type="submit" id="reg" class="btn btn-primary" value="Registrar" disabled>
           </div>
         </div>  
         

@@ -19,7 +19,7 @@ export class AdminEstComponent implements OnInit {
   dia: any;
   f_nac: Object;
   sexo: string;
-  mun: string;
+  municipio: string;
   
   toSetupYear: Boolean;
   
@@ -47,8 +47,11 @@ export class AdminEstComponent implements OnInit {
     this.nombre = "";
     this.apellido = "";
     this.sexo = "";
+    this.ano = "";
+    this.mes = "";
+    this.dia = "";
     this.f_nac = {};
-    this.mun = "";
+    this.municipio = "";
     this.toogleForm();
     this.toSetupYear = true;
   }
@@ -118,7 +121,7 @@ export class AdminEstComponent implements OnInit {
       apellido : this.apellido,
       f_nac : this.f_nac,
       sexo : this.sexo,
-      mun: this.mun,
+      municipio: this.municipio,
       
     }
     
@@ -129,6 +132,7 @@ export class AdminEstComponent implements OnInit {
 
         if(data.success){
           this.flashMessage.show(data.msg, { cssClass: 'alert-success', timeout: 1000 });
+          this.quitarFormulario();
         }
         else{
           this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 1000 });

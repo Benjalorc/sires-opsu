@@ -46,9 +46,8 @@ module.exports.obtenerSnis = function(data, callback){
 }
 
 
-module.exports.buscarSni = function(data, callback){
+module.exports.buscarSni = function(query, callback){
 
-    const query = {estudiante: data};
     Sni.findOne(query)
         .populate("estudiante")
         .populate("opciones.a")

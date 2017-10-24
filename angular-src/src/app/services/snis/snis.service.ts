@@ -7,10 +7,41 @@ import 'rxjs/add/operator/map';
 export class SnisService {
 
   constructor(private http: Http) { }
+
+  	validateSni(sni){
+
+      console.log(sni);
+      'use strict'
+      let avaible = Object.getOwnPropertyNames(sni);
+      let pass = true;
+  
+      avaible.forEach((element) =>{
+        if(sni[element] == undefined || sni[element] == '' || sni[element] == null){
+          pass = false
+        }
+      });
+      
+      avaible = Object.getOwnPropertyNames(sni.opciones);
+      
+      avaible.forEach((element) =>{
+        if(sni.opciones[element] == undefined || sni.opciones[element] == '' || sni.opciones[element] == null){
+          pass = false;
+        }
+      });
+      return pass;
+    }
   
     obtenerSnis(){
         'use strict'
         return this.http.get('http://localhost:8080/snis/all')
+            .map(res => res.json());
+    }
+
+    registrarSni(sni){
+      'use strict'
+      let headers = new Headers();
+      headers.append('Content-Type','application/json');
+      return this.http.post('http://localhost:8080/snis/agregar', sni, {headers: headers})
             .map(res => res.json());
     }
 

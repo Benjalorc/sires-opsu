@@ -7,10 +7,10 @@ const Carrera = require('../models/carrera');
 
 //AGREGAR SNI
 router.post('/agregar', (req, res, next) =>{
-    'use strict';
 
-    let cedula = req.body.cedula;
-
+    let cedula = req.body.estudiante;
+    console.log(req.body);
+    console.log(cedula);
     Estudiante.buscarEstudiante(cedula, (err, estudiante) =>{
         
         if(err){
@@ -18,45 +18,84 @@ router.post('/agregar', (req, res, next) =>{
         }
         
         if(estudiante){
-            Carrera.listarCarreras('', (err, carreras) =>{
-                
-                if(err){
-                    return res.json({success: false, msg: "Error al ejecutar la consulta"});
-                }
-                
-                if(carreras){
+            
+            let query = {estudiante: estudiante._id};
+            console.log(query);
+            console.log(estudiante);
+            Sni.buscarSni(query, (err, sni) =>{
 
-                    let newSni = new Sni({
-                        codigo: req.body.sni.codigo,
-                        ano: req.body.sni.ano,
-                        estudiante: estudiante._id,
-                        opciones: {
-                            a: carreras.find(function(element){ return element.codigo == req.body.sni.opciones.a})._id,
-                            b: carreras.find(function(element){ return element.codigo == req.body.sni.opciones.b})._id,
-                            c: carreras.find(function(element){ return element.codigo == req.body.sni.opciones.c})._id,
-                            d: carreras.find(function(element){ return element.codigo == req.body.sni.opciones.d})._id,
-                            e: carreras.find(function(element){ return element.codigo == req.body.sni.opciones.e})._id,
-                            f: carreras.find(function(element){ return element.codigo == req.body.sni.opciones.f})._id
-                        }
-                    });
-                    
-                    Sni.agregarSni(newSni, (err, sni) =>{
-                        if(err){
-                            return res.json({success:false, msg:"Fallo al agregar sni en la base de datos"});
-                        }else{
-                            return res.json({success:true, msg:"Sni agregada con exito"});
-                        }
-                    });
-                }else{
-                    return res.json({success: false, msg: "Listado de carreras no encontrado"});
+                if(err){
+                    return res.json({success: false, msg:"Error intentando verificar sni"});
                 }
+
+                if (sni) {
+                    return res.json({success: false, msg:"Ya existe un registro de SNI asociado a la cedula proporcionada"});
+                }
+
+                else{
+
+
+                    let query = {codigo: req.body.codigo};
+                    Sni.buscarSni(query, (err, sni) =>{
+                        if(err){
+                            return res.json({success: false, msg:"Se produjo un error al consulta a sni"});
+                        }
+                        if(sni){
+                            return res.json({success: false, msg:"Ya existe un registro de sni con ese codigo"});
+                        }
+                        else{
+
+
+
+
+                            Carrera.listarCarreras('', (err, carreras) =>{
+                            
+                                if(err){
+                                    return res.json({success: false, msg: "Error al ejecutar la consulta"});
+                                }
+
+                                if(carreras){
+
+                                    let newSni = new Sni({
+                                        codigo: req.body.codigo,
+                                        ano: req.body.ano,
+                                        estudiante: estudiante._id,
+                                        opciones: {
+                                            a: carreras.find(function(element){ return element.codigo == req.body.opciones.a})._id,
+                                            b: carreras.find(function(element){ return element.codigo == req.body.opciones.b})._id,
+                                            c: carreras.find(function(element){ return element.codigo == req.body.opciones.c})._id,
+                                            d: carreras.find(function(element){ return element.codigo == req.body.opciones.d})._id,
+                                            e: carreras.find(function(element){ return element.codigo == req.body.opciones.e})._id,
+                                            f: carreras.find(function(element){ return element.codigo == req.body.opciones.f})._id
+                                        }
+                                    });
+                                    
+                                    Sni.agregarSni(newSni, (err, sni) =>{
+                                        if(err){
+                                            return res.json({success:false, msg:"Fallo al agregar SNI en la base de datos"});
+                                        }else{
+                                            return res.json({success:true, msg:"SNI agregado con exito"});
+                                        }
+                                    });                           
+
+                                }
+                                else{
+                                    return res.json({success: false, msg: "Listado de carreras no encontrado"});
+                                }
+                            });
+                        }
+                    });
+             
+                }
+
             });
-            
-            
-        }else{
-            return res.json({success: false, msg:"No se encontro al estudiante"});
+
+        }
+        else{
+            return res.json({success: false, msg:"El estudiante con la cedula proporcionada no existe en los registros"});
         }
     });
+
 });
 
 

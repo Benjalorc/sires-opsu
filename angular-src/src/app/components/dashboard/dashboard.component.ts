@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
       if(pintura[municipio] < pintura.total*0.65){return 'rgb(255, 195, 100)';} 
       if(pintura[municipio] < pintura.total*0.80){return 'rgb(255, 175, 100)';} 
       if(pintura[municipio] <= pintura.total){return 'rgb(255, 155, 100)';} 
-      return 'rgb(0, 0, 0)';
+      return 'rgb(255, 255, 255)';
     }
 
     return { 
@@ -545,10 +545,18 @@ export class DashboardComponent implements OnInit {
   drawSortedCareers(obj, buttonParent){
     console.log(obj);
     console.log(buttonParent);
-    
+
+    if(document.querySelector("#munCount")){
+      let h5temp = document.querySelector("#munCount");
+      h5temp.parentNode.removeChild(h5temp);
+    }
+
     let avaible = Object.getOwnPropertyNames(obj);
+
     let h5 = document.createElement("h5");
     h5.innerHTML = "";
+    h5.setAttribute("id","munCount");
+
     avaible.forEach((element) =>{
 
       if(element == "total"){
@@ -625,16 +633,6 @@ export class DashboardComponent implements OnInit {
     this.showingSortedCareers2 = true;
   }
 
-/*
-  erase(){
-    this.ocultarPanelInferior();
-
-    if(this.markersLayer != undefined){this.markersLayer.clearLayers();}
-    //this.markersLayer.clearLayers();
-    console.log(this.markersLayer);
-  }
-*/
-
  getPnevs(){
 
     this.toogleMapColors();
@@ -702,7 +700,7 @@ export class DashboardComponent implements OnInit {
             else{
               especialidadSorted[element.carreras[opt].especialidad][element.municipio] = 1;
             }
-            especialidadSorted[element.carreras[opt].especialidad] += 1;
+            especialidadSorted[element.carreras[opt].especialidad].total += 1;
           }
           else{
             especialidadSorted[element.carreras[opt].especialidad] = {};
@@ -719,7 +717,7 @@ export class DashboardComponent implements OnInit {
             else{
               areaSorted[element.carreras[opt].area][element.municipio] = 1;
             }
-            areaSorted[element.carreras[opt].area] += 1;
+            areaSorted[element.carreras[opt].area].total += 1;
           }
           else{
             areaSorted[element.carreras[opt].area] = {};
@@ -736,7 +734,7 @@ export class DashboardComponent implements OnInit {
             else{
               carreraSorted[element.carreras[opt].nombre][element.municipio] = 1;
             }
-            carreraSorted[element.carreras[opt].nombre] += 1;
+            carreraSorted[element.carreras[opt].nombre].total += 1;
           }
           else{
             carreraSorted[element.carreras[opt].nombre] = {};

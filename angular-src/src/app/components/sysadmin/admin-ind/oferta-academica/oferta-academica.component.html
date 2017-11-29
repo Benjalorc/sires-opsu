@@ -1,0 +1,128 @@
+<div class="row btn">
+  <div class="col-xs-2">  
+    <button type="button" class="btn btn-danger" id="volver" (click)="limpiarSesion()" [routerLink]="['/admin/indicadores']"><span class="glyphicon glyphicon-arrow-left"></span></button>
+  </div>
+</div>
+
+<div class="row">
+
+        <form class="form" (submit)="enviarFormulario()">  
+
+        <div class="form-row">
+          <div class="col-xs-12">
+            <h3 class="text-center">Oferta Académica</h3>
+          </div>
+        </div>
+
+        <div class="form-row">
+          
+          <div class="col-xs-6">
+            <label class="control-label" for="estado">Estado</label>  
+            <select class="form-control" id="estado" [(ngModel)]="estado" name="estado" (change)="enableMun()">
+                <option value="" selected disabled></option>
+                <option *ngFor="let est of estados" [value]="est.codigo">{{est.nombre}}</option>
+            </select>
+          </div>
+
+          <div class="col-xs-6">
+          <label class="control-label" for="municipio">Municipio</label>  
+            <select class="form-control" id="municipio" [(ngModel)]="municipio" name="municipio" (change)="obtenerUniversidades()" [disabled]="munOff">
+                <option value="" selected disabled></option>
+                <option *ngFor="let ubic of municipios" [value]="ubic.codigo">{{ubic.nombre}}</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-xs-12">
+          <label class="control-label" for="universidad">Universidades</label>  
+            <select class="form-control" id="universidad" [(ngModel)]="universidad" name="universidad" (change)="enableCarr()" [disabled]="univOff">
+                <option value="" selected disabled></option>
+                <option *ngFor="let univ of universidades" [value]="univ.codigo">{{univ.nombre}}</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-xs-12">
+          <label class="control-label" for="carrera">Carreras</label>  
+            <select class="form-control" id="carrera" [(ngModel)]="carrera" name="carrera" (change)="enablePeriodo()" [disabled]="carrOff">
+                <option value="" selected disabled></option>
+                <option *ngFor="let carr of carreras" [value]="carr.carrera.codigo">{{carr.carrera.nombre}}</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-xs-2">
+          <label class="control-label" for="periodo">Periodo</label>
+            <input type="number" class="form-control" id="periodo" [(ngModel)]="periodo" name="periodo" min="1" max="2" [disabled]="periodoOff">
+          </div>
+
+          <div class="col-xs-2">
+          <label class="control-label" for="ano">Ano</label>
+            <select class="form-control" id="ano" [(ngModel)]="ano" name="ano" [disabled]="periodoOff">
+                <option *ngFor="let anio of anios" [value]="anio">{{anio}}</option>
+            </select>
+          </div>
+
+
+          <div class="col-xs-5"></div>
+
+
+          <div class="col-xs-3">
+          <label class="control-label" for="oferta">Oferta</label>
+            <input type="number" class="form-control" id="oferta" [(ngModel)]="oferta" name="oferta" min="0" [disabled]="ofertaOff">
+          </div>
+
+        </div>
+
+
+
+        <div class="form-group" *ngIf="carrera && mostrarGrilla">
+
+          {{ calcularTitulo() }}
+          <h4>Histórico de Ofertas en {{universidadActual.nombre}} en la carrera {{carreraActual.carrera.nombre}} </h4>
+          <div class="table-responsive">
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Periodo</th>
+                      <th>Año</th>
+                      <th>Cupos</th>
+                      <th>Inscritos</th>
+                    </tr>
+                  </thead>
+                  <tbody ngDefaultControl>
+                    <tr *ngFor="let registro of historial">
+                      <td>{{registro.periodo}}</td>
+                      <td>{{registro.ano}}</td>
+                      <td>{{registro.cupos}}</td>
+                      <td>{{registro.inscritos}}</td>
+                    </tr>
+                    <tr>
+                      <td>  <button type="button" class="btn btn-success" (click)="insertar()">Insertar</button>  </td>
+                      <td>  <button type="button" class="btn btn-warning" (click)="modificar()">Modificar</button>  </td>
+                      <td>  <button type="button" class="btn btn-danger" (click)="eliminar()">Eliminar</button>  </td>
+                    </tr>
+                  </tbody>
+              </table>
+          </div>
+
+        <div class="form-group">
+          <div id="indicadores" class="row">
+            <div id="myCanvas"></div>
+          </div>
+        </div>
+
+        </div>
+
+        </form>
+
+</div>

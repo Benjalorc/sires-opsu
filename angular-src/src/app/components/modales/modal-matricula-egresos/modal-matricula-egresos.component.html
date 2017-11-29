@@ -1,0 +1,59 @@
+<button type="button" class="btn btn-success" (click)="openModal(template)">Reportar Egresos</button>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"><span class="glyphicon glyphicon-warning-sign btn-danger"></span>Reportar Egresos<span class="glyphicon glyphicon-warning-sign btn-danger"></span></h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+	
+  <div class="row">
+	<div class="col-xs-12 text-center">
+		<h4>¿Desea reportar los siguientes egresos para el periodo {{ano}} - {{periodo}} ?</h4>
+		<h5> -- Los cambios no podrán deshacerse una vez guardados! -- </h5>	
+
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Retiros Nuevos</th>
+                    <th>Graduandos Nuevos</th>
+                  </tr>
+                </thead>
+                <tbody ngDefaultControl>
+                  <tr *ngFor="let ingreso of egresos">
+                    <td>{{carrera.carrera.codigo}}</td>
+                    <td>{{carrera.carrera.nombre}}</td>
+                    <td>{{ingreso.ano}}</td>
+                    <td>{{ingreso.periodo}}</td>
+                    <td>{{ingreso.egresados.nuevos_retiros}}</td>
+                    <td>{{ingreso.egresados.nuevos_graduandos}}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+        	<div class="col-xs-7"></div>
+        	<div class="col-xs-2">
+        		<button type="button" class="btn btn-success" (click)="accept()">Aceptar</button>
+        	</div>
+        	<div class="col-xs-2">
+        		<button type="button" class="btn btn-danger" (click)="decline()">Cancelar</button>
+        	</div>
+        </div>
+
+	</div>  	
+  </div>
+
+
+
+  </div>
+</ng-template>

@@ -1,31 +1,30 @@
-<div class="container">
-    <div class="row">
-        
-        <div class="containerLeft col-xs-6">
+<div class="row">
+        <div class="col-xs-1"></div>
+        <div class="containerLeft col-xs-5">
             <h4>Estadisticas</h4>
             <div id="btnset1" (click)="animateLeft()">
                 <img id="btn1" src="../../assets/icons/search64.png">
             </div>
             <div id="linkset1" class="linksLeft">
-                <img [@myAwesomeAnimation]='icon1' [routerLink]="['/admin/indicadores']" id="link1" src="../../assets/icons/analytics64.png">
-                <img [@myAwesomeAnimation]='icon2' id="link2" src="../../assets/icons/laptop64.png">
+                <img data-toggle="tooltip" data-placement="left" title="Indicadores" [@myAwesomeAnimation]='icon1' [routerLink]="['/admin/indicadores']" id="link1" src="../../assets/icons/analytics64.png">
+                <img data-toggle="tooltip" data-placement="right" title="..." [@myAwesomeAnimation]='icon2' id="link2" src="../../assets/icons/laptop64.png">
             </div>
         </div>
 
-        <div class="containerRight col-xs-6">
+        <div class="containerRight col-xs-3">
             <h4>Registros</h4>
             <div id="btnset2" (click)="animateRight()">
                 <img id="btn2" src="../../assets/icons/books64.png">
             </div>
             <div id="linkset2" class="linksRight">
-                <img [@myAwesomeAnimation]='icon3' [routerLink]="['/admin/universidades']" id="link3" src="../../assets/icons/school64.png">
-                <img [@myAwesomeAnimation]='icon4' [routerLink]="['/admin/carreras']" id="link4" src="../../assets/icons/trophy64.png">
-                <img [@myAwesomeAnimation]='icon5' [routerLink]="['/admin/estudiantes']" id="link5" src="../../assets/icons/graduation64.png">
-                <img [@myAwesomeAnimation]='icon6' [routerLink]="['/admin/municipios']" id="link6" src="../../assets/icons/radar64.png">
-                <img [@myAwesomeAnimation]='icon7' [routerLink]="['/admin/pnevs']" id="link7" src="../../assets/icons/aptitudes64.png">
-                <img [@myAwesomeAnimation]='icon8' [routerLink]="['/admin/snis']" id="link8" src="../../assets/icons/opciones64.png">
+                <img data-toggle="tooltip" data-placement="left" title="Universidades" [@myAwesomeAnimation]='icon3' [routerLink]="['/admin/universidades']" id="link3" src="../../assets/icons/school64.png">
+                <img data-toggle="tooltip" data-placement="left" title="Oferta de Universidades" [@myAwesomeAnimation]='icon4' [routerLink]="['/admin/ofertauniv']" id="link4" src="../../assets/icons/trophy64.png">
+                <img data-toggle="tooltip" data-placement="right" title="Gestion de Matricula" [@myAwesomeAnimation]='icon5' [routerLink]="['/admin/matriculauniv']" id="link5" src="../../assets/icons/graduation64.png">
+                <img data-toggle="tooltip" data-placement="right" title="..." [@myAwesomeAnimation]='icon6' id="link6" src="../../assets/icons/liceo64.png">
+                <img data-toggle="tooltip" data-placement="left" title="..." [@myAwesomeAnimation]='icon7' id="link7" src="../../assets/icons/aptitudes64.png">
+                <img data-toggle="tooltip" data-placement="right" title="Asignaciones SNI" [@myAwesomeAnimation]='icon8' [routerLink]="['/admin/asignaciones']" id="link8" src="../../assets/icons/opciones64.png">
             </div>
         </div>
-        
-    </div>
+        <div class="col-xs-3"></div>
+
 </div>

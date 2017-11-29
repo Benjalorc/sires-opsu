@@ -37,6 +37,18 @@ export class SnisService {
             .map(res => res.json());
     }
 
+    obtenerSnisIndicadores(){
+        'use strict'
+        return this.http.get('http://localhost:8080/snis/ind')
+            .map(res => res.json());
+    }    
+
+    buscarAsignaciones(univ, carr, ano, periodo){
+        'use strict'
+        return this.http.get('http://localhost:8080/snis/asignaciones/'+univ+'/'+carr+'/'+ano+'/'+periodo)
+            .map(res => res.json());
+    }
+
     registrarSni(sni){
       'use strict'
       let headers = new Headers();

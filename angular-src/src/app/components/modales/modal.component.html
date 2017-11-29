@@ -1,0 +1,58 @@
+<button type="button" class="btn btn-primary" (click)="staticModal.show()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+ 
+<div class="modal fade" id="modalCarreras" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Seleccione 1 carrera</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+
+
+
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Nombre</th>
+          <th>Area</th>
+          <th>Especialidad</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody ngDefaultControl>
+        <tr *ngFor=" let carr of carreras">
+
+          <td>{{carr.codigo}}</td>
+          <td>{{carr.nombre}}</td>
+          <td>{{carr.area}}</td>
+          <td>{{carr.especialidad}}</td>
+          <td>
+            <button type="button" class="btn btn-warning" aria-label="Left Align" (click)="seleccionarCarrera(carr.codigo)">
+              <span class="glyphicon glyphicon-check" aria-hidden="true">
+              </span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

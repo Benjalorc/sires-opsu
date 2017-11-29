@@ -1,0 +1,848 @@
+<app-modal-mensajes-importantes [mensaje]="mensajeImportante" ></app-modal-mensajes-importantes>
+<div class="row">
+<div *ngIf="mostrarPrincipal" class="col-xs-12">
+  
+<form class="form" (ngSubmit)="enviarFormulario()">
+    <div class="form-row">
+      <div class="col-xs-12">
+        <h3 class="text-center">Oferta de Universidades</h3>
+      </div>
+    </div>
+
+    <fieldset class="scheduler-border">
+      <legend class="scheduler-border">Localidad</legend>
+      <div class="row">
+        <div class="form-group col-xs-4">
+          <label class="control-label" for="estado">Estado</label>  
+          <select class="form-control" id="estado" [(ngModel)]="estado" name="estado" (change)="enableMun()" required [disabled]="estOff">
+            <option value="" selected disabled></option>
+            <option *ngFor="let est of estados" [value]="est.codigo">{{est.nombre}}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-xs-4">
+          <label class="control-label" for="municipio">Municipio</label>  
+          <select class="form-control" id="municipio" [(ngModel)]="municipio" name="municipio" (change)="enableParr()" [disabled]="munOff" required>
+            <option value="" selected disabled></option>
+            <option *ngFor="let ubic of municipios" [value]="ubic.codigo">{{ubic.nombre}}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-xs-4">
+          <label class="control-label" for="parroquia">Parroquia</label>  
+          <select class="form-control" id="parroquia" [(ngModel)]="parroquia" name="parroquia" (change)="obtenerUniversidadesPorParroquia()" [disabled]="parrOff" required>
+            <option value="" selected disabled></option>
+            <option *ngFor="let parr of parroquias" [value]="parr.codigo">{{parr.nombre}}</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+
+    <fieldset class="scheduler-border" *ngIf="universidadActiva">
+      <legend class="scheduler-border">Universidad</legend>
+      <!-- Codigo -->
+      <div class="row">
+        <div class="form-group col-xs-2">
+          <label class="control-label" for="codigo">Codigo</label>  
+          <input id="codigo" [(ngModel)]="codigo" name="codigo" type="text" placeholder="123456789" maxlength="5" class="form-control input-md" required="true" disabled required>
+        </div>
+        <!-- Nombre-->
+        <div class="form-group col-xs-6">
+          <label class="control-label" for="nombre">Nombre</label>  
+          <input id="nombre" [(ngModel)]="nombre" name="nombre" type="text" placeholder="Nombre" maxlength="80" class="form-control input-md" required="true" disabled required>
+        </div>
+        <!-- Siglas-->
+        <div class="form-group col-xs-2">
+          <label class="control-label" for="siglas">Siglas</label>  
+          <input id="siglas" [(ngModel)]="siglas" name="siglas" type="text" placeholder="siglas" maxlength="10" class="form-control input-md" required="true" disabled required>
+        </div>
+        <!-- Gestion-->
+        <div class="form-group col-xs-2">
+          <label class="control-label" for="gestion">Gestion</label>  
+          <input type="text" class="form-control" id="gestion" name="gestion" [(ngModel)]="gestion" disabled required>        
+        </div>
+      </div>
+    </fieldset>
+
+
+
+    <div class="row">
+      
+      <div class="col-xs-7">
+
+        <fieldset *ngIf="carreraSeleccionada" class="scheduler-border">
+          <legend class="scheduler-border">Carrera</legend>
+          <!-- Carrera-->
+
+          <div class="row">
+	          <div class="form-group col-xs-4">
+	            <label class="control-label" for="cod_carr">Codigo</label>
+	            <input type="text" class="form-control" id="cod_carr" [(ngModel)]="carreraActual.carrera.codigo" name="cod_carr" disabled>
+	          </div>
+	          <div class="form-group col-xs-8">
+	            <label class="control-label" for="nombre_carr">Nombre</label>
+	            <input type="text" class="form-control" id="nombre_carr" [(ngModel)]="carreraActual.carrera.nombre" name="nombre_carr" disabled>
+	          </div>
+          </div>      
+
+          <div class="row">
+	          <div class="form-group col-xs-4">
+	            <label class="control-label" for="area_carr">Area</label>
+	            <input type="text" class="form-control" id="area_carr" [(ngModel)]="carreraActual.carrera.area" name="area_carr" disabled>
+	          </div>
+	          <div class="form-group col-xs-8">
+	            <label class="control-label" for="especialidad_carr">Especialidad</label>
+	            <input type="text" class="form-control" id="especialidad_carr" [(ngModel)]="carreraActual.carrera.especialidad" name="especialidad_carr" (change)="enableCarr()" disabled>
+	          </div>
+          </div>
+
+        </fieldset>
+
+        
+      </div>
+      
+
+
+      <div class="col-xs-5">
+  
+        <fieldset *ngIf="carreraSeleccionada" class="scheduler-border">
+          <legend class="scheduler-border">Oferta</legend>
+          <!-- Capacidad-->
+          <div class="row">
+            <div class="form-group col-xs-7">
+              <label class="control-label" for="ano">Año</label>  
+              <select id="ano" [(ngModel)]="ano" name="ano" placeholder="123456789" class="form-control input-md" (change)="enablePeriodo()" required>
+              	<option value="" selected disabled></option>
+              	<option *ngFor="let a of anos" [value]="a">{{a}}</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-5">
+              <label class="control-label" for="periodo">Periodo</label>  
+              <input id="periodo" [(ngModel)]="periodo" name="periodo" type="number" min="1" max="2" placeholder="123456789" class="form-control input-md" [disabled]="periodoOff" required>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-xs-12">
+              <label class="control-label" for="cant_ofertas">Oferta</label>
+              <div class="input-group">
+	              <input id="cant_ofertas" [(ngModel)]="cant_ofertas" name="cant_ofertas" type="number" min="0" placeholder="123456789" class="form-control input-md" required [disabled]="cargarOfertaOff">
+	              <span class="input-group-btn"> 
+		              <button type="button" class="btn btn-success" (click)="consultarOfertas()">
+		              	<span class="glyphicon glyphicon-ok"></span>
+		              </button>
+	              </span>
+	          </div>
+            </div>            
+          </div>
+   
+        </fieldset>
+
+      </div>
+
+    </div>
+
+    <!-- Submit-->
+    <fieldset>
+      <legend class="scheduler-border"></legend>
+
+
+
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <button type="button" class="btn btn-success" id="cargarOferta" (click)="cargarOferta()" [disabled]="cargarOfertaOff">Cargar Oferta</button>
+      </div>
+      <div class="form-group col-xs-2">
+        <button *ngIf="!graficaActiva" type="button" class="btn btn-danger" id="cancelar-registro" (click)="restaurar()">Cancelar</button>
+      </div>
+      <div class="form-group col-xs-2">
+        <button *ngIf="graficaActiva" type="button" class="btn btn-success" id="cambiarGrafica" (click)="guardarIndicador()">Guardar Indicador</button>
+      </div>
+      <div class="form-group col-xs-2">
+      </div>
+      <div class="form-group col-xs-2">
+        <button type="button" class="btn btn-info" id="draw" (click)="toggleGrafica($event.target)" [disabled]="grafOff">Mostrar Indicador</button>
+      </div>
+    </div>
+
+
+
+    </fieldset>
+  </form>
+
+
+</div>
+</div>
+
+
+
+
+
+<div class="row">
+<div class="col-xs-12">
+  
+    <div *ngIf="viendoOfertasCarrera" class="form-group">
+        <h4> <button type="button" class="btn btn-warning" (click)="volverListadoCarreras();" ><span class="glyphicon glyphicon-arrow-left"></span></button> Oferta por periodo </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Cupos</th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="ofertasCarreraActual" ngDefaultControl>
+                  <tr *ngFor="let oferta of ofertasCarreraActual; let i = index; ">
+                    <td>{{oferta.carrera}}</td>
+                    <td>{{carreraActual.carrera.nombre}}</td>
+                    <td>{{oferta.ano}}</td>
+                    <td>{{oferta.periodo}}</td>
+                    <td>{{oferta.cupos}}</td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-xs-12">
+  
+    <div class="form-group">
+        <div *ngIf="viendoCarrerasDisponibles" class="table-responsive">
+            <h4> <button type="button" class="btn btn-warning" (click)="volverListadoUniversidades();" ><span class="glyphicon glyphicon-arrow-left"></span></button> Carreras Disponibles</h4>
+            <table *ngIf="hasCareers" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Area</th>
+                    <th>Especialidad</th>
+                    <th>Modalidad</th>
+                    <th>Duracion</th>
+                    <th>Titulo</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="universidadActual" ngDefaultControl>
+                  <tr *ngFor="let career of universidadActual.carreras; let i = index; ">
+                    <td>{{career.carrera.nombre}}</td>
+                    <td>{{career.carrera.area}}</td>
+                    <td>{{career.carrera.especialidad}}</td>
+                    <td>{{career.modalidad}}</td>
+                    <td><table><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.duracion}}</td></tr></tbody></table></td>
+                    <td><table class="table table-hover"><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.titulo}}</td></tr></tbody></table></td>
+                    <td>
+                      <button type="button" class="btn btn-info" aria-label="Left Align" (click)="seleccionarCarrera(career.carrera.codigo)">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+
+
+<div class="row">
+<div class="col-xs-12">
+  
+
+<div class="form-group" *ngIf="mostrarUnivs" id="mostrarUnivs">
+  
+  <h4>Informacion de universidades</h4>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Nombre</th>
+          <th>Siglas</th>
+          <th>Capacidad</th>
+          <th>Matricula</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody ngDefaultControl>
+        <tr *ngFor=" let univ of universidades; let i = index; ">
+
+          <td>{{univ.codigo}}</td>
+          <td>{{univ.nombre}}</td>
+          <td>{{univ.siglas}}</td>
+          <td>{{univ.capacidad}}</td>
+          <td>{{univ.matricula}}</td>
+          <td>
+            <button type="button" class="btn btn-info" aria-label="Left Align" (click)="seleccionarUniversidad(univ.codigo)">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="form-group">
+  <div id="indicadores" class="row">
+  </div>
+</div>
+
+
+</div>
+</div>
+
+<div *ngIf="encontroUniversidad" class="row">
+<div class="col-xs-12">
+  
+
+    <div class="panel panel-default">
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th><button type="button" class="btn btn-warning" (click)="volverGestionar()"><span class="glyphicon glyphicon-arrow-left"></span></button> Informacion de la universidad</th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="universidadActual" ngDefaultControl>
+                  <tr>
+                    <td>Siglas</td>
+                    <td>{{universidadActual.siglas}}</td>
+                  </tr>
+                  <tr>
+                    <td>Nombre</td>
+                    <td>{{universidadActual.nombre}}</td>
+                  </tr>
+                  <tr>
+                    <td>Estado</td>
+                    <td>{{universidadActual.ubicacion.municipio.estado.nombre}}</td>
+                  </tr>
+                  <tr>
+                    <td>Municipio</td>
+                    <td>{{universidadActual.ubicacion.municipio.nombre}}</td>
+                  </tr>
+                  <tr> 
+                  <tr>
+                    <td>Parroquia</td>
+                    <td>{{universidadActual.ubicacion.nombre}}</td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad</td>
+                    <td>{{universidadActual.capacidad}}</td>
+                  </tr>              
+                  <tr>
+                    <td>Matricula</td>
+                    <td>{{universidadActual.matricula}}</td>
+                  </tr>              
+                  <tr>
+                    <td>Gestion</td>
+                    <td>{{universidadActual.gestion}}</td>
+                  </tr>              
+                  <tr>
+                    <td>Servicios</td>
+                    <td><p *ngFor="let servicio of universidadActual.servicios">{{servicio}}</p></td>
+                  </tr>              
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h4>Carreras disponibles</h4>
+        <div class="table-responsive">
+            <table *ngIf="hasCareers" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Area</th>
+                    <th>Especialidad</th>
+                    <th>Modalidad</th>
+                    <th>Duracion</th>
+                    <th>Titulo</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="universidadActual" ngDefaultControl>
+
+                  <tr *ngFor="let career of universidadActual.carreras">
+                    <td>{{career.carrera.nombre}}</td>
+                    <td>{{career.carrera.area}}</td>
+                    <td>{{career.carrera.especialidad}}</td>
+                    <td>{{career.modalidad}}</td>
+                    <td><table><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.duracion}}</td></tr></tbody></table></td>
+                    <td><table class="table table-hover"><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.titulo}}</td></tr></tbody></table></td>
+                  </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+</div>
+</div>
+
+
+<!--  -->
+<div class="row" *ngIf="eligiendoCarreras">
+<div class="col-xs-12">
+
+    <form class="form" (submit)="enviarCarreras()">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h2 class="text-center">{{universidadActual.nombre}}</h2>
+          <h3 class="text-center">Modificar carreras ofrecidas</h3>
+        </div>
+      </div>
+
+      <fieldset class="scheduler-border">
+      <legend class="scheduler-border"> Listado de Carreras </legend>
+
+        <div class="row">
+
+          <div class="form-group col-xs-2">
+            <label class="control-label" for="area_carr">Area</label>
+            <select class="form-control" id="area_carr" [(ngModel)]="area_carr" name="area_carr" (change)="enableEsp()">
+              <option *ngFor="let ar of areas" [value]="ar.nombre" >{{ar.nombre}}</option>
+            </select>
+          </div>
+          <div class="form-group col-xs-4">
+            <label class="control-label" for="especialidad_carr">Especialidad</label>
+            <select class="form-control" id="especialidad_carr" [(ngModel)]="especialidad_carr" name="especialidad_carr" (change)="enableCarr()" [disabled]="espOff">
+              <option *ngFor="let esp of especialidades" [value]="esp">{{esp}}</option>
+            </select>
+          </div>
+
+          <div class="form-group col-xs-6">
+            <label class="control-label" for="carrera">Carrera</label>
+            <select class="form-control" id="carrera" [(ngModel)]="carrera" name="carrera" (change)="cambiarCarreraActual()" [disabled]="carrOff">
+              <option *ngFor="let carr of carreras" [value]="carr.codigo">{{carr.nombre}}</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="form-group col-xs-2">
+            <label class="control-label" for="codigo_int">Codigo Interno</label>
+            <input class="form-control" type="text" name="codigo_int" [(ngModel)]="codigo_int">
+          </div>
+
+          <div class="form-group col-xs-7">
+            <label class="control-label" for="nombre_carr">Nombre</label>
+            <input class="form-control" type="text" name="nombre_carr" [(ngModel)]="nombre_carr" disabled>
+          </div>
+
+          <div class="form-group col-xs-2">
+            <label class="control-label" for="modalidad_carr">Modalidad</label>
+            <select class="form-control" id="modalidad_carr" [(ngModel)]="modalidad_carr" name="modalidad_carr">
+              <option value="Anual">Anual</option>
+              <option value="Semestral">Semestral</option>
+              <option value="Trimestral">Trimiestral</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="row">
+        <!-- Duracion y Titulo 1-->
+          <div class="form-group col-xs-2">
+            <label class="control-label" for="duracion_carr_1">Duracion</label>
+            <input class="form-control" type="number" id="duracion_carr_1" name="duracion_carr_1" [(ngModel)]="duracion_carr_1" min="1" max="16">
+          </div>
+
+          <div class="form-group col-xs-8">
+            <label class="control-label" for="titulo_carr_1">Titulo</label>
+            <input class="form-control" type="text" id="titulo_carr_1" name="titulo_carr_1" [(ngModel)]="titulo_carr_1" maxlength="70">
+          </div>
+
+        </div>
+
+        <div class="row">
+          <!-- Duracion y Titulo 2-->          
+          <div class="form-group col-xs-2">
+            <label class="control-label" for="duracion_carr_2">Duracion</label>
+            <input class="form-control" type="number" name="duracion_carr_2" [(ngModel)]="duracion_carr_2" min="1" max="16">
+          </div>
+
+          <div class="form-group col-xs-8">
+            <label class="control-label" for="titulo_carr_2">Titulo</label>
+            <input class="form-control" type="text" name="titulo_carr_2" [(ngModel)]="titulo_carr_2" maxlength="70">
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="form-group col-xs-6"></div>
+          <div class="form-group col-xs-2">
+            <button type="button" class="btn btn-success" (click)="guardarCarrera()">Guardar</button>
+          </div>
+          <div class="form-group col-xs-2">
+            <button type="button" class="btn btn-danger" (click)="cancelarCarreras()">Cancelar</button>
+          </div>
+        </div>
+ 
+    </fieldset>
+    </form>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row" *ngIf="mostrarFormulario && preguntarCarreras">
+
+      <div class="jumbotron text-center">
+        <h1>Por favor, desea agregar carreras para esta universidad</h1>
+        <h3>( {{universidadActual.nombre}} )</h3>
+        <p class="lead">O bien puede hacerlo en otro momento si desea</p>
+        <div>
+          <button class="btn btn-success" (click)="responderCarreras(true)">De acuerdo!</button> 
+          <button class="btn btn-warning" (click)="responderCarreras(false)">Lo haré en otro momento</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row" *ngIf="mostrarFormulario && mostrarCargarCarreras">
+    
+        <form class="form-horizontal" (submit)="enviarCarreras()">
+
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h2 class="text-center">{{universidadActual.nombre}}</h2>
+            <h3 class="text-center">Modificar carreras ofrecidas</h3>
+          </div>
+        </div>
+
+        <fieldset>
+
+        <div class="form-group">
+          <div class="btn-goup">
+
+            <label class="col-xs-5 control-label" for="resultados">Ordenar por: </label>
+            
+            <label class="btn btn-primary">
+              <input type="radio" name="clasificacion" id="boton1" (click)="cargarClasificacion('Especialidad')" autocomplete="off">Especialidad
+            </label>
+
+            <label class="btn btn-primary">
+            <input type="radio" id="boton2" name="clasificacion" (click)="cargarClasificacion('Area')" autocomplete="off">Area
+            </label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="clase">Clasificacion</label>
+            
+          <div class="col-xs-3">
+            <select class="form-control" id="clases" [(ngModel)]="clase" name="clase" (change)="cargarOpcionesCarrera()">
+              <option value="" ></option>
+              <option *ngFor="let c of clasificaciones" [value]="c" > {{c}} </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-5 control-label" for="carreraActual">Carrera</label>
+            <div class="col-xs-3">
+              <select class="form-control" id="opcionesCarreras" [(ngModel)]="carreraActual" name="carreraActual">
+                <option value="" ></option>
+                <option *ngFor="let c of opcionesCarrera" [value]="c.codigo">{{c.nombre}}</option>
+              </select>
+            </div>          
+            <div class="col-xs-1">
+              <button type="button" class="btn btn-success" (click)="insertarCarrera(carreraActual)">+</button>            
+            </div>
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="col-xs-5 control-label" for="">Carreras</label>  
+          <div class="col-xs-7">
+              <ul>
+                <li *ngFor="let c of listadoCarreras">
+                  {{c.nombre}}
+                  <button type="button" class="btn btn-danger" (click)="removerCarrera(c.codigo)">X</button>
+                </li>
+              </ul>
+          </div>
+          
+        </div>
+
+
+        <div class="form-group">
+          <div class="col-xs-5">
+          </div>
+
+          <div class="col-xs-4">
+              <input type="submit" class="btn btn-primary" value="Guardar cambios">
+          </div>
+        </div>  
+        
+        </fieldset>
+        </form>
+
+    </div>
+
+
+    <div *ngIf="mostrarFormulario && mostrarElegir">
+
+
+        <form class="form-horizontal">
+          
+          <div class="form-group">
+            <div class="col-xs-12">
+              <h3 class="text-center">Indique una universidad</h3>
+            </div>
+          </div>
+
+          <p>
+            <button type="button" id="codesearch" class="btn btn-primary" (click)="toggleCodesearch($event.target)" [attr.aria-expanded]="!isCodesearchCollapsed" aria-controls="collapseCodesearch"> Buscar por código </button>
+            <button type="button" id="listsearch" class="btn btn-default" (click)="toggleListsearch($event.target)" [attr.aria-expanded]="!isCodesearchCollapsed" aria-controls="collapseListsearch"> Elegir de listado </button>
+          </p>
+
+          <fieldset [collapse]="isCodesearchCollapsed" id="collapseCodesearch" class="form-group">
+          <legend>Buscar por código</legend>
+          
+            <div class="form-group">
+              <div class="col-xs-2"></div>
+              <label class="col-xs-2 control-label" for="codigo">Codigo</label>  
+              <div class="col-xs-3">
+                <input id="codigo" [(ngModel)]="codigo" name="codigo" type="text" placeholder="123456789" class="form-control input-md">
+              </div>
+
+              <div class="col-xs-1">
+                  <button type="button" class="btn btn-info" (click)="buscarUniversidad()"><span class="glyphicon glyphicon-search"></span></button>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+
+          <fieldset [collapse]="isListsearchCollapsed" id="collapseListsearch" class="form-group">
+          <legend>Elegir de listado</legend>
+
+            <!-- Estado-->
+            <div class="form-group">
+              <label class="col-xs-5 control-label" for="estado">Estado</label>  
+              <div class="col-xs-3">
+                <select class="form-control" id="estado" [(ngModel)]="estado" name="estado" (change)="enableMun()">
+                    <option *ngFor="let state of estados" [value]="state.estado.codigo">{{state.estado.nombre}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Municipio-->
+            <div class="form-group">
+              <label class="col-xs-5 control-label" for="municipio">Municipio</label>  
+              <div class="col-xs-3">
+                <select class="form-control" id="municipio" [(ngModel)]="municipio" name="municipio" (change)="enableParr()">
+                    <option *ngFor="let ubic of municipios" [value]="ubic.municipio.codigo">{{ubic.municipio.nombre}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Parroquia-->
+            <div class="form-group">
+              <label class="col-xs-5 control-label" for="parroquia">Parroquia</label>  
+              <div class="col-xs-3">
+                <select class="form-control" id="parroquia" [(ngModel)]="parroquia" name="parroquia" [disabled]="parrOff" (change)="cargarOpcionesUniversidad()">
+                  <option></option>
+                  <option *ngFor="let parr of parroquias" [value]="parr.codigo">{{parr.nombre}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Universidades-->
+            <div class="form-group">
+              <label class="col-xs-5 control-label" for="universidades">Universidades</label>  
+              <div class="col-xs-3">
+                <select class="form-control" id="universidades" [(ngModel)]="codigo" name="codigo" [disabled]="univOff" (change)="cambiarUniversidadActual(codigo)">
+                  <option></option>
+                  <option *ngFor="let univ of opcionesUniversidad" [value]="univ.codigo">{{univ.nombre}}</option>
+                </select>
+              </div>
+            </div>
+
+          </fieldset>
+
+        </form>
+
+    </div>
+
+
+    <div class="row" *ngIf="mostrarFormulario && mostrarUniversidad">
+
+    <div class="panel panel-default">
+      <span class="continuaruniv">Haga click en el boton para continuar</span>
+      <button type="button" class="btn btn-success" (click)="aceptarUniversidad()"><span class="glyphicon glyphicon-arrow-right"></span></button>
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Informacion de la universidad</th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="universidadActual" ngDefaultControl>
+                  <tr>
+                    <td>Nombre</td>
+                    <td>{{universidadActual.nombre}}</td>
+                  </tr>
+                  <tr>
+                    <td>Municipio</td>
+                    <td>{{universidadActual.ubicacion.municipio.nombre}}</td>
+                  </tr>
+                  <tr> 
+                  <tr>
+                    <td>Parroquia</td>
+                    <td>{{universidadActual.ubicacion.nombre}}</td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad</td>
+                    <td>{{universidadActual.capacidad}}</td>
+                  </tr>              
+                  <tr>
+                    <td>Población</td>
+                    <td>{{universidadActual.poblacion}}</td>
+                  </tr>              
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h4>Carreras disponibles en la universidad seleccionada</h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Titulo</th>
+                    <th>Especialidad</th>
+                    <th>Area</th>
+                    <th>Duracion</th>
+                    <th>Modalidad</th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="universidadActual" ngDefaultControl>
+                  <tr *ngFor="let career of universidadActual.carreras">
+                    <td>{{career.nombre}}</td>
+                    <td>{{career.titulo}}</td>
+                    <td>{{career.especialidad}}</td>
+                    <td>{{career.area}}</td>
+                    <td>{{career.duracion}}</td>
+                    <td>{{career.modalidad}}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </div>
+
+
+    <div class="row" *ngIf="mostrarFormulario && preguntarModificacion">
+
+      <div class="jumbotron text-center">
+        <h1>Seleccione una opcion para editar</h1>
+        <div>
+          <button class="btn btn-default" (click)="responderCarreras(true)">Modificar carreras</button> 
+          <button class="btn btn-default" (click)="editarOtros()">Editar otros datos</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row" *ngIf="mostrarFormulario && mostrarActualizar">
+
+
+
+    </div>
+
+    <div class="row" *ngIf="mostrarFormulario && mostrarEliminar">
+
+
+
+    </div>
+

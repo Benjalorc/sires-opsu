@@ -23,9 +23,9 @@ export class EstudiantesService {
       return pass;
     }
     
-    getStudents(){
+    getStudents(ano, codigo){
         'use strict'
-        return this.http.get('http://localhost:8080/estudiantes/all')
+        return this.http.get('http://localhost:8080/estudiantes/all/'+ano+'/'+codigo)
             .map(res => res.json());
     }
     

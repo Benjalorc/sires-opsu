@@ -1,0 +1,57 @@
+<button type="button" class="btn btn-warning" (click)="openModal(template)"><span class="glyphicon glyphicon-pencil"></span></button>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar Carrera</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+
+ <div class="table-responsive">
+    <table class="table table-hover table-stripped">
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Modalidad</th>
+          <th>Duracion</th>
+          <th>Titulo</th>
+        </tr>
+      </thead>
+      <tbody ngDefaultControl>
+        <tr *ngFor="let titulo of carrera.titulos">
+          <td>{{carrera.codigo_int}}</td>
+          <td>
+      			<select class="form-control" [(ngModel)]="carrera.modalidad">
+      				<option value="Anual">Anual</option>
+      				<option value="Semestral">Semestral</option>
+      				<option value="Trimestral">Trimestral</option>
+      			</select>
+          	
+          </td>
+          <td>
+      			<input class="form-control" name="duracion" type="number" min="1" max="16" [(ngModel)]="titulo.duracion">
+          </td>
+          <td>
+      			<input class="form-control" name="titulo" type="text" maxlength="70" [(ngModel)]="titulo.titulo">          	
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="row">
+  	<div class="col-xs-7"></div>
+  	<div class="col-xs-2">
+		<button type="button" class="btn btn-success" (click)="actualizarCarreraEnUniversidad()">Aceptar</button>
+  	</div>
+  	<div class="col-xs-2">
+		<button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancelar</button>
+  	</div>
+  </div>
+
+  </div>
+</ng-template>

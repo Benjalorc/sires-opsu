@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   apellido: String;
   username: String;
   password: String;
+  password2: String;
   email: String;
   sexo: String;
   ano: any;
@@ -26,6 +27,8 @@ export class RegisterComponent implements OnInit {
   
   toSetup: Boolean;
   
+  sendOff: Boolean;
+
   constructor(private validateService: ValidateService, 
               private flashMessage: FlashMessagesService,
               private authService: AuthService,
@@ -37,6 +40,7 @@ export class RegisterComponent implements OnInit {
   
     this.toSetup = true;
 
+    this.sendOff = true;
   }
 
   asignarAnos(){
@@ -96,6 +100,15 @@ export class RegisterComponent implements OnInit {
     
   }
   
+  verifyPassword(){
+    if(this.password == this.password2){
+      this.sendOff = false;
+    }
+    else{
+      this.sendOff = true;
+    }
+  }
+
   onRegisterSubmit(){
     
     this.f_nac = new Date(this.ano, this.mes, this.dia, 0, 0, 0, 0);

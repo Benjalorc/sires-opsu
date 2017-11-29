@@ -1,40 +1,65 @@
     <div class="banner">
         <img class="banner" src="../../assets/logos/banner.jpg">
     </div>
+
+
+<div class="row">
+<div class="col-xs-12">
+
+
+      <div class="stars text-center">
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+        <span class="glyphicon glyphicon-star star"></span>
+      </div>
+
+
 <nav class="navbar navbar-default">
 
 
-
-
-  <div class="container">
-
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+      <button type="button" class="navbar-toggle collapsed" (click)="isNavbarCollapsed = !isNavbarCollapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar">  </span>
       <span class="icon-bar">  </span>
       <span class="icon-bar">  </span>
       </button>
-      <a id="logo" class="navbar-brand" [routerLink]="['/']"><img id="logoImg" src="../../assets/logos/fundacite2.svg"></a>
+      <a id="logo" class="navbar-brand" [routerLink]="['/']"><img id="logoImg" src="../../assets/logos/opsuLogo5.png"></a>
+
     </div>
 
-    <div id="navbar" class="collapse navbar-collapse">
+
+
+    <div id="navbar" [collapse]="isNavbarCollapsed" class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-left">
-        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/']">Home</a></li>
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/']">Inicio</a></li>
       </ul>
             
       <ul class="nav navbar-nav navbar-right">
-        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/dashboard']">Dashboard</a></li>
+        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/dashboard']">Mapa</a></li>
         <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/profile']">Perfil</a></li>
-        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/admin']">Admin</a></li>
+        <li *ngIf="(authService.loggedIn())&&(isAdmin())" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/admin']">Gestionar</a></li>
             
         <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/login']">Entrar</a></li>
         <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/register']">Registrarse</a></li>
         <li *ngIf="authService.loggedIn()"><a (click)='onLogoutClick()' href='#'>Salir</a></li>
       </ul>
     </div><!--/.nav-collapse -->
-  </div>
+
 </nav>
+
+
+
+    
+</div>
+</div>
+
+
 <!--
     <div class="cintillo">
         <img class="banner" src="../../assets/logos/cintillo.png">

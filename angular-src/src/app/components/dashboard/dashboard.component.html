@@ -1,49 +1,69 @@
-<div>
+<div class="row">
+<div class="col-xs-12">
 
-  <div *ngIf="showMap">
-      
-      <p>Elija una opcion!</p>
-          <form (submit)="onOriginSubmit()">
-              <select name="dataOrigin" [(ngModel)]="dataOrigins">
-                  <option *ngFor="let dataOrigin of dataOrigins" [value]="dataOrigin">
-                      
-                      {{dataOrigin}}
-                      
-                  </option>
-              </select>
-          </form>
-      <div *ngIf="showMap">
-          <button type="button" (click)="drawUniversities()">Ver universidades</button>
-          <button type="button" (click)="drawCareers()">Ver oferta academica</button>
-          <button type="button" (click)="getPnevs()">Ver aptitudes academicas</button>
-          <button type="button" (click)="getSnis()">Ver demanda academica</button>
-          <button type="button" (click)="getStudents()">Ver distribucion academica</button>
-      </div>
-  
+  <div class="row" *ngIf="showMap">
+  <div class="col-xs-12">
+      <form (submit)="onOriginSubmit()">
+      <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Elija su Opcion</legend>
+          <div class="row">
+            <div class="form-group col-xs-6">
+              <label for="mapToLoad" class="control-label">Estado</label>
+              <select name="mapToLoad" class="form-control" [(ngModel)]="mapToLoad" (change)="cambiarMapa()">
+                  <option *ngFor="let state of states" [value]="state">{{state}}</option>
+              </select>              
+            </div>
+          </div>
+
+        <div class="row">
+
+          <div class="col-xs-4">
+              <button type="button" class="btn btn-info" (click)="drawUniversities()">Ver universidades</button>
+          </div>
+          <div class="col-xs-4">          
+              <button type="button" class="btn btn-info" (click)="drawCareers()">Ver oferta academica</button>
+          </div>
+
+          <div class="col-xs-4">
+              <button type="button" class="btn btn-info" (click)="getStudents()">Ver distribucion academica</button>         
+          </div>
+
+        </div>
+
+      </fieldset>
+      </form>
+  </div>
   </div>
 
-  <div>
-      <div *ngIf="!showMap" id="holder" class="panel panel-default text-center" (click)="dibujarMapa()">
-          <h2>Haga click en este cuadro para ver el mapa!</h2>
+  <div class="row">
+    <div class="col-xs-12">
+      <div id="map" class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"></div>
+    </div>
+  </div>
+
+  <div *ngIf="showMap" class="row">
+      <div class="col-xs-11"></div>
+      <div class="col-xs-1">
+        <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Descargar Capas (GeoJSON)" (click)="descargarCapas()"><span class="glyphicon glyphicon-download-alt"></span></button>
       </div>
-      <div id="map"></div>
   </div>
 
   <div id="panelInferior">
     
     <div *ngIf="showingCareers" class="panel panel-default">
+        {{scrollToLowerPanel()}}
+
         <div *ngIf="careersOne">
         <h4>Informacion de la carrera seleccionada</h4>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                   <tr>
+                    <th>Codigo</th>
                     <th>Nombre</th>
-                    <th>Titulo</th>
-                    <th>Especialidad</th>
                     <th>Area</th>
-                    <th>Duracion</th>
-                    <th>Modalidad</th>
+                    <th>Especialidad</th>
+                    <th>Tipo</th>
                     <th>Disponible en</th>
                   </tr>
                 </thead>
@@ -55,7 +75,7 @@
                     <td>{{currentCareer.area}}</td>
                     <td>{{currentCareer.duracion}}</td>
                     <td>{{currentCareer.modalidad}}</td>
-                    <td><button class="alert-info" (click)="goToUnivs();" id="univs_button">Ver universidades disponibles</button></td>
+                    <td><button class="btn btn-info" (click)="goToUnivs();" id="univs_button"><span class="glyphicon glyphicon-search"></span></button></td>
                   </tr>
                 </tbody>
             </table>
@@ -74,6 +94,7 @@
     </div>
     
     <div *ngIf="showingUniversity" class="panel panel-default">
+        {{scrollToLowerPanel()}}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
@@ -88,7 +109,12 @@
                   </tr>
                   <tr>
                     <td>Municipio</td>
-                    <td>{{currentUniv.municipio.nombre}}</td>
+                    <td>{{currentUniv.ubicacion.municipio.nombre}}</td>
+                  </tr>
+                  <tr> 
+                  <tr>
+                    <td>Parroquia</td>
+                    <td>{{currentUniv.ubicacion.nombre}}</td>
                   </tr>
                   <tr>
                     <td>Capacidad</td>
@@ -96,7 +122,7 @@
                   </tr>              
                   <tr>
                     <td>Población</td>
-                    <td>{{currentUniv.poblacion}}</td>
+                    <td>{{currentUniv.matricula}}</td>
                   </tr>              
                 </tbody>
             </table>
@@ -118,20 +144,23 @@
                   </tr>
                 </thead>
                 <tbody [(ngModel)]="currentUniv" ngDefaultControl>
-                  <tr *ngFor="let carreer of currentUniv.carreras">
-                    <td>{{carreer.nombre}}</td>
-                    <td>{{carreer.titulo}}</td>
-                    <td>{{carreer.especialidad}}</td>
-                    <td>{{carreer.area}}</td>
-                    <td>{{carreer.duracion}}</td>
-                    <td>{{carreer.modalidad}}</td>
+
+                  <tr *ngFor="let career of currentUniv.carreras">
+                    <td>{{career.carrera.nombre}}</td>
+                    <td>{{career.carrera.area}}</td>
+                    <td>{{career.carrera.especialidad}}</td>
+                    <td>{{career.modalidad}}</td>
+                    <td><table><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.duracion}}</td></tr></tbody></table></td>
+                    <td><table class="table table-hover"><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.titulo}}</td></tr></tbody></table></td>
                   </tr>
+
                 </tbody>
             </table>
         </div>
     </div>
     
     <div *ngIf="showingSortedCareers" class="panel panel-default">
+        {{scrollToLowerPanel()}}
     
       <h4>Seleccione la carrera por la cual desea ordenar su busqueda</h4>
       <div class="row">
@@ -175,13 +204,27 @@
     
     </div>
     
-    <div *ngIf="showingStudents" id="sortedStudents" class="panel panel-default">
-      <h4>Distribucion academica</h4>
-      <button type="button" (click)="drawStudents()">Mostrar distribucion</button>
+    <div *ngIf="showStudents" class="row">
+      <div class="col-xs-12">
+
+        <form class="form">    
+          <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Año Académico</legend>
+            <div class="row">        
+                <div class="form-group col-xs-4">
+                  <label class="control-label" for="ano">Año</label>  
+                  <input type="number" min="1990" class="form-control" id="ano" [(ngModel)]="ano" name="ano">
+                </div>
+                <div class="form-group col-xs-2">      
+                  <button type="button" (click)="drawStudents()" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </div>
+        </fieldset>
+        </form>
+        
+      </div>
     </div>
-  
-  </div><!--Fin del panel inferior-->
 
 
-
+</div>
 </div>

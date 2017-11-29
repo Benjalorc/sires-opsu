@@ -1,0 +1,684 @@
+<app-modal-mensajes-importantes [mensaje]="mensajeImportante" ></app-modal-mensajes-importantes>
+
+<div class="row">
+<div *ngIf="mostrarPrincipal" class="col-xs-12">
+  
+<form class="form">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3 class="text-center">Gestionar Matrícula</h3>
+      </div>
+    </div>
+
+    <fieldset class="scheduler-border">
+      <legend class="scheduler-border">Localidad</legend>
+      <div class="row">
+        <div class="form-group col-xs-4">
+          <label class="control-label" for="estado">Estado</label>  
+          <select class="form-control" id="estado" [(ngModel)]="estado" name="estado" (change)="enableMun()" required [disabled]="estOff">
+            <option value="" selected disabled></option>
+            <option *ngFor="let est of estados" [value]="est.codigo">{{est.nombre}}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-xs-4">
+          <label class="control-label" for="municipio">Municipio</label>  
+          <select class="form-control" id="municipio" [(ngModel)]="municipio" name="municipio" (change)="enableParr()" [disabled]="munOff" required>
+            <option value="" selected disabled></option>
+            <option *ngFor="let ubic of municipios" [value]="ubic.codigo">{{ubic.nombre}}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-xs-4">
+          <label class="control-label" for="parroquia">Parroquia</label>  
+          <select class="form-control" id="parroquia" [(ngModel)]="parroquia" name="parroquia" (change)="obtenerUniversidadesPorParroquia()" [disabled]="parrOff" required>
+            <option value="" selected disabled></option>
+            <option *ngFor="let parr of parroquias" [value]="parr.codigo">{{parr.nombre}}</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+
+    <fieldset class="scheduler-border" *ngIf="universidadActiva">
+      <legend class="scheduler-border">Universidad</legend>
+      <!-- Codigo -->
+      <div class="row">
+        <div class="form-group col-xs-2">
+          <label class="control-label" for="codigo">Codigo</label>  
+          <input id="codigo" [(ngModel)]="universidadActual.codigo" name="codigo" type="text" placeholder="123456789" maxlength="5" class="form-control input-md" required="true" disabled required>
+        </div>
+        <!-- Nombre-->
+        <div class="form-group col-xs-6">
+          <label class="control-label" for="nombre">Nombre</label>  
+          <input id="nombre" [(ngModel)]="universidadActual.nombre" name="nombre" type="text" placeholder="Nombre" maxlength="80" class="form-control input-md" required="true" disabled required>
+        </div>
+        <!-- Siglas-->
+        <div class="form-group col-xs-2">
+          <label class="control-label" for="siglas">Siglas</label>  
+          <input id="siglas" [(ngModel)]="universidadActual.siglas" name="siglas" type="text" placeholder="siglas" maxlength="10" class="form-control input-md" required="true" disabled required>
+        </div>
+        <!-- Gestion-->
+        <div class="form-group col-xs-2">
+          <label class="control-label" for="gestion">Gestion</label>  
+          <input type="text" class="form-control" id="gestion" name="gestion" [(ngModel)]="universidadActual.gestion" disabled required>
+        </div>
+      </div>
+    </fieldset>
+
+
+    <div *ngIf="carreraSeleccionada" class="row">
+    	<div class="col-xs-6">
+		    <fieldset id="gestionarIngresos" class="scheduler-border">
+		    	<legend class="scheduler-border">Gestionar Ingresos</legend>    	
+		    <div class="row">
+		    	<div class="col-xs-4"></div>
+		    	<div class="col-xs-4">
+		    		<button type="button" class="btn btn-info" (click)="gestionarIngresos()">Gestionar Ingresos</button>
+		    	</div>
+		    	<div class="col-xs-4"></div>
+		    </div>
+		    </fieldset>    		
+
+    	</div>
+
+    	<div class="col-xs-6">
+		    <fieldset id="gestionarEgresos" class="scheduler-border">
+		    	<legend class="scheduler-border">Gestionar Egresos</legend>    	
+		    <div class="row">
+		    	<div class="col-xs-4"></div>
+		    	<div class="col-xs-4">
+		    		<button type="button" class="btn btn-info" (click)="gestionarEgresos()">Gestionar Egresos</button>
+		    	</div>
+		    	<div class="col-xs-4"></div>
+		    </div>
+		    </fieldset>
+    	</div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-xs-7">
+        <fieldset *ngIf="carreraSeleccionada" class="scheduler-border">
+        <legend class="scheduler-border">Carrera</legend>
+          <!-- Carrera-->
+
+          <div class="row">
+	          <div class="form-group col-xs-4">
+	            <label class="control-label" for="cod_carr">Codigo</label>
+	            <input type="text" class="form-control" id="cod_carr" [(ngModel)]="carreraActual.carrera.codigo" name="cod_carr" disabled>
+	          </div>
+	          <div class="form-group col-xs-8">
+	            <label class="control-label" for="nombre_carr">Nombre</label>
+	            <input type="text" class="form-control" id="nombre_carr" [(ngModel)]="carreraActual.carrera.nombre" name="nombre_carr" disabled>
+	          </div>
+          </div>      
+
+          <div class="row">
+	          <div class="form-group col-xs-4">
+	            <label class="control-label" for="area_carr">Area</label>
+	            <input type="text" class="form-control" id="area_carr" [(ngModel)]="carreraActual.carrera.area" name="area_carr" disabled>
+	          </div>
+	          <div class="form-group col-xs-8">
+	            <label class="control-label" for="especialidad_carr">Especialidad</label>
+	            <input type="text" class="form-control" id="especialidad_carr" [(ngModel)]="carreraActual.carrera.especialidad" name="especialidad_carr" disabled>
+	          </div>
+          </div>
+
+        </fieldset>
+      </div>
+    
+      <div class="col-xs-5">
+        <fieldset *ngIf="cargarIngresos" class="scheduler-border">
+        <legend class="scheduler-border">Ingresos</legend>
+
+          <div class="row">
+            <div class="form-group col-xs-7">
+              <label class="control-label" for="ano">Año</label>  
+              <select id="ano" [(ngModel)]="ano" name="ano" placeholder="123456789" class="form-control input-md" (change)="fechaCambio()" required>
+              	<option value="" selected disabled></option>
+              	<option *ngFor="let a of anos" [value]="a">{{a}}</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-5">
+              <label class="control-label" for="periodo">Periodo</label>  
+              <input id="periodo" [(ngModel)]="periodo" name="periodo" type="number" min="1" max="2" placeholder="1-2" class="form-control input-md" (change)="fechaCambio()" [disabled]="periodoOff"  required>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-xs-6">
+              <label class="control-label" for="cant_ingresos_opsu">OPSU</label>
+              <input id="cant_ingresos_opsu" [(ngModel)]="cant_ingresos_opsu" name="cant_ingresos_opsu" type="number" min="0" placeholder="123456789" class="form-control input-md" required [disabled]="ingresosOff">
+            </div>            
+            <div class="form-group col-xs-6">
+              <label class="control-label" for="cant_ingresos_convenio">Convenio</label>
+              <div class="input-group">
+	              <input id="cant_ingresos_convenio" [(ngModel)]="cant_ingresos_convenio" name="cant_ingresos_convenio" type="number" min="0" placeholder="123456789" class="form-control input-md" required [disabled]="ingresosOff">
+	              <span class="input-group-btn"> 
+		              <button *ngIf="!mostrarGuardar" type="button" class="btn btn-success" (click)="consultarIngresos()">
+		              	<span class="glyphicon glyphicon-ok"></span>
+		              </button>
+		              <button *ngIf="mostrarGuardar" type="button" class="btn btn-success" (click)="guardarIngresos()">
+		              	<span class="glyphicon glyphicon-floppy-save"></span>
+		              </button>
+	              </span>
+	          </div>
+            </div>            
+          </div>
+        </fieldset>        
+
+        <fieldset *ngIf="cargarEgresos" class="scheduler-border">
+        <legend class="scheduler-border">Egresos</legend>
+
+          <div class="row">
+            <div class="form-group col-xs-7">
+              <label class="control-label" for="ano">Año</label>  
+              <select id="ano" [(ngModel)]="ano" name="ano" placeholder="123456789" class="form-control input-md" (change)="fechaCambio()" required>
+              	<option value="" selected disabled></option>
+              	<option *ngFor="let a of anos" [value]="a">{{a}}</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-5">
+              <label class="control-label" for="periodo">Periodo</label>  
+              <input id="periodo" [(ngModel)]="periodo" name="periodo" type="number" min="1" max="2" placeholder="1-2" class="form-control input-md" (change)="fechaCambio()" [disabled]="periodoOff" required>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-xs-12">
+              <label class="control-label" for="cant_egresos">Egresos</label>
+              <div class="input-group">
+	              <input id="cant_egresos" [(ngModel)]="cant_egresos" name="cant_egresos" type="number" min="0" placeholder="123456789" class="form-control input-md" required disabled>
+	              <span class="input-group-btn"> 
+		              <button type="button" class="btn btn-success" (click)="consultarEgresos()">
+		              	<span class="glyphicon glyphicon-ok"></span>
+		              </button>
+	              </span>
+	          </div>
+            </div>            
+          </div>
+        </fieldset>
+      </div>
+
+    </div>
+
+<!--
+     Submit
+    <fieldset>
+      <legend class="scheduler-border"></legend>
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <button type="button" class="btn btn-success" id="cargarOferta" (click)="cargarOferta()" [disabled]="cargarOfertaOff">Cargar Oferta</button>
+      </div>
+      <div class="form-group col-xs-2">
+        <button *ngIf="!graficaActiva" type="button" class="btn btn-danger" id="cancelar-registro" (click)="restaurar()">Cancelar</button>
+      </div>
+      <div class="form-group col-xs-2">
+        <button *ngIf="graficaActiva" type="button" class="btn btn-success" id="cambiarGrafica" (click)="guardarIndicador()">Guardar Indicador</button>
+      </div>
+      <div class="form-group col-xs-2">
+      </div>
+      <div class="form-group col-xs-2">
+        <button type="button" class="btn btn-info" id="draw" (click)="toggleGrafica($event.target)" [disabled]="grafOff">Mostrar Indicador</button>
+      </div>
+    </div>
+    </fieldset>
+-->    
+
+    <div class="row">
+    <div class="col-xs-12">
+
+      <div *ngIf="mostrarEgresos&&viendoEgresosCarrera" class="row">
+        <div class="col-xs-1">
+          <app-modal-matricula-egresos (updateAccepted)="guardarEgresos($event)" [carrera]="carreraActual" [ano]="ano" [periodo]="periodo" [ingresos]="ingresosCarreraActual"></app-modal-matricula-egresos>
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+  </form>
+
+
+</div>
+</div>
+
+
+
+
+<div class="row">
+<div class="col-xs-12">
+
+	<div class="form-group" *ngIf="mostrarUnivs" id="mostrarUnivs">
+
+	  <h4>Informacion de universidades</h4>
+	  <div class="table-responsive">
+	    <table class="table table-hover">
+	      <thead>
+	        <tr>
+	          <th>Codigo</th>
+	          <th>Nombre</th>
+	          <th>Siglas</th>
+	          <th>Capacidad</th>
+	          <th>Matricula</th>
+	          <th></th>
+	        </tr>
+	      </thead>
+	      <tbody ngDefaultControl>
+	        <tr *ngFor=" let univ of universidades; let i = index; ">
+
+	          <td>{{univ.codigo}}</td>
+	          <td>{{univ.nombre}}</td>
+	          <td>{{univ.siglas}}</td>
+	          <td>{{univ.capacidad}}</td>
+	          <td>{{univ.matricula}}</td>
+	          <td>
+	            <button type="button" class="btn btn-info" aria-label="Left Align" (click)="seleccionarUniversidad(univ.codigo)">
+	              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+	            </button>
+	          </td>
+	        </tr>
+	      </tbody>
+	    </table>
+	  </div>
+	</div>
+		
+</div>
+</div>
+
+
+
+
+<div class="row">
+<div class="col-xs-12">
+  
+    <div class="form-group">
+        <div *ngIf="mostrarCarreras" class="table-responsive">
+            <h4> <button type="button" class="btn btn-warning" (click)="volverListadoUniversidades();" ><span class="glyphicon glyphicon-arrow-left"></span></button> Carreras Disponibles</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Area</th>
+                    <th>Especialidad</th>
+                    <th>Modalidad</th>
+                    <th>Duracion</th>
+                    <th>Titulo</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody [(ngModel)]="universidadActual" ngDefaultControl>
+                  <tr *ngFor="let career of universidadActual.carreras; let i = index; ">
+                    <td>{{career.carrera.nombre}}</td>
+                    <td>{{career.carrera.area}}</td>
+                    <td>{{career.carrera.especialidad}}</td>
+                    <td>{{career.modalidad}}</td>
+                    <td><table><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.duracion}}</td></tr></tbody></table></td>
+                    <td><table class="table table-hover"><tbody><tr *ngFor="let titulo of career.titulos"><td>{{titulo.titulo}}</td></tr></tbody></table></td>
+                    <td>
+                      <button type="button" class="btn btn-info" aria-label="Left Align" (click)="seleccionarCarrera(career.carrera.codigo)">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+<div class="row">
+<div class="col-xs-12">
+  
+    <div class="row">
+      <div class="col-xs-9"></div>
+      <div class="col-xs-2">
+        <button *ngIf="mostrarIngresos && !mostrarAsignaciones" type="button" class="btn btn-info" (click)="cargarAsignaciones()">Evaluar Asignaciones</button>
+        <button *ngIf="mostrarIngresos && mostrarAsignaciones" type="button" class="btn btn-warning" (click)="mostrarAsignaciones=false;">Mostrar Ingresos</button>
+      </div>
+    </div>
+
+    <div *ngIf="mostrarIngresos && !mostrarAsignaciones" class="form-group">
+        <h4> <button type="button" class="btn btn-warning" (click)="volverListadoCarreras();" ><span class="glyphicon glyphicon-arrow-left"></span></button> Ingresos por periodo </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Oferta</th>
+                    <th>Ingresos OPSU</th>
+                    <th>Ingresos Convenio</th>
+                  </tr>
+                </thead>
+                <tbody id="egresos" [(ngModel)]="ingresosCarreraActual" ngDefaultControl>
+                  <tr *ngFor="let ingreso of ingresosCarreraActual">
+                    <td>{{ingreso.carrera}}</td>
+                    <td>{{carreraActual.carrera.nombre}}</td>
+                    <td>{{ingreso.ano}}</td>
+                    <td>{{ingreso.periodo}}</td>
+                    <td>{{ingreso.cupos}}</td>
+                    <td>{{ingreso.inscritos.opsu}}</td>
+                    <td>{{ingreso.inscritos.convenio}}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>    
+
+    <div *ngIf="mostrarIngresos && mostrarAsignaciones" class="form-group">
+        <h4> <button type="button" class="btn btn-warning" (click)="volverListadoCarreras();" ><span class="glyphicon glyphicon-arrow-left"></span></button> Ingresos por periodo </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Asignaciones OPSU</th>
+                    <th>Ingresos OPSU</th>
+                    <th>%</th>
+                    <th>Indicador</th>
+                    <th>Tendencia</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="egresos" [(ngModel)]="ingresosCarreraActual" ngDefaultControl>
+                  <tr *ngFor="let ingreso of ingresosCarreraActual; let i = index; ">
+                    <td>{{carreraActual.carrera.codigo}}</td>
+                    <td>{{carreraActual.carrera.nombre}}</td>
+                    <td>{{ingreso.ano}}</td>
+                    <td>{{ingreso.periodo}}</td>
+                    <td>{{asignacionesCarreraActual[i].count}}</td>
+                    <td>{{ingreso.inscritos.opsu}}</td>
+                    <td>{{ingreso.inscritos.porcentaje_opsu}}</td>
+                    <td></td>
+                    <td></td>
+                    <td><button type="button" class="btn btn-info" (click)="toggleGrafica(ingreso.ano,ingreso.periodo)" [disabled]="drawOff"><span class="glyphicon glyphicon-search"></span></button></td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+<div class="col-xs-12">
+
+
+
+    <div *ngIf="preguntarIndicador" class="row">
+      <div class="col-xs-6">
+        <fieldset id="gestionarIngresos" class="scheduler-border">
+          <legend class="scheduler-border">Indicador por Graduandos</legend>      
+        <div class="row">
+          <div class="col-xs-4"></div>
+          <div class="col-xs-4">
+            <button type="button" class="btn btn-info" (click)="seleccionarIndicador('3')">Graduandos</button>
+          </div>
+          <div class="col-xs-4"></div>
+        </div>
+        </fieldset>       
+
+      </div>
+
+      <div class="col-xs-6">
+        <fieldset id="gestionarEgresos" class="scheduler-border">
+          <legend class="scheduler-border">Indicador por Retiros</legend>     
+        <div class="row">
+          <div class="col-xs-4"></div>
+          <div class="col-xs-4">
+            <button type="button" class="btn btn-info" (click)="seleccionarIndicador('4')">Retiros</button>
+          </div>
+          <div class="col-xs-4"></div>
+        </div>
+        </fieldset>
+      </div>
+    </div>
+
+
+    <div *ngIf="!grafOff" class="row">
+      <div class="col-xs-8"></div>
+      <div class="col-xs-4">
+        <button type="button" class="btn btn-danger" id="draw" (click)="toggleGrafica(last_ano,last_per)">Regresar Tabla</button>
+      </div>
+    </div>
+
+
+  
+    <div *ngIf="mostrarEgresos&&viendoEgresosCarrera" class="form-group">
+
+        <h4> <button type="button" class="btn btn-warning" (click)="volverListadoCarreras()" ><span class="glyphicon glyphicon-arrow-left"></span></button> Egresos por periodo </h4>
+
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Ingresos</th>
+                    <th>Egresos Anteriores</th>
+                    <th>Retiros</th>
+                    <th>Graduandos</th>
+                  </tr>
+                </thead>
+                <tbody ngDefaultControl>
+                  <tr *ngFor="let ingreso of ingresosCarreraActual">
+                    <td>{{ingreso.carrera}}</td>
+                    <td>{{carreraActual.carrera.nombre}}</td>
+                    <td>{{ingreso.ano}}</td>
+                    <td>{{ingreso.periodo}}</td>
+                    <td>{{ingreso.inscritos.opsu + ingreso.inscritos.convenio}}</td>
+                    <td>{{ingreso.egresados.graduacion + ingreso.egresados.retiro}}</td>
+                    <td> <input type="number" class="form-control" name="cant_egresos_nuevos" [max]="(ingreso.inscritos.opsu+ingreso.inscritos.convenio)-(ingreso.egresados.graduacion+ingreso.egresados.retiro+ingreso.egresados.nuevos_graduandos)" min="0" value="0" (change)="actualizarRetiros($event.target,ingreso)" [disabled]="((ano==ingreso.ano)&&(ingreso.periodo>periodo))"> </td>
+                    <td> <input type="number" class="form-control" name="cant_egresos_nuevos" [max]="(ingreso.inscritos.opsu+ingreso.inscritos.convenio)-(ingreso.egresados.graduacion+ingreso.egresados.retiro+ingreso.egresados.nuevos_retiros)" min="0" value="0" (change)="actualizarGraduandos($event.target,ingreso)" [disabled]="(ano-ingreso.ano)<(2)"> </td>
+                </tbody>
+            </table>
+        </div>
+    </div>  
+
+    <div *ngIf="mostrarEgresos2&&viendoEgresosCarrera" class="form-group">
+        <h4> <button type="button" class="btn btn-warning" (click)="volverListadoCarreras()" ><span class="glyphicon glyphicon-arrow-left"></span></button> Egresos por periodo </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Ingresos</th>
+                    <th>Retiros</th>
+                    <th>%</th>
+                    <th>Indicador</th>
+                    <th>Tendencia</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody ngDefaultControl>
+                  <tr *ngFor="let ingreso of ingresosCarreraActual">
+                    <td>{{ingreso.carrera}}</td>
+                    <td>{{carreraActual.carrera.nombre}}</td>
+                    <td>{{ingreso.ano}}</td>
+                    <td>{{ingreso.periodo}}</td>
+                    <td>{{ingreso.inscritos.opsu + ingreso.inscritos.convenio}}</td>
+                    <td>{{ingreso.egresados.retiro}}</td>
+                    <td>{{ingreso.egresados.porcentaje_retiros.toFixed(2)}}%</td>
+                    <td></td>
+                    <td></td>
+                    <td> <button type="button" class="btn btn-info" (click)="toggleGrafica(ingreso.ano,ingreso.periodo)" [disabled]="drawOff"><span class="glyphicon glyphicon-search"></span></button> </td>
+                </tbody>
+            </table>
+        </div>
+    </div>    
+
+    <div *ngIf="mostrarEgresos3&&viendoEgresosCarrera" class="form-group">
+        <h4> <button type="button" class="btn btn-warning" (click)="volverListadoCarreras()" ><span class="glyphicon glyphicon-arrow-left"></span></button> Egresos por periodo </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Año</th>
+                    <th>Periodo</th>
+                    <th>Ingresos</th>
+                    <th>Graduandos</th>
+                    <th>%</th>
+                    <th>Indicador</th>
+                    <th>Tendencia</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody ngDefaultControl>
+                  <tr *ngFor="let ingreso of ingresosCarreraActual">
+                    <td>{{ingreso.carrera}}</td>
+                    <td>{{carreraActual.carrera.nombre}}</td>
+                    <td>{{ingreso.ano}}</td>
+                    <td>{{ingreso.periodo}}</td>
+                    <td>{{ingreso.inscritos.opsu + ingreso.inscritos.convenio}}</td>
+                    <td>{{ingreso.egresados.retiro}}</td>
+                    <td>{{ingreso.egresados.porcentaje_graduandos.toFixed(2)}}%</td>
+                    <td></td>
+                    <td></td>
+                    <td> <button type="button" class="btn btn-info" (click)="toggleGrafica(ingreso.ano,ingreso.periodo)" [disabled]="drawOff"><span class="glyphicon glyphicon-search"></span></button> </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+
+
+<div class="form-group">
+  <div class="row">
+    <div class="col-xs-2"></div>
+   
+    <div id="indicadores" class="col-xs-8">
+      
+    </div>
+
+    <div class="col-xs-2"></div>
+
+  </div>
+
+  <div id="historico" class="row">
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2"></div>
+    <div *ngIf="indicadorActivado" class="col-xs-8">
+      <progressbar class="progress" [value]="stacked" [max]="100"></progressbar>
+    </div>
+    <div class="col-xs-2"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2"></div>
+    <div *ngIf="indicadorActivado" class="col-xs-8">
+    
+
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>{{indicador.nombre}}</th>
+              <th>{{carreraActual.carrera.nombre}} {{last_ano}}-{{last_per}}</th>
+            </tr>
+          </thead>
+          <tbody ngDefaultControl>
+            <tr>
+              <td>Nombre del indicador</td>
+              <td>{{indicador.nombre}}</td>
+            </tr>
+            <tr>
+              <td>Perspectiva</td>
+              <td>{{indicador.perspectiva}}</td>
+            </tr>            
+            <tr>
+              <td>Factor de Exito</td>
+              <td>{{indicador.factor}}</td>
+            </tr>            
+            <tr>
+              <td>Tipo de Indicador</td>
+              <td>{{indicador.tipo}}</td>
+            </tr>            
+            <tr>
+              <td>Periodicidad</td>
+              <td>{{indicador.periodicidad}}</td>
+            </tr>            
+            <tr>
+              <td>Resultado</td>
+              <td>{{indicador.resultado}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+
+    </div>
+    <div class="col-xs-2"></div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+</div>
+
+<!--
+
+
+<div class="row">
+<div class="col-xs-12">
+
+
+<tabset type="pills">
+  <tab heading="Pills 1">Pills content 1</tab>
+  <tab heading="Pills 2">Pills content 2</tab>
+</tabset>
+
+</div>
+</div>
+
+
+
+-->
+
+

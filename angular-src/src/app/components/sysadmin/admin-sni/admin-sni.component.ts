@@ -16,6 +16,7 @@ export class AdminSniComponent implements OnInit {
   ano: number;
   cedula: string;
   resultados: any;
+  asignada: any;
   
   clasificacion: string;
   clase: string;
@@ -45,6 +46,7 @@ export class AdminSniComponent implements OnInit {
       e: "",
       f: ""
     };
+    this.asignada = 0;
     this.toSetupYear = true;
     this.toSetupCareers = true;
     this.clasificacion = "";
@@ -298,6 +300,7 @@ export class AdminSniComponent implements OnInit {
       e: "",
       f: ""
     };
+    this.asignada = 0;
     this.toogleForm();
     this.toSetupYear = true;
     this.toSetupCareers = true;
@@ -341,7 +344,8 @@ export class AdminSniComponent implements OnInit {
       codigo : this.codigo,
       ano : this.ano,
       estudiante : this.cedula,
-      opciones : opciones
+      opciones : opciones,
+      asignada : Number.parseInt(this.asignada)
     }
 
     console.log(sni);

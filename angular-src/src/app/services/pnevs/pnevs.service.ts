@@ -36,6 +36,12 @@ export class PnevsService {
             .map(res => res.json());
     }
 
+    obtenerPnevsCorto(){
+        'use strict'
+        return this.http.get('http://localhost:8080/pnevs/allshort')
+            .map(res => res.json());
+    }
+
     registrarPnev(pnev){
       'use strict'
       let headers = new Headers();

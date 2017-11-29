@@ -10,14 +10,18 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class NavbarComponent implements OnInit {
 
+ public isNavbarCollapsed = true;
+ tipo: any;
+
  constructor( public authService: AuthService,
               private router: Router,
               private flashMessage : FlashMessagesService
             ){ 
   }
 
-
   ngOnInit() {
+
+
   }
 
   onLogoutClick(){
@@ -25,6 +29,15 @@ export class NavbarComponent implements OnInit {
     this.flashMessage.show('Has cerrado la sesion', {cssClass: 'alert-success', timeout: 5000});
     this.router.navigate(['/login']);
     return false;
+  }
+
+  isAdmin(){
+    if(this.authService.getUserType()._doc.tipo == 'invitado'){
+      return false;
+    }
+    else{
+      return true;
+    }
   }
 
 }

@@ -79,15 +79,15 @@
           </div>
 
                     
-          <div>
-            <label class="control-label" for="clase">Clasificacion</label>
+          <div class="row">
+            <label class="col-xs-5 control-label" for="clase">Clasificacion</label>
             <select id="clases" [(ngModel)]="clase" name="clase" (change)="cargarOpcionesCarrera()">
                 
             </select>
           </div>
           
-          <div>
-            <label class="control-label" for="carrera">Carrera</label>
+          <div class="row">
+            <label class="col-xs-5 control-label" for="carrera">Carrera</label>
             <select id="opcionesCarreras" [(ngModel)]="carreraActual" name="carreraActual" (change)="enableAddButtons()">
                 
             </select>
@@ -96,7 +96,6 @@
         </div>
         
         <div id="inputsCarreras" class="form-group">
-
 
           <div>
             <div class="col-xs-5">
@@ -148,6 +147,25 @@
 
 
         </div>
+
+
+        <!-- Carrera asignada-->
+        <div class="form-group">
+          <div class="row">
+            <label class="col-xs-5 control-label" for="asignada">Carrera Asignada</label>
+            <select [(ngModel)]="asignada" name="asignada" >
+              <option value="0" selected></option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="0">Ninguna</option>
+            </select>              
+          </div>
+       </div>
+
 
         <!-- Submit-->
         <div class="form-group">

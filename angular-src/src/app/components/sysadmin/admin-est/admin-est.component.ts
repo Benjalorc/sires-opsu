@@ -18,6 +18,7 @@ export class AdminEstComponent implements OnInit {
   mes: any;
   dia: any;
   f_nac: Object;
+  a_sec: Number;
   sexo: string;
   municipio: string;
   
@@ -51,20 +52,35 @@ export class AdminEstComponent implements OnInit {
     this.mes = "";
     this.dia = "";
     this.f_nac = {};
+    this.a_sec = 0;
     this.municipio = "";
     this.toogleForm();
     this.toSetupYear = true;
   }
+
+  asignarEgreso(){
+    this.toSetupYear = true;
+    this.asignarAnos('sec');
+  }
   
-  asignarAnos(){
+  asignarAnos(origen){
+
     if(this.toSetupYear){
+
+      let ano_inicio = 0;
+      let ano_fin = 0;
       let anoActual = new Date().getFullYear();
-      let anos = document.querySelector('#ano');
+
+      if(origen == 'ano'){ ano_inicio = anoActual - 14; ano_fin = ano_inicio-80; }
+      else if(origen == 'sec'){ ano_inicio = anoActual; ano_fin = Number.parseInt(this.ano)+14 }
+
+
+      let anos = document.querySelector('#'+origen);
       
-      for (let i = 100; i>5; i--){
+      for (let i = ano_inicio, j=ano_fin; i>=j; i--){
         let opcion = document.createElement("option");
-        opcion.setAttribute("value",""+(anoActual-i));
-        opcion.innerHTML = ""+(anoActual-i);
+        opcion.setAttribute("value",""+i);
+        opcion.innerHTML = ""+i;
         anos.appendChild(opcion);
       }
     }
@@ -120,6 +136,7 @@ export class AdminEstComponent implements OnInit {
       nombre : this.nombre,
       apellido : this.apellido,
       f_nac : this.f_nac,
+      a_sec : this.a_sec,
       sexo : this.sexo,
       municipio: this.municipio,
       

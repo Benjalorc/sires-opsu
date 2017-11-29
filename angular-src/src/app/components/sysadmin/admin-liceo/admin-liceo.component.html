@@ -1,0 +1,170 @@
+<div class="btn" *ngIf="!mostrarFormulario">
+  <button type="button" class="btn btn-danger" id="volver" [routerLink]="['/admin']">Volver</button>
+</div>
+
+<div>
+    
+
+
+
+    <div class="row">
+      
+      <div class="btn-group-vertical" *ngIf="!mostrarFormulario">
+        <button type="button" class="btn btn-primary" id="reg-liceo" (click)="cargarFormulario()">Registrar Liceo</button>
+        <button type="button" class="btn btn-warning" id="update-liceo">Actualizar Liceo</button>
+        <button type="button" class="btn btn-danger" id="del-liceo">Eliminar Liceo</button>
+      </div>
+      
+
+
+      <div class="btn" *ngIf="mostrarFormulario">
+        <button type="button" class="btn btn-danger" id="cancelar-registro" (click)="quitarFormulario()">Cancelar</button>
+      </div>
+    
+    </div>
+
+
+
+    
+    <div class="row" *ngIf="mostrarFormulario">
+        <form class="form-horizontal" (submit)="enviarFormulario()">
+          
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h3 class="text-center">Registrar un liceo</h3>
+          </div>
+        </div>
+
+        <fieldset>
+        
+        <!-- Codigo -->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="codigo">Codigo</label>  
+          <div class="col-xs-3">
+          <input id="codigo" [(ngModel)]="codigo" name="codigo" type="text" placeholder="123456789" class="form-control input-md">
+          </div>
+        </div>
+        
+        <!-- Nombre-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="nombre">Nombre</label>  
+          <div class="col-xs-3">
+          <input id="nombre" [(ngModel)]="nombre" name="nombre" type="text" placeholder="Nombre" class="form-control input-md">
+          </div>
+        </div>
+
+        <!-- Tipo-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="tipo">Tipo</label>  
+          <div class="col-xs-3">
+          <input id="tipo" [(ngModel)]="tipo" name="tipo" type="text" placeholder="Bolivariano, Privado..." class="form-control input-md">
+          </div>
+        </div>
+
+        <!-- Estado-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="estado">Estado</label>  
+          <div class="col-xs-3">
+            <select class="form-control" id="estado" [(ngModel)]="estado" name="estado" (change)="enableMun()">
+                <option value="" selected disabled></option>
+                <option *ngFor="let est of estados" [value]="est.codigo">{{est.nombre}}</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Municipio-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="municipio">Municipio</label>  
+          <div class="col-xs-3">
+            <select class="form-control" id="municipio" [(ngModel)]="municipio" name="municipio" (change)="enableParr()" [disabled]="munOff">
+                <option *ngFor="let ubic of municipios" [value]="ubic.codigo">{{ubic.nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Parroquia-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="parroquia">Parroquia</label>  
+          <div class="col-xs-3">
+            <select class="form-control" id="parroquia" [(ngModel)]="parroquia" name="parroquia" [disabled]="parrOff">
+              <option *ngFor="let parr of parroquias" [value]="parr.codigo">{{parr.nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Egresos-->
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="tipo_educ">Tipo de Educacion</label>  
+          <div class="col-xs-3">
+          <select class="form-control" id="tipo_educ" [(ngModel)]="tipo_educacion" name="tipo_educacion" (change)="enableEsp()">
+              <option value="" selected disabled></option>
+              <option value="Media General">Media General</option>
+              <option value="Media Tecnica">Media Tecnica</option>
+          </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="especialidad">Especialidad</label>  
+          <div class="col-xs-3">
+          <select class="form-control" id="especialidad" [(ngModel)]="especialidad" name="especialidad" (change)="enableMen()" [disabled]="espOff">
+              <option *ngFor="let esp of especialidades" [value]="esp">{{esp}}</option>
+          </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-5 control-label" for="mencion">Mencion</label>  
+          <div class="col-xs-3 input-group">
+          <select class="form-control" id="mencion" [(ngModel)]="mencion" name="mencion" [disabled]="menOff">
+              <option value="" selected disabled></option>
+              <option *ngFor="let m of menciones" [value]="m">{{m}}</option>
+          </select>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success" (click)="agregarTipoEgreso()">+</button>
+          </span>
+          
+          </div>
+        </div>
+
+        <div class="form-group">
+
+          <label class="col-xs-5 control-label" for="">Especialidades</label>
+          
+          <h4>Informacion de la carrera seleccionada</h4>
+          <div class="table-responsive">
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Tipo de educacion</th>
+                      <th>Especialidad</th>
+                      <th>Mencion</th>
+                    </tr>
+                  </thead>
+                  <tbody ngDefaultControl>
+                    <tr *ngFor="let egreso of ofertas_egreso">
+                      <td>{{egreso.educacion}}</td>
+                      <td>{{egreso.especialidad}}</td>
+                      <td>{{egreso.mencion}}</td>
+                      <td><button type="button" class="btn btn-danger" (click)="removerTipoEgreso(egreso)">X</button></td>
+                    </tr>
+                  </tbody>
+              </table>
+          </div>
+        </div>
+
+        <!-- Submit-->
+        <div class="form-group">
+          <div class="col-xs-5">
+          </div>
+
+          <div class="col-xs-4">
+              <input type="submit" class="btn btn-primary" value="Registrar">
+          </div>
+        </div>  
+        
+        </fieldset>
+        </form>
+    </div>
+
+</div>

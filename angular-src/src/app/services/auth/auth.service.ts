@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Http, Headers} from '@angular/http';
 import {RequestOptions, Request, RequestMethod} from '@angular/http';
 import 'rxjs/add/operator/map';
-import {tokenNotExpired} from 'angular2-jwt';
+import {tokenNotExpired, JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
 
     authToken: any;
     user: any;
+    jwtHelper: JwtHelper = new JwtHelper();
+
 
   constructor(private http: Http) { }
 
@@ -35,6 +37,12 @@ export class AuthService {
         headers.append('Authorization', this.authToken);
         return this.http.get('http://localhost:8080/users/profile',{headers: headers})
             .map(res => res.json());
+    }
+
+    getUserType(){
+        'use strict'
+        this.loadToken()
+        return this.jwtHelper.decodeToken(this.authToken);
     }
     
     

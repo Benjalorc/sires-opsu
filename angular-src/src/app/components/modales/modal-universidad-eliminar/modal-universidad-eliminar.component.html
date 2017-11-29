@@ -1,0 +1,35 @@
+<button type="button" class="btn btn-danger" (click)="openModal(template)"><span class="glyphicon glyphicon-trash"></span></button>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"><span class="glyphicon glyphicon-warning-sign btn-danger"></span>Eliminar Universidad<span class="glyphicon glyphicon-warning-sign btn-danger"></span></h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+<form>
+	
+  <div class="row">
+	<div class="col-xs-12 text-center">
+		<h4>¿Esta seguro de querer eliminar la universidad: {{univ.nombre}} ?</h4>
+	</div>  	
+  </div>
+
+  <div class="row">
+  	<div class="col-xs-7"></div>
+  	<div class="col-xs-2">
+		<button type="button" class="btn btn-success" (click)="eliminarUniversidad()">Aceptar</button>
+  	</div>
+  	<div class="col-xs-2">
+		<button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancelar</button>
+  	</div>
+  </div>
+
+
+
+</form>
+
+  </div>
+</ng-template>

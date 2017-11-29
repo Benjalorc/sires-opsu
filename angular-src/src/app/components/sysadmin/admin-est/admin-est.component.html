@@ -59,9 +59,9 @@
         <div class="form-group">
           <label class="col-md-5 control-label" for="f_nac">Fecha de nacimiento</label>
         
-            <select [(ngModel)]="ano" name="ano" id="ano" (change)="asignarDias()">
+            <select [(ngModel)]="ano" name="ano" id="ano" (change)="asignarDias()" (change)="asignarEgreso()">
               <option value="" selected></option>
-              {{asignarAnos()}}
+              {{asignarAnos('ano')}}
             </select>
 
             <select [(ngModel)]="mes" name="mes" id="mes" (change)="asignarDias()">
@@ -83,6 +83,16 @@
             <select [(ngModel)]="dia" name="dia" id="dia">
               <option value="" selected></option>
               
+            </select>
+        </div>
+
+
+        <!-- Año de egreso de la secundaria-->
+        <div class="form-group">
+          <label class="col-md-5 control-label" for="a_sec">Año de egreso (secundaria)</label>
+        
+            <select [(ngModel)]="a_sec" name="a_sec" id="sec">
+              <option value="" selected></option>
             </select>
         </div>
 

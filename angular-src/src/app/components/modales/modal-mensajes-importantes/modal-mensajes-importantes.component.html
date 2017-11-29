@@ -1,0 +1,34 @@
+<a id="mensajesImportantes" (click)="openModal(template)"></a>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Mensaje</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+<form>
+	
+  <div class="row">
+	<div class="col-xs-12 text-center">
+		<h4> {{mensaje}} </h4>
+	</div>  	
+  </div>
+
+  <div class="row">
+  	<div class="col-xs-7"></div>
+  	<div class="col-xs-2">
+  	</div>
+  	<div class="col-xs-2">
+		<button type="button" class="btn btn-success" (click)="modalRef.hide()">Entendido!</button>
+  	</div>
+  </div>
+
+
+
+</form>
+
+  </div>
+</ng-template>

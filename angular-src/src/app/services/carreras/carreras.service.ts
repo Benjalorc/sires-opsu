@@ -27,13 +27,18 @@ export class CarrerasService {
         'use strict'
         return this.http.get('http://localhost:8080/carreras/all')
             .map(res => res.json());
-    }
+  }
+
+  getSortedCareers(){
+        'use strict'
+        return this.http.get('http://localhost:8080/carreras/allsorted')
+            .map(res => res.json());
+  }
 
   getCareer(carr_code){
   	'use strict'
   	 return this.http.get('http://localhost:8080/carreras/buscar/'+carr_code)
   	 	.map(res => res.json());
-
   }
 
   registrarCarrera(carrera){
@@ -42,6 +47,18 @@ export class CarrerasService {
       headers.append('Content-Type','application/json');
       return this.http.post('http://localhost:8080/carreras/registrar', carrera, {headers: headers})
             .map(res => res.json());
-    }
+  }
+
+  obtenerClasificacion(){
+    'use strict'
+     return this.http.get('http://localhost:8080/carreras/clasificar')
+       .map(res => res.json());
+  }  
+
+  obtenerCarrerasPorEspecialidad(esp){
+    'use strict'
+     return this.http.get('http://localhost:8080/carreras/especialidad/'+esp)
+       .map(res => res.json());
+  }
 
 }

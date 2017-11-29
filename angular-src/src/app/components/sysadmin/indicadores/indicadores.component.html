@@ -1,0 +1,196 @@
+<div class="row">
+<div class="col-xs-12">
+
+<h2 class="text-center">Indicadores</h2>
+
+<form class="form">
+  
+<fieldset class="scheduler-border">
+  <legend class="scheduler-border">Seleccion del Indicador</legend>
+
+  <div class="row">
+    <div class="form-group col-xs-3"></div>
+    <div class="form-group col-xs-3">
+      <label class="control-label" for="perspectiva">Perspectiva</label>
+      <select class="form-control" name="persepctiva" [(ngModel)]="perspectiva" (change)="montarIndicadores()">
+        <option value="" disabled selected default></option>
+        <option value="Inclusion y Excelencia Académica">Inclusion y Excelencia Académica</option>
+        <option value="Clientes">Cientes</option>
+        <option value="Procesos">Procesos</option>
+      </select>
+    </div>
+    <div class="form-group col-xs-3">
+      <label class="control-label" for="indicador">Indicador</label>
+      <select class="form-control" name="indicador" [(ngModel)]="indicador" (change)="seleccionarIndicador()" [disabled]="indicadoresOff">
+        <option value="" disabled selected default></option>
+        <option *ngFor="let ind of indicadores" [value]="ind.codigo">{{ind.nombre}}</option>
+      </select>
+    </div>
+    <div class="form-group col-xs-3"></div>
+  </div>
+</fieldset>
+
+<fieldset *ngIf="indicadorAscendenteSeleccionado||indicadorDescendenteSeleccionado" class="scheduler-border">
+<legend class="scheduler-border">Información del Indicador</legend>
+
+  <div class="row">
+    <div class="form-group col-xs-3">
+      <label class="control-label" for="codigo">Codigo</label>
+      <input class="form-control" type="text" name="codigo" [(ngModel)]="indicadorActual.codigo" disabled>
+    </div>
+    <div class="form-group col-xs-3">
+      <label class="control-label" for="nombre">Nombre</label>
+      <input class="form-control" type="text" name="nombre" [(ngModel)]="indicadorActual.nombre" disabled>
+    </div>
+    <div class="form-group col-xs-3">
+      <label class="control-label" for="tipo">Tipo</label>
+      <input class="form-control" type="text" name="tipo" [(ngModel)]="indicadorActual.tipo" disabled>
+    </div>
+    <div class="form-group col-xs-3">
+      <label class="control-label" for="tendencia">Tendencia</label>
+      <input class="form-control" type="text" name="tendencia" [(ngModel)]="indicadorActual.tendencia" disabled>
+    </div>
+  </div>  
+
+  <div class="row">
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="perspectiva">Perspectiva</label>
+      <input class="form-control" type="text" name="perspectiva" [(ngModel)]="indicadorActual.perspectiva" disabled>
+    </div>
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="factor">Factor de Exito</label>
+      <input class="form-control" type="text" name="factor" [(ngModel)]="indicadorActual.factor" disabled>
+    </div>
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="periodicidad">Periodicidad</label>
+      <input class="form-control" type="text" name="periodicidad" [(ngModel)]="indicadorActual.periodicidad" disabled>
+    </div>
+  </div>
+
+  </fieldset>
+
+
+
+<fieldset *ngIf="indicadorDescendenteSeleccionado" class="scheduler-border">
+<legend class="scheduler-border">Valores</legend>
+
+  <div class="row">
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="valorExito">Valor de Exito</label>
+      <input class="form-control" type="number" name="valorExito" [(ngModel)]="indicadorActual.ve" disabled>
+    </div>
+    <div class="form-group col-xs-4"></div>
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="valorCritico">Valor Critico</label>
+      <input class="form-control" type="number" name="valorCritico" [(ngModel)]="indicadorActual.vc" disabled>
+    </div>
+  </div>   
+
+  <div class="row">
+    <div class="form-group col-xs-4">
+      <input id="range1" name="controlExito" [value]="successRange" (input)="successRange=updateSuccessDescend($event)" (mouseup)="updateProgressBarDescend()" type="range" min="0" max="100">{{successRange}}
+    </div>
+    <div class="form-group col-xs-4"></div>
+    <div class="form-group col-xs-4">
+      <input id="range1" name="controlCritico" [value]="dangerRange" (input)="dangerRange=updateDangerDescend($event)" (mouseup)="updateProgressBarDescend()" type="range" min="0" max="100">{{dangerRange}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <progressbar class="progress" [value]="stacked" [max]="100"></progressbar>
+    </div>
+  </div>
+
+</fieldset>
+
+<fieldset *ngIf="indicadorAscendenteSeleccionado" class="scheduler-border">
+<legend class="scheduler-border">Valores</legend>
+
+  <div class="row">
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="valorCritico">Valor Critico</label>
+      <input class="form-control" type="number" name="valorCritico" [(ngModel)]="indicadorActual.vc" disabled>
+    </div>
+    <div class="form-group col-xs-4"></div>
+    <div class="form-group col-xs-4">
+      <label class="control-label" for="valorExito">Valor de Exito</label>
+      <input class="form-control" type="number" name="valorExito" [(ngModel)]="indicadorActual.ve" disabled>
+    </div>
+  </div>   
+
+  <div class="row">
+    <div class="form-group col-xs-4">
+      <input id="range1" name="controlCritico" [value]="dangerRange" (input)="dangerRange=updateDanger($event)" (mouseup)="updateProgressBar()" type="range" min="0" max="100">{{dangerRange}}
+    </div>
+    <div class="form-group col-xs-4"></div>
+    <div class="form-group col-xs-4">
+      <input id="range1" name="controlExito" [value]="successRange" (input)="successRange=updateSuccess($event)" (mouseup)="updateProgressBar()" type="range" min="0" max="100">{{successRange}}
+    </div>
+  </div>
+
+  <div class="row">
+  	<div class="col-xs-12">
+  		<progressbar class="progress" [value]="stacked" [max]="100"></progressbar>
+  	</div>
+  </div>
+
+</fieldset>
+
+<fieldset *ngIf="indicadorAscendenteSeleccionado" class="scheduler-border">
+  <legend class="scheduler-border">Toma de Decision</legend>
+
+  <div class="row">
+    <div class="col-xs-4">
+      <label class="control-label" for="mensajeCritico">Critico:</label>
+      <textarea class="form-control" rows="4" [(ngModel)]="indicadorActual.mensajeCritico" name="mensajeCritico" id="mensajeCritico"></textarea>
+    </div>
+
+    <div class="col-xs-4">
+      <label class="control-label" for="mensajeAlerta">Alerta:</label>
+      <textarea class="form-control" rows="4" [(ngModel)]="indicadorActual.mensajeAlerta" name="mensajeAlerta" id="mensajeAlerta"></textarea>
+    </div>
+
+    <div class="col-xs-4">
+      <label class="control-label" for="mensajeExito">Exito:</label>
+      <textarea class="form-control" rows="4" [(ngModel)]="indicadorActual.mensajeExito" name="mensajeExito" id="mensajeExito"></textarea>
+    </div>
+  </div>
+
+</fieldset>
+
+<fieldset *ngIf="indicadorDescendenteSeleccionado" class="scheduler-border">
+  <legend class="scheduler-border">Toma de Decision</legend>
+  <div class="row">
+    <div class="col-xs-4">
+      <label class="control-label" for="mensajeExito">Exito:</label>
+      <textarea class="form-control" rows="4" [(ngModel)]="indicadorActual.mensajeExito" name="mensajeExito" id="mensajeExito"></textarea>
+    </div>
+
+
+    <div class="col-xs-4">
+      <label class="control-label" for="mensajeAlerta">Alerta:</label>
+      <textarea class="form-control" rows="4" [(ngModel)]="indicadorActual.mensajeAlerta" name="mensajeAlerta" id="mensajeAlerta"></textarea>
+    </div>
+
+
+    <div class="col-xs-4">
+      <label class="control-label" for="mensajeCritico">Critico:</label>
+      <textarea class="form-control" rows="4" [(ngModel)]="indicadorActual.mensajeCritico" name="mensajeCritico" id="mensajeCritico"></textarea>
+    </div>
+  </div>
+</fieldset>
+</form>
+
+<div *ngIf="indicadorAscendenteSeleccionado||indicadorDescendenteSeleccionado" class="row">
+	<div class="col-xs-2">
+		<button type="button" class="btn btn-success" (click)="actualizarIndicador()">Guardar</button>
+	</div>
+	<div class="col-xs-2">
+		<button type="button" class="btn btn-danger" (click)="restaurar()">Cancelar</button>
+	</div>
+	<div class="col-xs-8"></div>
+</div>
+
+</div>
+</div>

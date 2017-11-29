@@ -12,7 +12,7 @@ const CarreraSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    titulo:{
+    area:{
         type: String,
         required: true
     },
@@ -20,15 +20,7 @@ const CarreraSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    area:{
-        type: String,
-        required: true
-    },
-    duracion:{
-        type: Number,
-        required: true
-    },
-    modalidad:{
+    tipo:{
         type: String,
         required: true
     }
@@ -40,16 +32,47 @@ module.exports.agregarCarrera = function(carrera, callback){
     carrera.save(callback);
 }
 
-module.exports.buscarCarrera = function(data, callback){
+module.exports.guardarVarios = function(documentos, callback){
+    Carrera.insertMany(documentos, callback);
+}
 
-    const query = {codigo: data};
+module.exports.buscarCarrera = function(query, callback){
+
     Carrera.findOne(query, callback);
 }
 
 module.exports.listarCarreras = function(data, callback){
 
-    const query = {};
-    Carrera.find(query, callback);
+    Carrera.find({}, callback);
+}
+
+module.exports.agruparCarrerasArea = function(data, callback){
+
+    Carrera.aggregate([
+        { $group : 
+            { 
+            _id : "$area", 
+            carreras: { $push: "$$ROOT" } 
+            } 
+        }
+    ]).exec(callback);
+}
+
+module.exports.buscarCarrerasPorEspecialidad = function(data, callback){
+
+    Carrera.find({especialidad: data}, callback);
+}
+
+module.exports.agruparCarrerasEspecialidad = function(data, callback){
+
+    Carrera.aggregate([
+        { $group : 
+            { 
+            _id : "$especialidad", 
+            carreras: { $push: "$$ROOT" } 
+            } 
+        }
+    ]).exec(callback);
 }
 
 module.exports.actualizarCarrera = function(data, callback){

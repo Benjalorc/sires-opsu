@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../config/database');
+const db = mongoose.createConnection("mongodb://benjapc:alois007@ds117271.mlab.com:17271/opsu")
 
 //SNI Schema
 const SniSchema = mongoose.Schema({
@@ -9,10 +9,6 @@ const SniSchema = mongoose.Schema({
         required: true
     },
     ano:{
-        type: Number,
-        required: true
-    },
-    periodo:{
         type: Number,
         required: true
     },
@@ -31,11 +27,6 @@ const SniSchema = mongoose.Schema({
             type: String, 
             ref: "Universidad", 
             required: true   
-        },
-        asignada: {
-            type: Boolean,
-            required: true,
-            default: false
         }
     }],
     asignada:{
@@ -45,7 +36,7 @@ const SniSchema = mongoose.Schema({
     }
 });
 
-const Sni = module.exports = mongoose.model('Sni', SniSchema);
+const Sni = module.exports = db.model('Sni', SniSchema);
 
 module.exports.agregarSni = function(sni, callback){
     sni.save(callback);
@@ -54,64 +45,13 @@ module.exports.agregarSni = function(sni, callback){
 
 module.exports.obtenerSnis = function(data, callback){
 
-Sni.aggregate([
-    {$match: { asignada: {$ne: 0}, ano: 2011 } },
-    {$project:
-            {
-            codigo:1,
-            items:{
-                $filter:{
-                    input:"$opciones",
-                    as:"item",
-                    cond:{$eq:["$$item.universidad","553"]}
-                }
-            }
-        }
-    },
-    {$match:{ "items":{$ne: [] } }}
-]).exec(callback);
-
-}
-
-
-module.exports.obtenerAsignaciones = function(data, callback){
-
-let univ = data.univ;
-let carr = data.carr;
-
-let anoG = parseInt(data.ano);
-let anoP = parseInt(data.ano)-3;
-console.log(data);
-
-Sni.aggregate([
-    {$match: { asignada: {$ne: 0}, ano:{$gte: anoP, $lte: anoG } } },
-    {$project:
-        {
-            codigo:1,
-            asignaciones:{
-                $filter:{
-                    input:"$opciones",
-                    as:"asignacion",
-                    cond:{ $and: [{$eq:["$$asignacion.universidad",univ]},{$eq:["$$asignacion.asignada",true]}]}
-                }
-            },
-            ano:1,
-            periodo:1
-        }
-    },
-    {$match:{ "asignaciones":{$ne: [] } }},
-    { "$unwind": 
-        { path: "$asignaciones", preserveNullAndEmptyArrays: true } 
-    },
-    {$group : 
-        {
-           _id : { ano: "$ano", periodo:"$periodo", carrera: "$asignaciones.carrera"},
-           count: { $sum: 1 }
-        }
-    },
-    {$match:{ "_id.carrera": carr }}
-]).exec(callback);
-
+    const query = {};
+    Sni.find(query)
+        .populate("estudiante")
+        .populate("opciones.a")
+        .populate("opciones.b")
+        .populate("opciones.c")
+        .exec(callback);
 }
 
 module.exports.verificarSni = function(data, callback){

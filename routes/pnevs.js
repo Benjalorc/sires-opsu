@@ -94,6 +94,27 @@ router.post('/agregar', (req, res, next) =>{
 
 });
 
+router.get('/allshort', (req, res, next) =>{
+    'use strict';
+
+    Pnev.obtenerPnevsRepoblados('', (err, data) =>{
+        if(err){
+            return res.json({success: false, msg: "Error al ejecutar consulta en Pnev"});
+        }
+        if(data){
+            return res.json({success: true, msg: "Aqui estan los pnevs, mas facil", data: data});
+        }
+        else{
+            return res.json({success: false, msg: "No se encontraron las pruebas vocacionales"});            
+        }
+
+    });
+
+});
+
+
+
+
 
 //OBTENER TODOS LOS PNEV
 router.get('/all', (req, res, next) =>{
@@ -166,6 +187,8 @@ router.get('/all', (req, res, next) =>{
     });
 
 });
+
+
 
 //BUSCAR LA PNEV DE 1 ESTUDIANTE ESPECIFICO    
 router.get('/buscar/:cedula', (req, res, next) =>{

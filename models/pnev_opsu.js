@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../config/database');
+const db = mongoose.createConnection("mongodb://benjapc:alois007@ds117271.mlab.com:17271/opsu")
 
 //PNEV Schema
 const PnevSchema = mongoose.Schema({
@@ -20,7 +20,7 @@ const PnevSchema = mongoose.Schema({
     resultados:[{type: String, ref: "Carrera", required: true}]
 });
 
-const Pnev = module.exports = mongoose.model('Pnev', PnevSchema);
+const Pnev = module.exports = db.model('Pnev', PnevSchema);
 
 module.exports.agregarPnev = function(pnev, callback){
     pnev.save(callback);
@@ -28,39 +28,37 @@ module.exports.agregarPnev = function(pnev, callback){
 
 module.exports.buscarPnev = function(query, callback){
 
-    Pnev.findOne(query)
-        .populate("estudiante")
-        .populate("estudiante.mun")
-        .populate("resultados.a")
-        .populate("resultados.b")
-        .populate("resultados.c")
-        .exec(callback);
+    Pnev.findOne(query, callback)
 }
 
 module.exports.obtenerPnevsRepoblados = function(data, callback){
     const query = {};
 
-    Pnev.find(query)
-        .populate({
-            path: 'estudiante',
-            populate: {
-                path: 'mun',
-                model: 'Municipio'
+    Pnev.aggregate([
+        {$lookup:
+            {
+            from: 'carreras',
+            localField: 'resultados',
+            foreignField: 'codigo',
+            as: 'carreras'
             }
-        })
-        .exec(callback);
+        },
+        {$lookup:
+            {
+            from: 'estudiantes',
+            localField: 'estudiante',
+            foreignField: 'cedula',
+            as: 'estudiante'
+            }
+        }
+    ]).exec(callback);
 
 }
 
 module.exports.obtenerPnevs = function(data, callback){
 
     const query = {};
-    Pnev.find(query)
-        .populate("estudiante")
-        .populate("resultados.a")
-        .populate("resultados.b")
-        .populate("resultados.c")
-        .exec(callback);
+    Pnev.find(query, callback);
 }
 
 module.exports.corregirPnev = function(data, callback){

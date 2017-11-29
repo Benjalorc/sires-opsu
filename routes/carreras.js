@@ -2,6 +2,38 @@ const express = require('express');
 const router = express.Router();
 const Carrera = require('../models/carrera');
 
+router.post('/insertar', (req, res, next) =>{
+    'use strict';
+
+    let carreras = req.body;
+    let documentos = [];
+
+    carreras.forEach((element) =>{
+
+        let carrera = new Carrera({
+            codigo: element.codigo,
+            nombre: element.nombre,
+            area: element.area,
+            especialidad: element.especialidad,
+            tipo: element.tipo
+        });
+
+        documentos.push(carrera);
+    });
+
+    Carrera.guardarVarios(documentos, (err, docs) =>{
+        if(err) throw err;
+
+        if(docs){
+            return res.json({success: true, msg:"Operacion exitosa", data: docs});
+        }
+        else{
+            return res.json({success: false, msg:"Operacion fallida"});
+        }
+
+    });
+
+});
 
 //AGREGAR CARRERA
 router.post('/agregar', (req, res, next) =>{
@@ -46,9 +78,9 @@ router.post('/agregar', (req, res, next) =>{
 router.get('/buscar/:codigo', (req, res, next) =>{
     'use strict';
 
-    let codigo = req.params.codigo;
+    let query = {codigo: req.params.codigo};
 
-    Carrera.buscarCarrera(codigo, (err, carrera) =>{
+    Carrera.buscarCarrera(query, (err, carrera) =>{
         
         
         if(err){
@@ -78,6 +110,56 @@ router.get('/all', (req, res, next) =>{
             return res.json({success: false, msg: "Listado de carreras no encontrado"});
         }
    })
+});
+
+router.get('/especialidad/:especialidad', (req, res, next) =>{
+
+    let esp = req.params.especialidad;
+
+    Carrera.buscarCarrerasPorEspecialidad(esp, (err, carreras) =>{
+
+        if(err) throw err;
+
+        if(carreras){
+            return res.json({success: true, msg: "Se encontro el listao de carreras", data: carreras});
+        }
+        else{
+            return res.json({success: false, msg: "Listado de carreras no encontrado"});
+        }
+
+    })
+
+});
+
+router.get('/allsorted', (req, res, next) =>{
+    'use strict';
+
+    Carrera.agruparCarrerasArea({}, (err, data) =>{
+        if(err) throw err;
+
+        if(data){
+            let carrerasArea = data;
+            Carrera.agruparCarrerasEspecialidad({}, (err, data2) =>{
+                if(err) throw err;
+
+                if(data2){
+                    let carrerasEspecialidad = data2;
+                    let carreras = {
+                        Area: carrerasArea,
+                        Especialidad: carrerasEspecialidad
+                    }
+                    return res.json({success: true, msg:"Aqui van las carreras ordenadas", data:carreras});
+                }
+                else{
+
+                }
+            });
+        }
+        else{
+
+        }
+    });
+
 });
 
 router.put('/actualizar', (req, res, next) =>{
@@ -119,6 +201,56 @@ router.delete('/eliminar', (req, res, next) =>{
             return res.json({success: false, msg: "La carrera no pudo ser eliminada"});
         }
     });
+});
+
+router.get('/clasificar', (req, res, next) =>{
+    'use strict'
+
+    Carrera.listarCarreras('', (err, carreras) =>{
+
+        if (err) throw err;
+
+        if(carreras){
+
+            let clasificacion = []
+
+            carreras.forEach((element) =>{
+
+                let carrera = element;
+
+                if(!clasificacion.find((element) =>{return element.nombre == carrera.area}) ){
+                    clasificacion.push({nombre: carrera.area, especialidades: []});
+                }
+            });
+
+            let i = 0;
+            clasificacion.forEach((element) =>{
+
+                let area = element.nombre;
+
+                let esp = [];
+
+                let filtradas = carreras.filter((element) =>{return element.area == area});
+
+                filtradas.forEach((element) =>{
+                    let carrera = element;
+                    if(!esp.find((element) =>{return element == carrera.especialidad}) ){
+                        esp.push(carrera.especialidad);
+                        clasificacion[i].especialidades.push(carrera.especialidad);
+                    }
+                });
+
+                i++;
+            });
+
+            return res.json({success: true, msg: "Clasificacion encontrada", data: clasificacion});
+        }
+        else{
+            return res.json({success: false, msg: "La carreras no se pudieron encontrar"});            
+        }
+
+    });
+
 });
 
 module.exports = router;

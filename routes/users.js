@@ -10,9 +10,6 @@ const smtpTransport = require('nodemailer-smtp-transport');
 const randtoken = require('rand-token');
 
 
-//DELETE
-
-
 //REGISTER
 router.post('/register', (req, res, next) => {
     //res.send('REGISTER');
@@ -71,8 +68,9 @@ router.post('/register', (req, res, next) => {
                                 password: req.body.password,
                                 email: req.body.email,
                                 sexo: req.body.sexo,
-                                f_nac: new Date(req.body.f_nac.jsdate),
-                                active: false
+                                f_nac: req.body.f_nac,
+                                active: true,
+                                tipo: 'invitado'
                             });
                             
                             //AGREGAR EL USUARIO

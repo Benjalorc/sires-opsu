@@ -1,25 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const Municipio = require('../models/municipio');
+const Estado = require('../models/estado');
 
 router.post('/insertar', (req, res, next) =>{
     'use strict';
 
-    let municipios = req.body;
+    let estados = req.body;
     let documentos = [];
 
-    municipios.forEach((element) =>{
+    estados.forEach((element) =>{
 
-        let municipio = new Municipio({
+        let estado = new Estado({
             codigo: element.codigo,
-            estado: element.estado,
-            nombre: element.nombre
+            nombre: element.nombre,
+            estandar: element.estandar
         });
 
-        documentos.push(municipio);
+        documentos.push(estado);
     });
 
-    Municipio.guardarVarios(documentos, (err, docs) =>{
+    Estado.guardarVarios(documentos, (err, docs) =>{
         if(err) throw err;
 
         if(docs){
@@ -33,65 +33,66 @@ router.post('/insertar', (req, res, next) =>{
 
 });
 
-//REGISTRAR MUNICIPIO
+//REGISTRAR ESTADO
 router.post('/registrar', (req, res, next) =>{
     'use strict';
 
-    let newMunicipio = new Municipio({
+    let newEstado = new Estado({
         codigo: req.body.codigo,
         nombre: req.body.nombre,
         poblacion: req.body.poblacion,
         superficie: req.body.superficie
     });
     
-    Municipio.registrarMunicipio(newMunicipio, (err, municipio) =>{
+    Estado.registrarEstado(newEstado, (err, estado) =>{
         if(err){
-            return res.json({success:false, msg:"Fallo al registrar municipio"});
+            return res.json({success:false, msg:"Fallo al registrar estado"});
         }else{
-            return res.json({success:true, msg:"Municipio registrado con exito"});
+            return res.json({success:true, msg:"Estado registrado con exito"});
         }
      });
 });
 
-//BUSCAR TODOS LOS MUNICIPIOS
+//BUSCAR TODOS LOS ESTADOS
 router.get('/buscar', (req, res, next) =>{
    'use strict'; 
     
-    Municipio.obtenerMunicipios('', (err, mun) =>{        
+    Estado.obtenerEstados('', (err, est) =>{
+        
         
         if(err){
             return res.json({success: false, msg: "Error al ejecutar la consulta"});
         }
         
-        if(mun){
+        if(est){
             
-            return res.json({success: true, msg: "Se encontraron los municipios", data: mun});
+            return res.json({success: true, msg: "Se encontraron los estados", data: est});
         }else{
             
-            return res.json({success: false, msg: "Municipios no encontrados"});
+            return res.json({success: false, msg: "Estados no encontrados"});
         }
     });
 });
 
-//BUSCAR 1 MUNICIPIO
+//BUSCAR 1 ESTADO
 router.get('/buscar/:code', (req, res, next) =>{
    'use strict'; 
     
-    let mun_code = req.params.code;
+    let est_code = req.params.code;
     
-    Municipio.buscarMunicipio(mun_code, (err, mun) =>{
+    Estado.buscarEstado(est_code, (err, est) =>{
         
         
         if(err){
             return res.json({success: false, msg: "Error al ejecutar la consulta"});
         }
         
-        if(mun){
+        if(est){
             
-            return res.json({success: true, msg: "Se encontro el municipio", data: mun});
+            return res.json({success: true, msg: "Se encontro el estado", data: est});
         }else{
             
-            return res.json({success: false, msg: "Municipio no encontrado"});
+            return res.json({success: false, msg: "Estado no encontrado"});
         }
     });
 });
@@ -99,21 +100,21 @@ router.get('/buscar/:code', (req, res, next) =>{
 router.put('/actualizar', (req, res, next) =>{
    'use strict'; 
     
-    let municipio = {
+    let estado = {
         codigo: req.body.codigo,
         updatedData: req.body.datosNuevos
     }
     
-    Municipio.actualizarMunicipio(municipio, (err, mun) =>{
+    Estado.actualizarEstado(estado, (err, est) =>{
        
        if(err){
            return res.json({success: false, msg: "Error al ejecutar la consulta"});
        }
        
-       if(mun){
-            return res.json({success: true, msg: "Se actualizo el municipio"});
+       if(est){
+            return res.json({success: true, msg: "Se actualizo el estado"});
         }else{
-            return res.json({success: false, msg: "Municipio no pudo actualizarse"});
+            return res.json({success: false, msg: "Estado no pudo actualizarse"});
         }
     });
 });
@@ -121,18 +122,18 @@ router.put('/actualizar', (req, res, next) =>{
 router.delete('/eliminar', (req, res, next) =>{
     'use strict';
 
-    let mun_code = req.body.codigo;
+    let est_code = req.body.codigo;
     
-    Municipio.eliminarMunicipio(mun_code, (err, mun) =>{
+    Estado.eliminarEstado(est_code, (err, est) =>{
         
         if(err){
            return res.json({success: false, msg: "Error al ejecutar la consulta"});
         }
        
-       if(mun){
-            return res.json({success: true, msg: "Se elimino el municipio"});
+       if(est){
+            return res.json({success: true, msg: "Se elimino el estado"});
         }else{
-            return res.json({success: false, msg: "El municipio no pudo ser eliminado"});
+            return res.json({success: false, msg: "El estado no pudo ser eliminado"});
         }
     });
 });

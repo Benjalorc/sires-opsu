@@ -42,8 +42,15 @@ const UserSchema = mongoose.Schema({
         default: false,
         required: true
         
+    },
+    tipo:{
+        type: String,
+        required: true
+    },
+    institucion:{
+        type: String,
+        required: false
     }
-    
 });
 
 const User = module.exports = mongoose.model('User', UserSchema);

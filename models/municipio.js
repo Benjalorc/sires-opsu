@@ -7,6 +7,11 @@ const MunicipioSchema = mongoose.Schema({
     codigo:{
         type: String,
         required: true
+    },    
+    estado:{
+        type: String,
+        ref: 'Estado',
+        required: true
     },
     nombre:{
         type: String,
@@ -15,13 +20,18 @@ const MunicipioSchema = mongoose.Schema({
     poblacion:{
         type: Number,
         min: 1,
-        required: true
+        required: false
     },
     superficie:{
         type: Number,
         min: 1,
-        required: true
-    }
+        required: false
+    },
+    potencialidades:[{
+        type: String,
+        required: false,
+        default: ''
+    }]
 });
 
 const Municipio = module.exports = mongoose.model('Municipio', MunicipioSchema);
@@ -30,10 +40,26 @@ module.exports.registrarMunicipio = function(municipio, callback){
     municipio.save(callback);
 }
 
+module.exports.guardarVarios = function(documentos, callback){
+    Municipio.insertMany(documentos, callback);
+}
+
 module.exports.obtenerMunicipios = function(data, callback){
 
     const query = {};
     Municipio.find(query, callback);
+/*
+    Municipio.aggregate([
+        { $lookup: 
+            {
+            from: "estados", 
+            localField: "estado", 
+            foreignField: "codigo",
+            as: "estado"
+            } 
+        }
+    ]).exec(callback);
+*/
 }
 
 module.exports.buscarMunicipio = function(data, callback){

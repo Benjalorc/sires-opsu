@@ -1,0 +1,86 @@
+//21510000//
+
+var estudiantesArr = [];
+
+var cedula = 20000000;
+var ano = 1998;
+for(let i = 0; i<100; i++){
+	
+	estudiantesArr[i] = genStudents(cedula,cedula+15000, ano);
+	cedula = cedula+15000+100;
+
+}
+
+
+
+
+
+var pnevsArr = [];
+
+for(let i = 0; i < 100; i++){
+	
+	var estudiantes = estudiantesArr[i];
+	pnevsArr[i] = pnevGen();
+
+}
+
+
+var snisArr = [];
+
+for(let i = 0; i < 100; i++){
+	
+	var estudiantes = estudiantesArr[i];
+	snisArr[i] = sniGen();
+
+}
+
+
+
+arreglo15a30sni = [];
+
+
+
+
+var guardarEstudiantesActualizados = function(objeto, nombre){
+	
+
+
+
+}
+
+var guardarObjeto = function(objeto, nombre){
+
+	var obj = objeto;
+	var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
+
+	var a = document.createElement('a');
+	a.href = 'data:' + data;
+	a.download = nombre'.json';
+	a.innerHTML = 'download JSON';
+	a.click();
+
+}
+
+
+
+var i = 0;
+
+var myTimerVar;
+
+function myTimerFunction(){
+	myTimerVar = setInterval(timerFunction, 1500);
+}
+function timerFunction(){
+
+
+	var obj = estudiantesArr[i];
+	var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
+
+	var a = document.createElement('a');
+	a.href = 'data:' + data;
+	a.download = 'estudiantesActualizados.json';
+	a.innerHTML = 'download JSON';
+	a.click();
+	i++
+
+}
